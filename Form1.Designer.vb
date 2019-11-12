@@ -306,7 +306,7 @@ Partial Class Form1
         'ColumnHeader2
         '
         Me.ColumnHeader2.Text = "Rec"
-        Me.ColumnHeader2.Width = 150
+        Me.ColumnHeader2.Width = 180
         '
         'ColumnHeader3
         '
@@ -463,21 +463,21 @@ Partial Class Form1
         '
         Me.ChercherToolStripMenuItem.Enabled = False
         Me.ChercherToolStripMenuItem.Name = "ChercherToolStripMenuItem"
-        Me.ChercherToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ChercherToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
         Me.ChercherToolStripMenuItem.Text = "Chercher"
         '
         'InitialiserToolStripMenuItem
         '
         Me.InitialiserToolStripMenuItem.Enabled = False
         Me.InitialiserToolStripMenuItem.Name = "InitialiserToolStripMenuItem"
-        Me.InitialiserToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.InitialiserToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
         Me.InitialiserToolStripMenuItem.Text = "Initialiser"
         '
         'FermerToolStripMenuItem
         '
         Me.FermerToolStripMenuItem.Enabled = False
         Me.FermerToolStripMenuItem.Name = "FermerToolStripMenuItem"
-        Me.FermerToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.FermerToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
         Me.FermerToolStripMenuItem.Text = "Fermer"
         '
         'TabPage3
@@ -608,41 +608,41 @@ Partial Class Form1
         'menuCoupSuivant
         '
         Me.menuCoupSuivant.Name = "menuCoupSuivant"
-        Me.menuCoupSuivant.Size = New System.Drawing.Size(152, 22)
+        Me.menuCoupSuivant.Size = New System.Drawing.Size(146, 22)
         Me.menuCoupSuivant.Text = "Suivant"
         '
         'menuTous
         '
         Me.menuTous.Name = "menuTous"
-        Me.menuTous.Size = New System.Drawing.Size(152, 22)
+        Me.menuTous.Size = New System.Drawing.Size(146, 22)
         Me.menuTous.Text = "Tous"
         '
         'menuTousLimit
         '
         Me.menuTousLimit.Name = "menuTousLimit"
-        Me.menuTousLimit.Size = New System.Drawing.Size(152, 22)
+        Me.menuTousLimit.Size = New System.Drawing.Size(146, 22)
         Me.menuTousLimit.Text = "Tous => ligne"
         '
         'ToolStripMenuItem4
         '
         Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
-        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(143, 6)
         '
         'mnuReTous
         '
         Me.mnuReTous.Name = "mnuReTous"
-        Me.mnuReTous.Size = New System.Drawing.Size(152, 22)
+        Me.mnuReTous.Size = New System.Drawing.Size(146, 22)
         Me.mnuReTous.Text = "RE Tous"
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(143, 6)
         '
         'menuClear
         '
         Me.menuClear.Name = "menuClear"
-        Me.menuClear.Size = New System.Drawing.Size(152, 22)
+        Me.menuClear.Size = New System.Drawing.Size(146, 22)
         Me.menuClear.Text = "CLEAR"
         '
         'mnuOptions
@@ -753,14 +753,11 @@ Partial Class Form1
         '
         Me.TimerOpenFile.Interval = 1000
         '
-        'SaveFileDialog1
-        '
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1312, 669)
+        Me.ClientSize = New System.Drawing.Size(1639, 618)
         Me.Controls.Add(Me.pbReduire)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.TabControl1)

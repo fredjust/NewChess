@@ -103,6 +103,8 @@ Public Class Form1
 
     End Sub
 
+   
+
     'affiche les cercles rouges et vert lorsqu'on défile les positions
     Private Sub lvRec_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles lvRec.KeyUp
         DrawSymbol()
@@ -114,6 +116,7 @@ Public Class Form1
 
     'ajoute une position dans la lvMove
     'on doit ajouter les positions dans l'ordre
+    'TODO reprendre le code dans mon ancien programme
     Public Sub Add_Pos_lvMoves(ByVal idPos As Integer)
         'si c'est un coup blancs on ajoute une ligne
         'si c'est un coup noirs on le rajoute à la derniere ligne
@@ -126,18 +129,18 @@ Public Class Form1
 #Region "GESTION TREE VIEW POSITION"
 
     'procedure recursive qui s'auto appelle
-    'trouve le noeud ayant pour clé "key" dans l'ensemble de tous les noeuds et le renvoie dans "FindNode"
-    Public Sub Find_Node_By_Key(ByVal myNodes As TreeNodeCollection, ByVal key As String, _
+    'trouve le noeud ayant pour clé "thekey" dans l'ensemble de tous les noeuds et le renvoie dans "FindNode"
+    Public Sub Find_Node_By_Key(ByVal myNodes As TreeNodeCollection, ByVal thekey As String, _
                                 ByRef FindNode As TreeNode, ByRef isFind As Boolean)
         Dim Child As TreeNode
 
-        If myNodes.ContainsKey(key) Then
-            FindNode = myNodes(key)
+        If myNodes.ContainsKey(thekey) Then
+            FindNode = myNodes(thekey)
             isFind = True
         Else
             If isFind = False Then
                 For Each Child In myNodes
-                    Find_Node_By_Key(Child.Nodes, key, FindNode, isFind)
+                    Find_Node_By_Key(Child.Nodes, thekey, FindNode, isFind)
                 Next
             End If
         End If
@@ -219,6 +222,7 @@ Public Class Form1
 
 #Region "DIVERS"
 
+    'initialise les variables options
     Public Sub Init_Option()
 
         With LesOptions
@@ -292,7 +296,7 @@ Public Class Form1
         Exit Function
 ErrorHandler:
 
-        MsgBox("Error in LoadRecords : " & vbCrLf & Err.Description)
+        MsgBox("Error in Function NameFile : " & vbCrLf & Err.Description)
 
     End Function
 
@@ -321,12 +325,11 @@ ErrorHandler:
     'recherche les fils de toutes les positions qui n'ont pas encore été calculé
     Public Sub Find_Child()
 
-        Dim OnTrouve As Boolean = True
+        'Dim OnTrouve As Boolean = True
 
         If POSITIONS.col_Position.Count = 0 Then Cherche_Premier()
 
         For iPos = 1 To POSITIONS.col_Position.Count
-
             If POSITIONS.col_Position.Item(iPos).nbFils = PasEncoreRechercher Then
                 Find_Next_Pos(iPos)
             End If
@@ -402,7 +405,7 @@ ErrorHandler:
 
         'récupère les signatures possibles de tous les coups 
         'renvoyer sous la forme d'un STRING contenenant les signatures et le coups
-        ' sous la forme forme : 195.195...195 a1h8 Th8|195.195...195 a1h8 Th8
+        'sous la forme forme : 195.195...195 a1h8 Th8|195.195...195 a1h8 Th8
         CoupsEnString = PARTIE.Get_All_Signs()
 
         LesCoups = CoupsEnString.Split("|") 'sépare les signatures
@@ -432,6 +435,7 @@ ErrorHandler:
                 If ETATS.col_States.Item(idStateStart + iEtat).signature = LeCoup(0) Then
 
                     'vérifions que la case de départ s'est éteinte et que la case d'arrivée s'est allumé
+                    'ou que ses vérifications sont ignorées
                     If (LesOptions.Zap_Verif_case_depart Or ETATS.switched_OFF(LeCoup(1).Substring(0, 2), idStateStart, idStateStart + iEtat)) _
                         And (LesOptions.Zap_Verif_case_arrivee Or ETATS.switched_ON(LeCoup(1).Substring(2, 2), idStateStart + 1, idStateStart + iEtat)) Then
 
@@ -481,7 +485,7 @@ ErrorHandler:
 
 
 
-    'calcule la distance entre deux signatures
+    'calcule la distance (nombre de cases différentes) entre deux signatures
     'place dans case différente la case qui diffère
     Public Function Distance(ByVal Signature1 As String, ByVal signature2 As String) As Byte
         Dim colonne1 As String()
@@ -516,6 +520,7 @@ ErrorHandler:
         Return diff
     End Function
 
+    'CALCULE LES ETATS NON PARFAITEMENT EGAUX
     'recherche tous les coups possible depuis une position
     'calcule la différence avec chacune des xNext signatures suivantes 
     'et retient celle qui sont inférieur à DistanceMax
@@ -799,7 +804,6 @@ ErrorHandler:
 
     End Sub
 
-
     'Lorsqu'on clic sur un item de la listview
     'Affiche les symbole sur une case
     Public Sub DrawSymbol()
@@ -896,12 +900,6 @@ ErrorHandler:
 
 #End Region
 
-
-
-
-
-
-
 #Region "Evenement Bouton reduire"
 
     Private Sub pbReduire_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pbReduire.Click
@@ -912,10 +910,10 @@ ErrorHandler:
 
 #Region "EVENEMENT TREE VIEW"
 
+    'Dessine la position lorsqu'on clic sur un noeud de la Treeview
     Private Sub tvPos_AfterSelect(ByVal sender As Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles tvPos.AfterSelect
         Dim aTag As String
         Dim aPos As Integer
-
 
         'On Error Resume Next
 
@@ -941,6 +939,8 @@ ErrorHandler:
 
     End Sub
 
+
+    'Renvoi le PGN correspondant au dernier noeud
     Public Function PGN_Of_Node(Optional ByVal nbCoupRetard As Byte = 0) As String
         Dim PGNgame As String = ""
         Dim tempo As String = ""
@@ -988,7 +988,7 @@ ErrorHandler:
 
 #Region "EVENEMENT SUR LES MENUS"
 
-    'affecte -1 a la position selectionnée pour forcer son recalcul
+    'affecte -1 au noeud selectionné pour forcer son recalcul
     Private Sub menuRecalculer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuRecalculer.Click
         Dim aTag As String
         Dim aPos As UInteger
@@ -1173,7 +1173,7 @@ ErrorHandler:
         Refresh_TreeView()
     End Sub
 
-    'copie dans le presse papier la partie complète en PGN correspondant au noeud sélectionné
+    'copie dans le presse papier la partie complète en PGN correspondant au dernier noeud 
     Private Sub mneCopierPGN_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mneCopierPGN.Click
         Clipboard.SetText(PGN_Of_Node(2))
     End Sub
@@ -1190,18 +1190,23 @@ ErrorHandler:
         frmPgnInfo.Show()
     End Sub
 
-    'sauvegarde la partie correspondant au noeud sélectionné
+    'sauvegarde la partie correspondant au dernier noeud
     Private Sub menuSauvePartie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuSauvePartie.Click
         Dim NumFile As Integer
+        Dim TheFileName As String = ""
 
         While My.Computer.FileSystem.FileExists("c:\GAME\game" & NumFile.ToString & ".pgn")
             NumFile += 1
         End While
 
+        TheFileName = "c:\GAME\game" & NumFile.ToString & ".pgn"
+
         Try
-            My.Computer.FileSystem.WriteAllText("c:\GAME\game" & NumFile.ToString & ".pgn", PGN_Of_Node, True)
+            My.Computer.FileSystem.WriteAllText(TheFileName, PGN_Of_Node, True)
         Catch ex As Exception
-            Exit Sub
+
+            MsgBox("Impossible de sauvegarder : " & TheFileName, MsgBoxStyle.Exclamation, "ERREUR")
+
         End Try
 
 
@@ -1307,7 +1312,8 @@ ErrorHandler:
         End Try
     End Sub
 
-
+    'Ouvre le fichier automatiquement 
+    'lorsqu"il est envoyé par un raspberry pi
     Private Sub TimerOpenFile_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerOpenFile.Tick
         'Dim infoReader As System.IO.FileInfo
         Dim utf8WithoutBom As New System.Text.UTF8Encoding(False)
@@ -1370,9 +1376,6 @@ ErrorHandler:
         'End If
     End Sub
 
-    Private Sub SaveFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
-
-    End Sub
 
     Private Sub menu1sec_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu1sec.Click
         TimerOpenFile.Interval = 100
@@ -1432,6 +1435,9 @@ ErrorHandler:
     End Sub
 
 
+    Private Sub lvRec_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lvRec.SelectedIndexChanged
+
+    End Sub
 End Class
 
 
