@@ -25,13 +25,11 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.TabControl1 = New System.Windows.Forms.TabControl()
-        Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.lvMoves = New System.Windows.Forms.ListView()
         Me.chCoup = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.chWhite = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.chBlack = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.StatusStrip2 = New System.Windows.Forms.StatusStrip()
+        Me.sst_move = New System.Windows.Forms.StatusStrip()
         Me.sbFormulaire = New System.Windows.Forms.ToolStripStatusLabel()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.menuPartie = New System.Windows.Forms.ToolStripMenuItem()
@@ -43,7 +41,6 @@ Partial Class Form1
         Me.menuNum1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuNum2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuNum3 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.lvRec = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -51,7 +48,7 @@ Partial Class Form1
         Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.StatusStrip3 = New System.Windows.Forms.StatusStrip()
+        Me.sst_etat = New System.Windows.Forms.StatusStrip()
         Me.sbEnregistrement = New System.Windows.Forms.ToolStripStatusLabel()
         Me.MenuStrip2 = New System.Windows.Forms.MenuStrip()
         Me.FichierToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -74,7 +71,6 @@ Partial Class Form1
         Me.ChercherToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InitialiserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FermerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.tvPos = New System.Windows.Forms.TreeView()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.menuCopierFEN = New System.Windows.Forms.ToolStripMenuItem()
@@ -83,10 +79,10 @@ Partial Class Form1
         Me.menuCoupProche = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuVoirEtat = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuRecalculer = New System.Windows.Forms.ToolStripMenuItem()
-        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.sst_TV = New System.Windows.Forms.StatusStrip()
         Me.pbArbre = New System.Windows.Forms.ToolStripProgressBar()
         Me.sbArbre = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.MenuStrip3 = New System.Windows.Forms.MenuStrip()
+        Me.mnu_TV = New System.Windows.Forms.MenuStrip()
         Me.PositionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuEnPGN = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuEffaceOrphelin = New System.Windows.Forms.ToolStripMenuItem()
@@ -114,59 +110,35 @@ Partial Class Form1
         Me.pbReduire = New System.Windows.Forms.PictureBox()
         Me.TimerOpenFile = New System.Windows.Forms.Timer(Me.components)
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
-        Me.TabControl1.SuspendLayout()
-        Me.TabPage1.SuspendLayout()
-        Me.StatusStrip2.SuspendLayout()
+        Me.pnl_LV_etats = New System.Windows.Forms.Panel()
+        Me.pnl_TV = New System.Windows.Forms.Panel()
+        Me.pnl_LV_move = New System.Windows.Forms.Panel()
+        Me.sst_move.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
-        Me.TabPage2.SuspendLayout()
-        Me.StatusStrip3.SuspendLayout()
+        Me.sst_etat.SuspendLayout()
         Me.MenuStrip2.SuspendLayout()
-        Me.TabPage3.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
-        Me.StatusStrip1.SuspendLayout()
-        Me.MenuStrip3.SuspendLayout()
+        Me.sst_TV.SuspendLayout()
+        Me.mnu_TV.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbReduire, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnl_LV_etats.SuspendLayout()
+        Me.pnl_TV.SuspendLayout()
+        Me.pnl_LV_move.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'TabControl1
-        '
-        Me.TabControl1.Controls.Add(Me.TabPage1)
-        Me.TabControl1.Controls.Add(Me.TabPage2)
-        Me.TabControl1.Controls.Add(Me.TabPage3)
-        Me.TabControl1.Location = New System.Drawing.Point(564, 25)
-        Me.TabControl1.Margin = New System.Windows.Forms.Padding(2)
-        Me.TabControl1.Name = "TabControl1"
-        Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(364, 455)
-        Me.TabControl1.TabIndex = 5
-        '
-        'TabPage1
-        '
-        Me.TabPage1.Controls.Add(Me.lvMoves)
-        Me.TabPage1.Controls.Add(Me.StatusStrip2)
-        Me.TabPage1.Controls.Add(Me.MenuStrip1)
-        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage1.Margin = New System.Windows.Forms.Padding(2)
-        Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPage1.Size = New System.Drawing.Size(356, 429)
-        Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "Formulaire"
-        Me.TabPage1.UseVisualStyleBackColor = True
         '
         'lvMoves
         '
         Me.lvMoves.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.chCoup, Me.chWhite, Me.chBlack})
-        Me.lvMoves.Dock = System.Windows.Forms.DockStyle.Left
+        Me.lvMoves.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lvMoves.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lvMoves.FullRowSelect = True
         Me.lvMoves.GridLines = True
         Me.lvMoves.HideSelection = False
-        Me.lvMoves.Location = New System.Drawing.Point(2, 26)
+        Me.lvMoves.Location = New System.Drawing.Point(0, 24)
         Me.lvMoves.MultiSelect = False
         Me.lvMoves.Name = "lvMoves"
-        Me.lvMoves.Size = New System.Drawing.Size(288, 379)
+        Me.lvMoves.Size = New System.Drawing.Size(220, 531)
         Me.lvMoves.TabIndex = 18
         Me.lvMoves.UseCompatibleStateImageBehavior = False
         Me.lvMoves.View = System.Windows.Forms.View.Details
@@ -179,22 +151,22 @@ Partial Class Form1
         'chWhite
         '
         Me.chWhite.Text = "Blancs"
-        Me.chWhite.Width = 164
+        Me.chWhite.Width = 100
         '
         'chBlack
         '
         Me.chBlack.Text = "Noirs"
-        Me.chBlack.Width = 140
+        Me.chBlack.Width = 100
         '
-        'StatusStrip2
+        'sst_move
         '
-        Me.StatusStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sbFormulaire})
-        Me.StatusStrip2.Location = New System.Drawing.Point(2, 405)
-        Me.StatusStrip2.Name = "StatusStrip2"
-        Me.StatusStrip2.Padding = New System.Windows.Forms.Padding(1, 0, 10, 0)
-        Me.StatusStrip2.Size = New System.Drawing.Size(352, 22)
-        Me.StatusStrip2.TabIndex = 16
-        Me.StatusStrip2.Text = "StatusStrip2"
+        Me.sst_move.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sbFormulaire})
+        Me.sst_move.Location = New System.Drawing.Point(0, 555)
+        Me.sst_move.Name = "sst_move"
+        Me.sst_move.Padding = New System.Windows.Forms.Padding(1, 0, 10, 0)
+        Me.sst_move.Size = New System.Drawing.Size(220, 22)
+        Me.sst_move.TabIndex = 16
+        Me.sst_move.Text = "StatusStrip2"
         '
         'sbFormulaire
         '
@@ -205,9 +177,9 @@ Partial Class Form1
         'MenuStrip1
         '
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuPartie, Me.menuNumero})
-        Me.MenuStrip1.Location = New System.Drawing.Point(2, 2)
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(352, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(220, 24)
         Me.MenuStrip1.TabIndex = 15
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -267,20 +239,6 @@ Partial Class Form1
         Me.menuNum3.Size = New System.Drawing.Size(80, 22)
         Me.menuNum3.Text = "3"
         '
-        'TabPage2
-        '
-        Me.TabPage2.Controls.Add(Me.lvRec)
-        Me.TabPage2.Controls.Add(Me.StatusStrip3)
-        Me.TabPage2.Controls.Add(Me.MenuStrip2)
-        Me.TabPage2.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage2.Margin = New System.Windows.Forms.Padding(2)
-        Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPage2.Size = New System.Drawing.Size(356, 429)
-        Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = "Enregistrement"
-        Me.TabPage2.UseVisualStyleBackColor = True
-        '
         'lvRec
         '
         Me.lvRec.BackColor = System.Drawing.Color.Black
@@ -291,9 +249,9 @@ Partial Class Form1
         Me.lvRec.FullRowSelect = True
         Me.lvRec.GridLines = True
         Me.lvRec.HideSelection = False
-        Me.lvRec.Location = New System.Drawing.Point(2, 26)
+        Me.lvRec.Location = New System.Drawing.Point(0, 24)
         Me.lvRec.Name = "lvRec"
-        Me.lvRec.Size = New System.Drawing.Size(352, 379)
+        Me.lvRec.Size = New System.Drawing.Size(220, 553)
         Me.lvRec.TabIndex = 15
         Me.lvRec.UseCompatibleStateImageBehavior = False
         Me.lvRec.View = System.Windows.Forms.View.Details
@@ -306,11 +264,12 @@ Partial Class Form1
         'ColumnHeader2
         '
         Me.ColumnHeader2.Text = "Rec"
-        Me.ColumnHeader2.Width = 150
+        Me.ColumnHeader2.Width = 40
         '
         'ColumnHeader3
         '
         Me.ColumnHeader3.Text = "Time"
+        Me.ColumnHeader3.Width = 50
         '
         'ColumnHeader4
         '
@@ -325,16 +284,17 @@ Partial Class Form1
         'ColumnHeader7
         '
         Me.ColumnHeader7.Text = "Nb"
+        Me.ColumnHeader7.Width = 30
         '
-        'StatusStrip3
+        'sst_etat
         '
-        Me.StatusStrip3.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sbEnregistrement})
-        Me.StatusStrip3.Location = New System.Drawing.Point(2, 405)
-        Me.StatusStrip3.Name = "StatusStrip3"
-        Me.StatusStrip3.Padding = New System.Windows.Forms.Padding(1, 0, 10, 0)
-        Me.StatusStrip3.Size = New System.Drawing.Size(352, 22)
-        Me.StatusStrip3.TabIndex = 7
-        Me.StatusStrip3.Text = "StatusStrip3"
+        Me.sst_etat.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sbEnregistrement})
+        Me.sst_etat.Location = New System.Drawing.Point(0, 555)
+        Me.sst_etat.Name = "sst_etat"
+        Me.sst_etat.Padding = New System.Windows.Forms.Padding(1, 0, 10, 0)
+        Me.sst_etat.Size = New System.Drawing.Size(220, 22)
+        Me.sst_etat.TabIndex = 7
+        Me.sst_etat.Text = "StatusStrip3"
         '
         'sbEnregistrement
         '
@@ -345,10 +305,10 @@ Partial Class Form1
         'MenuStrip2
         '
         Me.MenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FichierToolStripMenuItem, Me.OrientationToolStripMenuItem, Me.PortSérieToolStripMenuItem})
-        Me.MenuStrip2.Location = New System.Drawing.Point(2, 2)
+        Me.MenuStrip2.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip2.Name = "MenuStrip2"
         Me.MenuStrip2.Padding = New System.Windows.Forms.Padding(4, 2, 0, 2)
-        Me.MenuStrip2.Size = New System.Drawing.Size(352, 24)
+        Me.MenuStrip2.Size = New System.Drawing.Size(220, 24)
         Me.MenuStrip2.TabIndex = 6
         Me.MenuStrip2.Text = "MenuStrip2"
         '
@@ -463,46 +423,32 @@ Partial Class Form1
         '
         Me.ChercherToolStripMenuItem.Enabled = False
         Me.ChercherToolStripMenuItem.Name = "ChercherToolStripMenuItem"
-        Me.ChercherToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ChercherToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
         Me.ChercherToolStripMenuItem.Text = "Chercher"
         '
         'InitialiserToolStripMenuItem
         '
         Me.InitialiserToolStripMenuItem.Enabled = False
         Me.InitialiserToolStripMenuItem.Name = "InitialiserToolStripMenuItem"
-        Me.InitialiserToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.InitialiserToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
         Me.InitialiserToolStripMenuItem.Text = "Initialiser"
         '
         'FermerToolStripMenuItem
         '
         Me.FermerToolStripMenuItem.Enabled = False
         Me.FermerToolStripMenuItem.Name = "FermerToolStripMenuItem"
-        Me.FermerToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.FermerToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
         Me.FermerToolStripMenuItem.Text = "Fermer"
-        '
-        'TabPage3
-        '
-        Me.TabPage3.Controls.Add(Me.tvPos)
-        Me.TabPage3.Controls.Add(Me.StatusStrip1)
-        Me.TabPage3.Controls.Add(Me.MenuStrip3)
-        Me.TabPage3.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage3.Margin = New System.Windows.Forms.Padding(2)
-        Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Size = New System.Drawing.Size(356, 429)
-        Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = "Arbre"
-        Me.TabPage3.UseVisualStyleBackColor = True
         '
         'tvPos
         '
         Me.tvPos.ContextMenuStrip = Me.ContextMenuStrip1
-        Me.tvPos.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tvPos.HideSelection = False
         Me.tvPos.Indent = 10
-        Me.tvPos.Location = New System.Drawing.Point(0, 24)
+        Me.tvPos.Location = New System.Drawing.Point(2, 26)
         Me.tvPos.Margin = New System.Windows.Forms.Padding(2)
         Me.tvPos.Name = "tvPos"
-        Me.tvPos.Size = New System.Drawing.Size(356, 383)
+        Me.tvPos.Size = New System.Drawing.Size(323, 527)
         Me.tvPos.TabIndex = 15
         '
         'ContextMenuStrip1
@@ -546,15 +492,15 @@ Partial Class Form1
         Me.menuRecalculer.Size = New System.Drawing.Size(143, 22)
         Me.menuRecalculer.Text = "Recalculer"
         '
-        'StatusStrip1
+        'sst_TV
         '
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.pbArbre, Me.sbArbre})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 407)
-        Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 10, 0)
-        Me.StatusStrip1.Size = New System.Drawing.Size(356, 22)
-        Me.StatusStrip1.TabIndex = 2
-        Me.StatusStrip1.Text = "StatusStrip1"
+        Me.sst_TV.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.pbArbre, Me.sbArbre})
+        Me.sst_TV.Location = New System.Drawing.Point(0, 555)
+        Me.sst_TV.Name = "sst_TV"
+        Me.sst_TV.Padding = New System.Windows.Forms.Padding(1, 0, 10, 0)
+        Me.sst_TV.Size = New System.Drawing.Size(346, 22)
+        Me.sst_TV.TabIndex = 2
+        Me.sst_TV.Text = "StatusStrip1"
         '
         'pbArbre
         '
@@ -567,15 +513,15 @@ Partial Class Form1
         Me.sbArbre.Size = New System.Drawing.Size(48, 17)
         Me.sbArbre.Text = "sbArbre"
         '
-        'MenuStrip3
+        'mnu_TV
         '
-        Me.MenuStrip3.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PositionToolStripMenuItem, Me.CoupsToolStripMenuItem, Me.mnuOptions})
-        Me.MenuStrip3.Location = New System.Drawing.Point(0, 0)
-        Me.MenuStrip3.Name = "MenuStrip3"
-        Me.MenuStrip3.Padding = New System.Windows.Forms.Padding(4, 2, 0, 2)
-        Me.MenuStrip3.Size = New System.Drawing.Size(356, 24)
-        Me.MenuStrip3.TabIndex = 1
-        Me.MenuStrip3.Text = "MenuStrip3"
+        Me.mnu_TV.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PositionToolStripMenuItem, Me.CoupsToolStripMenuItem, Me.mnuOptions})
+        Me.mnu_TV.Location = New System.Drawing.Point(0, 0)
+        Me.mnu_TV.Name = "mnu_TV"
+        Me.mnu_TV.Padding = New System.Windows.Forms.Padding(4, 2, 0, 2)
+        Me.mnu_TV.Size = New System.Drawing.Size(346, 24)
+        Me.mnu_TV.TabIndex = 1
+        Me.mnu_TV.Text = "MenuStrip3"
         '
         'PositionToolStripMenuItem
         '
@@ -608,41 +554,41 @@ Partial Class Form1
         'menuCoupSuivant
         '
         Me.menuCoupSuivant.Name = "menuCoupSuivant"
-        Me.menuCoupSuivant.Size = New System.Drawing.Size(152, 22)
+        Me.menuCoupSuivant.Size = New System.Drawing.Size(146, 22)
         Me.menuCoupSuivant.Text = "Suivant"
         '
         'menuTous
         '
         Me.menuTous.Name = "menuTous"
-        Me.menuTous.Size = New System.Drawing.Size(152, 22)
+        Me.menuTous.Size = New System.Drawing.Size(146, 22)
         Me.menuTous.Text = "Tous"
         '
         'menuTousLimit
         '
         Me.menuTousLimit.Name = "menuTousLimit"
-        Me.menuTousLimit.Size = New System.Drawing.Size(152, 22)
+        Me.menuTousLimit.Size = New System.Drawing.Size(146, 22)
         Me.menuTousLimit.Text = "Tous => ligne"
         '
         'ToolStripMenuItem4
         '
         Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
-        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(143, 6)
         '
         'mnuReTous
         '
         Me.mnuReTous.Name = "mnuReTous"
-        Me.mnuReTous.Size = New System.Drawing.Size(152, 22)
+        Me.mnuReTous.Size = New System.Drawing.Size(146, 22)
         Me.mnuReTous.Text = "RE Tous"
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(143, 6)
         '
         'menuClear
         '
         Me.menuClear.Name = "menuClear"
-        Me.menuClear.Size = New System.Drawing.Size(152, 22)
+        Me.menuClear.Size = New System.Drawing.Size(146, 22)
         Me.menuClear.Text = "CLEAR"
         '
         'mnuOptions
@@ -732,7 +678,7 @@ Partial Class Form1
         '
         Me.PictureBox1.Cursor = System.Windows.Forms.Cursors.Hand
         Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(0, 33)
+        Me.PictureBox1.Location = New System.Drawing.Point(12, 13)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(444, 447)
         Me.PictureBox1.TabIndex = 6
@@ -743,7 +689,7 @@ Partial Class Form1
         Me.pbReduire.BackColor = System.Drawing.SystemColors.Control
         Me.pbReduire.BackgroundImage = CType(resources.GetObject("pbReduire.BackgroundImage"), System.Drawing.Image)
         Me.pbReduire.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.pbReduire.Location = New System.Drawing.Point(944, 11)
+        Me.pbReduire.Location = New System.Drawing.Point(1614, 13)
         Me.pbReduire.Name = "pbReduire"
         Me.pbReduire.Size = New System.Drawing.Size(26, 17)
         Me.pbReduire.TabIndex = 13
@@ -753,51 +699,75 @@ Partial Class Form1
         '
         Me.TimerOpenFile.Interval = 1000
         '
-        'SaveFileDialog1
+        'pnl_LV_etats
         '
+        Me.pnl_LV_etats.Controls.Add(Me.sst_etat)
+        Me.pnl_LV_etats.Controls.Add(Me.lvRec)
+        Me.pnl_LV_etats.Controls.Add(Me.MenuStrip2)
+        Me.pnl_LV_etats.Location = New System.Drawing.Point(697, 13)
+        Me.pnl_LV_etats.Name = "pnl_LV_etats"
+        Me.pnl_LV_etats.Size = New System.Drawing.Size(220, 577)
+        Me.pnl_LV_etats.TabIndex = 14
+        '
+        'pnl_TV
+        '
+        Me.pnl_TV.Controls.Add(Me.sst_TV)
+        Me.pnl_TV.Controls.Add(Me.tvPos)
+        Me.pnl_TV.Controls.Add(Me.mnu_TV)
+        Me.pnl_TV.Location = New System.Drawing.Point(923, 13)
+        Me.pnl_TV.Name = "pnl_TV"
+        Me.pnl_TV.Size = New System.Drawing.Size(346, 577)
+        Me.pnl_TV.TabIndex = 15
+        '
+        'pnl_LV_move
+        '
+        Me.pnl_LV_move.Controls.Add(Me.lvMoves)
+        Me.pnl_LV_move.Controls.Add(Me.sst_move)
+        Me.pnl_LV_move.Controls.Add(Me.MenuStrip1)
+        Me.pnl_LV_move.Location = New System.Drawing.Point(471, 13)
+        Me.pnl_LV_move.Name = "pnl_LV_move"
+        Me.pnl_LV_move.Size = New System.Drawing.Size(220, 577)
+        Me.pnl_LV_move.TabIndex = 16
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1312, 669)
+        Me.ClientSize = New System.Drawing.Size(1317, 618)
         Me.Controls.Add(Me.pbReduire)
         Me.Controls.Add(Me.PictureBox1)
-        Me.Controls.Add(Me.TabControl1)
+        Me.Controls.Add(Me.pnl_LV_move)
+        Me.Controls.Add(Me.pnl_TV)
+        Me.Controls.Add(Me.pnl_LV_etats)
         Me.MainMenuStrip = Me.MenuStrip2
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "Form1"
         Me.Text = "ChessboARDuino v2"
-        Me.TabControl1.ResumeLayout(False)
-        Me.TabPage1.ResumeLayout(False)
-        Me.TabPage1.PerformLayout()
-        Me.StatusStrip2.ResumeLayout(False)
-        Me.StatusStrip2.PerformLayout()
+        Me.sst_move.ResumeLayout(False)
+        Me.sst_move.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
-        Me.TabPage2.ResumeLayout(False)
-        Me.TabPage2.PerformLayout()
-        Me.StatusStrip3.ResumeLayout(False)
-        Me.StatusStrip3.PerformLayout()
+        Me.sst_etat.ResumeLayout(False)
+        Me.sst_etat.PerformLayout()
         Me.MenuStrip2.ResumeLayout(False)
         Me.MenuStrip2.PerformLayout()
-        Me.TabPage3.ResumeLayout(False)
-        Me.TabPage3.PerformLayout()
         Me.ContextMenuStrip1.ResumeLayout(False)
-        Me.StatusStrip1.ResumeLayout(False)
-        Me.StatusStrip1.PerformLayout()
-        Me.MenuStrip3.ResumeLayout(False)
-        Me.MenuStrip3.PerformLayout()
+        Me.sst_TV.ResumeLayout(False)
+        Me.sst_TV.PerformLayout()
+        Me.mnu_TV.ResumeLayout(False)
+        Me.mnu_TV.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbReduire, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pnl_LV_etats.ResumeLayout(False)
+        Me.pnl_LV_etats.PerformLayout()
+        Me.pnl_TV.ResumeLayout(False)
+        Me.pnl_TV.PerformLayout()
+        Me.pnl_LV_move.ResumeLayout(False)
+        Me.pnl_LV_move.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
-    Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
-    Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
-    Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents pbReduire As System.Windows.Forms.PictureBox
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
@@ -816,21 +786,21 @@ Partial Class Form1
     Friend WithEvents ChercherToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents InitialiserToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents FermerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents MenuStrip3 As System.Windows.Forms.MenuStrip
+    Friend WithEvents mnu_TV As System.Windows.Forms.MenuStrip
     Friend WithEvents PositionToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuEnPGN As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuEffaceOrphelin As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CoupsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuCoupSuivant As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuTous As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents StatusStrip1 As System.Windows.Forms.StatusStrip
+    Friend WithEvents sst_TV As System.Windows.Forms.StatusStrip
     Friend WithEvents sbArbre As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents tvPos As System.Windows.Forms.TreeView
     Friend WithEvents lvMoves As System.Windows.Forms.ListView
     Friend WithEvents chCoup As System.Windows.Forms.ColumnHeader
     Friend WithEvents chWhite As System.Windows.Forms.ColumnHeader
     Friend WithEvents chBlack As System.Windows.Forms.ColumnHeader
-    Friend WithEvents StatusStrip2 As System.Windows.Forms.StatusStrip
+    Friend WithEvents sst_move As System.Windows.Forms.StatusStrip
     Friend WithEvents sbFormulaire As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents lvRec As System.Windows.Forms.ListView
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
@@ -839,7 +809,7 @@ Partial Class Form1
     Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader5 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader7 As System.Windows.Forms.ColumnHeader
-    Friend WithEvents StatusStrip3 As System.Windows.Forms.StatusStrip
+    Friend WithEvents sst_etat As System.Windows.Forms.StatusStrip
     Friend WithEvents sbEnregistrement As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents menuCopierFEN As System.Windows.Forms.ToolStripMenuItem
@@ -883,5 +853,8 @@ Partial Class Form1
     Friend WithEvents menuNum2 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuNum3 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuCalculComplet As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents pnl_LV_etats As System.Windows.Forms.Panel
+    Friend WithEvents pnl_TV As System.Windows.Forms.Panel
+    Friend WithEvents pnl_LV_move As System.Windows.Forms.Panel
 
 End Class
