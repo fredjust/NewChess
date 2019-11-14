@@ -68,6 +68,8 @@ Public Class Form1
         lvRec.Items(NbLigne).SubItems.Add(UnEtat.SquareOff)
         lvRec.Items(NbLigne).SubItems.Add(UnEtat.SquareOn)
         lvRec.Items(NbLigne).SubItems.Add(UnEtat.NbPieces)
+        lvRec.Items(NbLigne).SubItems.Add(UnEtat.FEN)
+        lvRec.Items(NbLigne).SubItems.Add(UnEtat.moveUCI)
 
         Select Case UnEtat.aColor
             Case BoardStates.StateColor.twoModif
@@ -82,8 +84,12 @@ Public Class Form1
             Case BoardStates.StateColor.NullTime
                 lvRec.Items(NbLigne).ForeColor = Color.BlueViolet
 
-            Case BoardStates.StateColor.Start
+
+            Case BoardStates.StateColor.CoupPossible
                 lvRec.Items(NbLigne).ForeColor = Color.Green
+
+            Case BoardStates.StateColor.CoupRejete
+                lvRec.Items(NbLigne).ForeColor = Color.Red
 
         End Select
 
@@ -105,6 +111,10 @@ Public Class Form1
 
     Private Sub lvRec_ColumnClick(ByVal sender As Object, ByVal e As System.Windows.Forms.ColumnClickEventArgs) Handles lvRec.ColumnClick
         ' sbEnregistrement.Text = lvRec.Columns(0).Width
+    End Sub
+
+    Private Sub lvRec_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles lvRec.DragDrop
+
     End Sub
 
    
@@ -203,6 +213,13 @@ Public Class Form1
 
         For iPos = 2 To POSITIONS.col_Position.Count - 1
             unePos = POSITIONS.col_Position.Item(iPos)
+
+            ETATS.col_States.Item(unePos.idState).FEN = unePos.FEN
+            ETATS.col_States.Item(unePos.idState).moveUCI = unePos.moveUCI
+
+            If unePos.nbFils = 0 Then
+                ETATS.col_States.Item(unePos.idState).aColor = BoardStates.StateColor.CoupRejete
+            End If
 
             If unePos.nbFils > 0 Or LesOptions.Voir_Orphelin Then 'n'affiche pas les orphelins de niveau 1       
                 Add_Pos_Tv(unePos)
@@ -445,6 +462,11 @@ ErrorHandler:
                     If (LesOptions.Zap_Verif_case_depart Or ETATS.switched_OFF(LeCoup(1).Substring(0, 2), idStateStart, idStateStart + iEtat)) _
                         And (LesOptions.Zap_Verif_case_arrivee Or ETATS.switched_ON(LeCoup(1).Substring(2, 2), idStateStart + 1, idStateStart + iEtat)) Then
 
+                        'Une signature vient de donner un coup
+                        'TODO il faut l'ajouter à la signature
+
+                        ETATS.col_States.Item(idStateStart + iEtat).aColor = BoardStates.StateColor.CoupPossible
+
                         PARTIE.MakeMove(LeCoup(1))  'effectue le déplacement
                         NewFen = PARTIE.GetFEN      'pour récupérer le FEN
                         PARTIE.SetFEN(aPos.FEN)     'avant de remètre l'ancien FEN
@@ -473,6 +495,7 @@ ErrorHandler:
         For iEtat = 1 To Min(Nb_Child_Find, POSITIONS.col_Position.Count - idPosition)
             POSITIONS.col_Position.Item(idPosition + iEtat).nbfrere = Nb_Child_Find - 1
         Next iEtat
+
 
         ''si on a trouvé aucun fils
         'If Nb_Child_Find = 0 Then
@@ -699,25 +722,25 @@ ErrorHandler:
 
             End With
 
-            With pnl_LV_etats
+            With SplitContainer1
                 .Top = 10
                 .Left = pnl_LV_move.Left + pnl_LV_move.Width + 10
                 .Height = Me.ClientSize.Height - .Top - 10
-                .Width = 220
+                .Width = Me.ClientSize.Width - 220 - PictureBox1.Width - 50
             End With
 
-            With pnl_TV
-                .Top = 10
-                .Left = pnl_LV_etats.Left + pnl_LV_etats.Width + 10
-                .Height = Me.ClientSize.Height - .Top - 10
-                .Width = Me.ClientSize.Width - 220 - 220 - PictureBox1.Width - 50
+            With lvRec
+                .Top = mnu_LV.Height + 2
+                .Left = 2
+                .Height = SplitContainer1.Panel1.Height - .Top - sst_etat.Height - 2
+                .Width = SplitContainer1.Panel1.Width - 4
             End With
 
             With tvPos
-                .Top = mnu_TV.Height
-                .Left = 0
-                .Height = pnl_TV.Height - sst_TV.Height - mnu_TV.Height
-                .Width = pnl_TV.Width
+                .Top = mnu_TV.Height + 2
+                .Left = 2
+                .Height = SplitContainer1.Panel2.Height - .Top - sst_TV.Height - 2
+                .Width = SplitContainer1.Panel2.Width - 4
             End With
 
 
@@ -851,7 +874,7 @@ ErrorHandler:
 
 #End Region
 
-
+    
 
 #Region "EVENEMENT FORM"
 
@@ -1047,13 +1070,13 @@ ErrorHandler:
 
         'TODO attention l'enregistrement est automatique !
 
-        Dim utf8WithoutBom As New System.Text.UTF8Encoding(False)
+        'Dim utf8WithoutBom As New System.Text.UTF8Encoding(False)
 
-        Try
-            My.Computer.FileSystem.WriteAllText(c_pgn_live_pgn, PGN_Of_Node(2), False, utf8WithoutBom)
-        Catch ex As Exception
-            Exit Sub
-        End Try
+        'Try
+        '    My.Computer.FileSystem.WriteAllText(c_pgn_live_pgn, PGN_Of_Node(2), False, utf8WithoutBom)
+        'Catch ex As Exception
+        '    Exit Sub
+        'End Try
 
 
 
@@ -1083,7 +1106,8 @@ ErrorHandler:
         aTag = aTag.Replace("k", "")
         aPos = aTag
         lvItem = POSITIONS.col_Position(aPos).idState
-        lvRec.Items(lvItem - 1).Selected = True
+        'lvRec.Items(lvItem - 1).Selected = True
+        lvRec.Items(lvRec.Items.Count - 1).EnsureVisible()
         lvRec.Items(lvItem - 1).EnsureVisible()
         'lvRec.Items(lvItem - 1).Focused = True
 
@@ -1466,6 +1490,33 @@ ErrorHandler:
     End Sub
 
 
+
+
+
+  
+
+    Private Sub SplitContainer1_SplitterMoved(ByVal sender As Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
+        With lvRec
+            .Top = mnu_LV.Height + 2
+            .Left = 2
+            .Height = SplitContainer1.Panel1.Height - .Top - sst_etat.Height - 2
+            .Width = SplitContainer1.Panel1.Width - 4
+        End With
+
+        With tvPos
+            .Top = mnu_TV.Height + 2
+            .Left = 2
+            .Height = SplitContainer1.Panel2.Height - .Top - sst_TV.Height - 2
+            .Width = SplitContainer1.Panel2.Width - 4
+        End With
+    End Sub
+
+  
+    Private Sub lvRec_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lvRec.SelectedIndexChanged
+        On Error Resume Next
+        PARTIE.SetFEN(lvRec.SelectedItems(0).SubItems(6).Text)
+        DrawPiece()
+    End Sub
 End Class
 
 

@@ -48,9 +48,11 @@ Partial Class Form1
         Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader6 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader8 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.sst_etat = New System.Windows.Forms.StatusStrip()
         Me.sbEnregistrement = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.MenuStrip2 = New System.Windows.Forms.MenuStrip()
+        Me.mnu_LV = New System.Windows.Forms.MenuStrip()
         Me.FichierToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuOuvreDonnees = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuSauveDonnees = New System.Windows.Forms.ToolStripMenuItem()
@@ -110,21 +112,22 @@ Partial Class Form1
         Me.pbReduire = New System.Windows.Forms.PictureBox()
         Me.TimerOpenFile = New System.Windows.Forms.Timer(Me.components)
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
-        Me.pnl_LV_etats = New System.Windows.Forms.Panel()
-        Me.pnl_TV = New System.Windows.Forms.Panel()
         Me.pnl_LV_move = New System.Windows.Forms.Panel()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.sst_move.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.sst_etat.SuspendLayout()
-        Me.MenuStrip2.SuspendLayout()
+        Me.mnu_LV.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.sst_TV.SuspendLayout()
         Me.mnu_TV.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbReduire, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pnl_LV_etats.SuspendLayout()
-        Me.pnl_TV.SuspendLayout()
         Me.pnl_LV_move.SuspendLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel1.SuspendLayout()
+        Me.SplitContainer1.Panel2.SuspendLayout()
+        Me.SplitContainer1.SuspendLayout()
         Me.SuspendLayout()
         '
         'lvMoves
@@ -242,16 +245,15 @@ Partial Class Form1
         'lvRec
         '
         Me.lvRec.BackColor = System.Drawing.Color.Black
-        Me.lvRec.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5, Me.ColumnHeader7})
-        Me.lvRec.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lvRec.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5, Me.ColumnHeader7, Me.ColumnHeader6, Me.ColumnHeader8})
         Me.lvRec.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lvRec.ForeColor = System.Drawing.Color.White
         Me.lvRec.FullRowSelect = True
         Me.lvRec.GridLines = True
         Me.lvRec.HideSelection = False
-        Me.lvRec.Location = New System.Drawing.Point(0, 24)
+        Me.lvRec.Location = New System.Drawing.Point(20, 55)
         Me.lvRec.Name = "lvRec"
-        Me.lvRec.Size = New System.Drawing.Size(220, 553)
+        Me.lvRec.Size = New System.Drawing.Size(337, 393)
         Me.lvRec.TabIndex = 15
         Me.lvRec.UseCompatibleStateImageBehavior = False
         Me.lvRec.View = System.Windows.Forms.View.Details
@@ -286,13 +288,21 @@ Partial Class Form1
         Me.ColumnHeader7.Text = "Nb"
         Me.ColumnHeader7.Width = 30
         '
+        'ColumnHeader6
+        '
+        Me.ColumnHeader6.Text = "FEN"
+        '
+        'ColumnHeader8
+        '
+        Me.ColumnHeader8.Text = "Move"
+        '
         'sst_etat
         '
         Me.sst_etat.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sbEnregistrement})
         Me.sst_etat.Location = New System.Drawing.Point(0, 555)
         Me.sst_etat.Name = "sst_etat"
         Me.sst_etat.Padding = New System.Windows.Forms.Padding(1, 0, 10, 0)
-        Me.sst_etat.Size = New System.Drawing.Size(220, 22)
+        Me.sst_etat.Size = New System.Drawing.Size(419, 22)
         Me.sst_etat.TabIndex = 7
         Me.sst_etat.Text = "StatusStrip3"
         '
@@ -302,15 +312,15 @@ Partial Class Form1
         Me.sbEnregistrement.Size = New System.Drawing.Size(119, 17)
         Me.sbEnregistrement.Text = "ToolStripStatusLabel2"
         '
-        'MenuStrip2
+        'mnu_LV
         '
-        Me.MenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FichierToolStripMenuItem, Me.OrientationToolStripMenuItem, Me.PortSérieToolStripMenuItem})
-        Me.MenuStrip2.Location = New System.Drawing.Point(0, 0)
-        Me.MenuStrip2.Name = "MenuStrip2"
-        Me.MenuStrip2.Padding = New System.Windows.Forms.Padding(4, 2, 0, 2)
-        Me.MenuStrip2.Size = New System.Drawing.Size(220, 24)
-        Me.MenuStrip2.TabIndex = 6
-        Me.MenuStrip2.Text = "MenuStrip2"
+        Me.mnu_LV.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FichierToolStripMenuItem, Me.OrientationToolStripMenuItem, Me.PortSérieToolStripMenuItem})
+        Me.mnu_LV.Location = New System.Drawing.Point(0, 0)
+        Me.mnu_LV.Name = "mnu_LV"
+        Me.mnu_LV.Padding = New System.Windows.Forms.Padding(4, 2, 0, 2)
+        Me.mnu_LV.Size = New System.Drawing.Size(419, 24)
+        Me.mnu_LV.TabIndex = 6
+        Me.mnu_LV.Text = "MenuStrip2"
         '
         'FichierToolStripMenuItem
         '
@@ -445,7 +455,7 @@ Partial Class Form1
         Me.tvPos.ContextMenuStrip = Me.ContextMenuStrip1
         Me.tvPos.HideSelection = False
         Me.tvPos.Indent = 10
-        Me.tvPos.Location = New System.Drawing.Point(2, 26)
+        Me.tvPos.Location = New System.Drawing.Point(43, 26)
         Me.tvPos.Margin = New System.Windows.Forms.Padding(2)
         Me.tvPos.Name = "tvPos"
         Me.tvPos.Size = New System.Drawing.Size(323, 527)
@@ -498,7 +508,7 @@ Partial Class Form1
         Me.sst_TV.Location = New System.Drawing.Point(0, 555)
         Me.sst_TV.Name = "sst_TV"
         Me.sst_TV.Padding = New System.Windows.Forms.Padding(1, 0, 10, 0)
-        Me.sst_TV.Size = New System.Drawing.Size(346, 22)
+        Me.sst_TV.Size = New System.Drawing.Size(445, 22)
         Me.sst_TV.TabIndex = 2
         Me.sst_TV.Text = "StatusStrip1"
         '
@@ -519,7 +529,7 @@ Partial Class Form1
         Me.mnu_TV.Location = New System.Drawing.Point(0, 0)
         Me.mnu_TV.Name = "mnu_TV"
         Me.mnu_TV.Padding = New System.Windows.Forms.Padding(4, 2, 0, 2)
-        Me.mnu_TV.Size = New System.Drawing.Size(346, 24)
+        Me.mnu_TV.Size = New System.Drawing.Size(445, 24)
         Me.mnu_TV.TabIndex = 1
         Me.mnu_TV.Text = "MenuStrip3"
         '
@@ -699,26 +709,6 @@ Partial Class Form1
         '
         Me.TimerOpenFile.Interval = 1000
         '
-        'pnl_LV_etats
-        '
-        Me.pnl_LV_etats.Controls.Add(Me.sst_etat)
-        Me.pnl_LV_etats.Controls.Add(Me.lvRec)
-        Me.pnl_LV_etats.Controls.Add(Me.MenuStrip2)
-        Me.pnl_LV_etats.Location = New System.Drawing.Point(697, 13)
-        Me.pnl_LV_etats.Name = "pnl_LV_etats"
-        Me.pnl_LV_etats.Size = New System.Drawing.Size(220, 577)
-        Me.pnl_LV_etats.TabIndex = 14
-        '
-        'pnl_TV
-        '
-        Me.pnl_TV.Controls.Add(Me.sst_TV)
-        Me.pnl_TV.Controls.Add(Me.tvPos)
-        Me.pnl_TV.Controls.Add(Me.mnu_TV)
-        Me.pnl_TV.Location = New System.Drawing.Point(923, 13)
-        Me.pnl_TV.Name = "pnl_TV"
-        Me.pnl_TV.Size = New System.Drawing.Size(346, 577)
-        Me.pnl_TV.TabIndex = 15
-        '
         'pnl_LV_move
         '
         Me.pnl_LV_move.Controls.Add(Me.lvMoves)
@@ -729,17 +719,36 @@ Partial Class Form1
         Me.pnl_LV_move.Size = New System.Drawing.Size(220, 577)
         Me.pnl_LV_move.TabIndex = 16
         '
+        'SplitContainer1
+        '
+        Me.SplitContainer1.Location = New System.Drawing.Point(697, 12)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        '
+        'SplitContainer1.Panel1
+        '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.mnu_LV)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lvRec)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.sst_etat)
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.mnu_TV)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.tvPos)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.sst_TV)
+        Me.SplitContainer1.Size = New System.Drawing.Size(868, 577)
+        Me.SplitContainer1.SplitterDistance = 419
+        Me.SplitContainer1.TabIndex = 17
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1317, 618)
+        Me.ClientSize = New System.Drawing.Size(1640, 665)
         Me.Controls.Add(Me.pbReduire)
+        Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.pnl_LV_move)
-        Me.Controls.Add(Me.pnl_TV)
-        Me.Controls.Add(Me.pnl_LV_etats)
-        Me.MainMenuStrip = Me.MenuStrip2
+        Me.MainMenuStrip = Me.mnu_LV
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "Form1"
         Me.Text = "ChessboARDuino v2"
@@ -749,8 +758,8 @@ Partial Class Form1
         Me.MenuStrip1.PerformLayout()
         Me.sst_etat.ResumeLayout(False)
         Me.sst_etat.PerformLayout()
-        Me.MenuStrip2.ResumeLayout(False)
-        Me.MenuStrip2.PerformLayout()
+        Me.mnu_LV.ResumeLayout(False)
+        Me.mnu_LV.PerformLayout()
         Me.ContextMenuStrip1.ResumeLayout(False)
         Me.sst_TV.ResumeLayout(False)
         Me.sst_TV.PerformLayout()
@@ -758,12 +767,14 @@ Partial Class Form1
         Me.mnu_TV.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbReduire, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pnl_LV_etats.ResumeLayout(False)
-        Me.pnl_LV_etats.PerformLayout()
-        Me.pnl_TV.ResumeLayout(False)
-        Me.pnl_TV.PerformLayout()
         Me.pnl_LV_move.ResumeLayout(False)
         Me.pnl_LV_move.PerformLayout()
+        Me.SplitContainer1.Panel1.ResumeLayout(False)
+        Me.SplitContainer1.Panel1.PerformLayout()
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.PerformLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -776,7 +787,7 @@ Partial Class Form1
     Friend WithEvents ToolStripMenuItem1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents menuInformationPartie As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuSauvePartie As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents MenuStrip2 As System.Windows.Forms.MenuStrip
+    Friend WithEvents mnu_LV As System.Windows.Forms.MenuStrip
     Friend WithEvents FichierToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuOuvreDonnees As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuSauveDonnees As System.Windows.Forms.ToolStripMenuItem
@@ -853,8 +864,9 @@ Partial Class Form1
     Friend WithEvents menuNum2 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuNum3 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuCalculComplet As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents pnl_LV_etats As System.Windows.Forms.Panel
-    Friend WithEvents pnl_TV As System.Windows.Forms.Panel
     Friend WithEvents pnl_LV_move As System.Windows.Forms.Panel
+    Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
+    Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader8 As System.Windows.Forms.ColumnHeader
 
 End Class

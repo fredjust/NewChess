@@ -13,7 +13,11 @@ Public Class BoardStates
         twoModif = 1
         DoubleOnOff = 2
         NullTime = 3
+        CoupPossible = 4
+        CoupRetenu = 5
+        CoupRejete = 6
         Start = 195
+
     End Enum
 
     'Type pour les données brutes
@@ -24,6 +28,8 @@ Public Class BoardStates
         Public SquareOff As String      'case qui s'est étent depuis la derniere position
         Public NbPieces As Byte         'nombre de pièce sur l'échiquier au moment 
         Public aColor As StateColor     'pour savoir si l'état comporte plusieurs modification
+        Public FEN As String            'la FEN de la position
+        Public moveUCI As String        'deplacement sous la forme g1f3 ayant permit d'arriver dans cette position
     End Class
 
     'collection des etats du plateau
