@@ -1,2 +1,2 @@
 # NewChess
- Decriptage des parties chessboarduino
+ Decryptage des parties chessboarduino
