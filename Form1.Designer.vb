@@ -114,6 +114,7 @@ Partial Class Form1
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.pnl_LV_move = New System.Windows.Forms.Panel()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.ColumnHeader9 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.sst_move.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.sst_etat.SuspendLayout()
@@ -245,7 +246,7 @@ Partial Class Form1
         'lvRec
         '
         Me.lvRec.BackColor = System.Drawing.Color.Black
-        Me.lvRec.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5, Me.ColumnHeader7, Me.ColumnHeader6, Me.ColumnHeader8})
+        Me.lvRec.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5, Me.ColumnHeader7, Me.ColumnHeader6, Me.ColumnHeader8, Me.ColumnHeader9})
         Me.lvRec.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lvRec.ForeColor = System.Drawing.Color.White
         Me.lvRec.FullRowSelect = True
@@ -564,41 +565,41 @@ Partial Class Form1
         'menuCoupSuivant
         '
         Me.menuCoupSuivant.Name = "menuCoupSuivant"
-        Me.menuCoupSuivant.Size = New System.Drawing.Size(146, 22)
+        Me.menuCoupSuivant.Size = New System.Drawing.Size(152, 22)
         Me.menuCoupSuivant.Text = "Suivant"
         '
         'menuTous
         '
         Me.menuTous.Name = "menuTous"
-        Me.menuTous.Size = New System.Drawing.Size(146, 22)
+        Me.menuTous.Size = New System.Drawing.Size(152, 22)
         Me.menuTous.Text = "Tous"
         '
         'menuTousLimit
         '
         Me.menuTousLimit.Name = "menuTousLimit"
-        Me.menuTousLimit.Size = New System.Drawing.Size(146, 22)
+        Me.menuTousLimit.Size = New System.Drawing.Size(152, 22)
         Me.menuTousLimit.Text = "Tous => ligne"
         '
         'ToolStripMenuItem4
         '
         Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
-        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(143, 6)
+        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(149, 6)
         '
         'mnuReTous
         '
         Me.mnuReTous.Name = "mnuReTous"
-        Me.mnuReTous.Size = New System.Drawing.Size(146, 22)
+        Me.mnuReTous.Size = New System.Drawing.Size(152, 22)
         Me.mnuReTous.Text = "RE Tous"
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(143, 6)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(149, 6)
         '
         'menuClear
         '
         Me.menuClear.Name = "menuClear"
-        Me.menuClear.Size = New System.Drawing.Size(146, 22)
+        Me.menuClear.Size = New System.Drawing.Size(152, 22)
         Me.menuClear.Text = "CLEAR"
         '
         'mnuOptions
@@ -739,6 +740,10 @@ Partial Class Form1
         Me.SplitContainer1.SplitterDistance = 419
         Me.SplitContainer1.TabIndex = 17
         '
+        'ColumnHeader9
+        '
+        Me.ColumnHeader9.Text = "Diff"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -868,5 +873,6 @@ Partial Class Form1
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader8 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader9 As System.Windows.Forms.ColumnHeader
 
 End Class

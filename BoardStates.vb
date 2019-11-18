@@ -16,6 +16,7 @@ Public Class BoardStates
         CoupPossible = 4
         CoupRetenu = 5
         CoupRejete = 6
+        CoupProche = 7
         Start = 195
 
     End Enum
@@ -30,6 +31,7 @@ Public Class BoardStates
         Public aColor As StateColor     'pour savoir si l'état comporte plusieurs modification
         Public FEN As String            'la FEN de la position
         Public moveUCI As String        'deplacement sous la forme g1f3 ayant permit d'arriver dans cette position
+        Public Diff As String           'Case en erreur
     End Class
 
     'collection des etats du plateau

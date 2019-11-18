@@ -70,6 +70,7 @@ Public Class Form1
         lvRec.Items(NbLigne).SubItems.Add(UnEtat.NbPieces)
         lvRec.Items(NbLigne).SubItems.Add(UnEtat.FEN)
         lvRec.Items(NbLigne).SubItems.Add(UnEtat.moveUCI)
+        lvRec.Items(NbLigne).SubItems.Add(UnEtat.Diff)
 
         Select Case UnEtat.aColor
             Case BoardStates.StateColor.twoModif
@@ -90,6 +91,9 @@ Public Class Form1
 
             Case BoardStates.StateColor.CoupRejete
                 lvRec.Items(NbLigne).ForeColor = Color.Red
+
+            Case BoardStates.StateColor.CoupProche
+                lvRec.Items(NbLigne).ForeColor = Color.Lime
 
         End Select
 
@@ -516,7 +520,7 @@ ErrorHandler:
 
     'calcule la distance (nombre de cases différentes) entre deux signatures
     'place dans case différente la case qui diffère
-    Public Function Distance(ByVal Signature1 As String, ByVal signature2 As String) As Byte
+    Public Function Distance(ByVal Signature1 As String, ByVal signature2 As String, Optional ByRef CaseDifferente As String = "") As Byte
         Dim colonne1 As String()
         Dim colonne2 As String()
         Dim Byte1 As Byte
@@ -536,7 +540,7 @@ ErrorHandler:
                     If (Byte1 And (2 ^ j)) <> (byte2 And (2 ^ j)) Then   'si la case est diffétente
                         diff += 1
 
-                        'CaseDifferente &= Chr(iCol + 97) & (j + 1) & " "
+                        CaseDifferente &= Chr(iCol + 97) & (j + 1) & " "
                         'ligne = sqIndex \ 10 'récupère la ligne
                         'lettre = Chr(iCol + 96) 'recupere le numero de colonne
                     End If
@@ -564,7 +568,7 @@ ErrorHandler:
         Dim idStateStart As Integer
         Dim laDistance As Byte
         Dim TempsEntreCoup As UInteger
-
+        Dim LesDiff As String = ""
 
         'position sur laquelle on se place
         aPos = POSITIONS.col_Position.Item(idPosition)
@@ -587,8 +591,8 @@ ErrorHandler:
             LeCoup = LesCoups(iSignature).Split(" ")
 
             For iEtat = 1 To Min(ETATS.col_States.Count - idStateStart, xNext) 'cherche dans les xNext signatures suivantes
-
-                laDistance = Distance(ETATS.col_States.Item(idStateStart + iEtat).signature, LeCoup(0))
+                LesDiff = ""
+                laDistance = Distance(ETATS.col_States.Item(idStateStart + iEtat).signature, LeCoup(0), Lesdiff)
 
                 If laDistance <= DistanceMax Then 'si la distance est inférieur à la limite
 
@@ -601,6 +605,8 @@ ErrorHandler:
 
                     If POSITIONS.Ajoute_Position(idPosition, idStateStart + iEtat, NewFen, TempsEntreCoup, LeCoup(1), LeCoup(2), PositionColor.rouge) Then
                         Nb_Child_Find += 1
+                        ETATS.col_States.Item(idStateStart + iEtat).aColor = BoardStates.StateColor.CoupProche
+                        ETATS.col_States.Item(idStateStart + iEtat).Diff = LesDiff
                     End If
 
                     'End If
@@ -621,6 +627,8 @@ ErrorHandler:
         For iEtat = 1 To Min(Nb_Child_Find, POSITIONS.col_Position.Count - idPosition)
             POSITIONS.col_Position.Item(idPosition + iEtat).nbfrere = Nb_Child_Find - 1
         Next iEtat
+
+        Refresh_ListView()
 
         Return Nb_Child_Find
 
@@ -1517,6 +1525,8 @@ ErrorHandler:
         PARTIE.SetFEN(lvRec.SelectedItems(0).SubItems(6).Text)
         DrawPiece()
     End Sub
+
+   
 End Class
 
 
