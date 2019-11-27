@@ -1,7 +1,7 @@
 # NewChess
  Decryptage des parties chessboarduino
  
- ![Screenshot](screenshot.png)
+ ![Screenshot](Screenshot.png)
  
  Cette version utilise les signatures pour trouver les coups  
  Elle permet de trouver des coups même si la position lue n'est pas parfaite (coup proche)  
