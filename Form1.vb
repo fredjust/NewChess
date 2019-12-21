@@ -59,7 +59,10 @@ Public Class Form1
 
     '------------------------------------------------
 
+    Declare Sub mouse_event Lib "user32" Alias "mouse_event" (ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal cButtons As Integer, ByVal dwExtraInfo As Integer)
 
+    Public Const MOUSEEVENTF_LEFTDOWN = &H2 ' left button down
+    Public Const MOUSEEVENTF_LEFTUP = &H4 ' left button up
 
 #Region "GESTION LIST VIEW ETAT"
 
@@ -1189,11 +1192,7 @@ ErrorHandler:
             Debug.Print("temps chargement : " & Environment.TickCount - intTimeStart)
             Refresh_ListView()
             sbEnregistrement.Text = NomFichier
-            If menuEnBoucle.Checked Then
-                If MsgBox("attention ce fichier sera ouvert toutes les 10 secondes", MsgBoxStyle.Exclamation + MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
-                    TimerOpenFile.Enabled = True
-                End If
-            End If
+            
         End If
     End Sub
 
@@ -1381,118 +1380,96 @@ ErrorHandler:
 
 
 
-    Private Sub menuEnBoucle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuEnBoucle.Click
-        menuEnBoucle.Checked = Not menuEnBoucle.Checked
-        TimerOpenFile.Enabled = False
-    End Sub
+   
 
-    'envoie le fichier sur le serveur FTP
-    Private Sub SendFTP()
-        Try 'Instance d'essaie qui retournera une erreur en cas de problème
+    ''envoie le fichier sur le serveur FTP
+    'Private Sub SendFTP()
+    '    Try 'Instance d'essaie qui retournera une erreur en cas de problème
 
-            Dim request As FtpWebRequest = DirectCast(WebRequest.Create("ftp_serveur"), System.Net.FtpWebRequest) 'On renseigne la futur destination du fichier à envoyer
-            request.Credentials = New NetworkCredential("user_name", "password") 'On rentre les identifiant et mot de passe
+    '        Dim request As FtpWebRequest = DirectCast(WebRequest.Create("ftp_serveur"), System.Net.FtpWebRequest) 'On renseigne la futur destination du fichier à envoyer
+    '        request.Credentials = New NetworkCredential("user_name", "password") 'On rentre les identifiant et mot de passe
 
-            request.Method = System.Net.WebRequestMethods.Ftp.UploadFile 'On indique qu'on veut upload un fichier
+    '        request.Method = System.Net.WebRequestMethods.Ftp.UploadFile 'On indique qu'on veut upload un fichier
 
-            Dim files() As Byte = File.ReadAllBytes(c_pgn_live_pgn) 'On indique le chemin du fichier à upload
+    '        Dim files() As Byte = File.ReadAllBytes(c_pgn_live_pgn) 'On indique le chemin du fichier à upload
 
-            Dim strz As Stream = request.GetRequestStream() 'On créer un stream qui va nous permettre d'envoyer le fichier
+    '        Dim strz As Stream = request.GetRequestStream() 'On créer un stream qui va nous permettre d'envoyer le fichier
 
-            strz.Write(files, 0, files.Length) 'On envoie le fichier
+    '        strz.Write(files, 0, files.Length) 'On envoie le fichier
 
-            strz.Close() 'On ferme la connection
-            strz.Dispose() 'On supprime la connection
+    '        strz.Close() 'On ferme la connection
+    '        strz.Dispose() 'On supprime la connection
 
-        Catch ex As Exception 'Une erreur c'est produite, on récupère l'erreur et on l'affiche.
-            Debug.Print("Erreur :" & vbCrLf & ex.ToString)
-        End Try
-    End Sub
+    '    Catch ex As Exception 'Une erreur c'est produite, on récupère l'erreur et on l'affiche.
+    '        Debug.Print("Erreur :" & vbCrLf & ex.ToString)
+    '    End Try
+    'End Sub
 
-    'Ouvre le fichier automatiquement 
-    'lorsqu"il est envoyé par un raspberry pi
-    Private Sub TimerOpenFile_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerOpenFile.Tick
-        'Dim infoReader As System.IO.FileInfo
-        Dim utf8WithoutBom As New System.Text.UTF8Encoding(False)
-        Static NouveauCalculNecessaire As Boolean = False
-        Static compteur As Byte = 0
-        'Static tailledufichier As Long = 0
-        Static nombredesignature As Integer = 0
-        Dim tempo As Long = 0
+    ''Ouvre le fichier automatiquement 
+    ''lorsqu"il est envoyé par un raspberry pi
+    'Private Sub TimerOpenFile_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    '    'Dim infoReader As System.IO.FileInfo
+    '    Dim utf8WithoutBom As New System.Text.UTF8Encoding(False)
+    '    Static NouveauCalculNecessaire As Boolean = False
+    '    Static compteur As Byte = 0
+    '    'Static tailledufichier As Long = 0
+    '    Static nombredesignature As Integer = 0
+    '    Dim tempo As Long = 0
 
-        pbArbre.Value = compteur * 10
-        compteur += 1
-        If compteur < 11 Then Exit Sub
-        compteur = 0
+    '    pbArbre.Value = compteur * 10
+    '    compteur += 1
+    '    If compteur < 11 Then Exit Sub
+    '    compteur = 0
 
-        If menuEnBoucle.Checked = True Then
-            'infoReader = My.Computer.FileSystem.GetFileInfo("\\RASPBERRYPI\DossierDeParties\Ronde_001.ARD") '"C:\pgn\live.ard")
-            'tempo = infoReader.Length
-            'If tempo = tailledufichier Then
-            'le fichier n'a pas changé depuis la derniere ouverture
-            If NouveauCalculNecessaire = True Then
-                'si on ne l'a pas déjà calculé    
-                If menuCalculComplet.Checked Then
-                    POSITIONS.col_Position.Clear()
-                    tvPos.Nodes.Clear()
-                End If
-                Find_All_Child()
-                Refresh_TreeView()
-                Refresh_ListView()
-                Draw_Position(POSITIONS.col_Position.Count)
+    '    If menuEnBoucle.Checked = True Then
+    '        'infoReader = My.Computer.FileSystem.GetFileInfo("\\RASPBERRYPI\DossierDeParties\Ronde_001.ARD") '"C:\pgn\live.ard")
+    '        'tempo = infoReader.Length
+    '        'If tempo = tailledufichier Then
+    '        'le fichier n'a pas changé depuis la derniere ouverture
+    '        If NouveauCalculNecessaire = True Then
+    '            'si on ne l'a pas déjà calculé    
+    '            If menuCalculComplet.Checked Then
+    '                POSITIONS.col_Position.Clear()
+    '                tvPos.Nodes.Clear()
+    '            End If
+    '            Find_All_Child()
+    '            Refresh_TreeView()
+    '            Refresh_ListView()
+    '            Draw_Position(POSITIONS.col_Position.Count)
 
-                Try
-                    My.Computer.FileSystem.WriteAllText(c_pgn_live_pgn, PGN_Of_Node, False, utf8WithoutBom)
-                Catch ex As Exception
-                    Exit Sub
-                End Try
+    '            Try
+    '                My.Computer.FileSystem.WriteAllText(c_pgn_live_pgn, PGN_Of_Node, False, utf8WithoutBom)
+    '            Catch ex As Exception
+    '                Exit Sub
+    '            End Try
 
 
 
-                NouveauCalculNecessaire = False
-                sbArbre.Text = "CALCUL POSITION"
-            Else
-                sbArbre.Text = "SAME FILE"
+    '            NouveauCalculNecessaire = False
+    '            sbArbre.Text = "CALCUL POSITION"
+    '        Else
+    '            sbArbre.Text = "SAME FILE"
 
-            End If
-            'Else
-            'le fichier a changé on le charge uniquement 
-            If ETATS.LoadFromFile(OpenFileDialog1.FileName, menuInvGD.Checked, menuInvHB.Checked, menuRot90.Checked) Then '"\\RASPBERRYPI\DossierDeParties\Ronde_001.ARD"
-                Refresh_ListView()
-                If nombredesignature = lvRec.Items.Count Then
-                    NouveauCalculNecessaire = False
-                Else
-                    NouveauCalculNecessaire = True
-                    nombredesignature = lvRec.Items.Count
-                End If
+    '        End If
+    '        'Else
+    '        'le fichier a changé on le charge uniquement 
+    '        If ETATS.LoadFromFile(OpenFileDialog1.FileName, menuInvGD.Checked, menuInvHB.Checked, menuRot90.Checked) Then '"\\RASPBERRYPI\DossierDeParties\Ronde_001.ARD"
+    '            Refresh_ListView()
+    '            If nombredesignature = lvRec.Items.Count Then
+    '                NouveauCalculNecessaire = False
+    '            Else
+    '                NouveauCalculNecessaire = True
+    '                nombredesignature = lvRec.Items.Count
+    '            End If
 
-                'tailledufichier = tempo
-                sbArbre.Text = "LOAD NEW FILE"
-            End If
-        End If
-        'End If
-    End Sub
+    '            'tailledufichier = tempo
+    '            sbArbre.Text = "LOAD NEW FILE"
+    '        End If
+    '    End If
+    '    'End If
+    'End Sub
 
 
-    Private Sub menu1sec_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu1sec.Click
-        TimerOpenFile.Interval = 100
-    End Sub
-
-    Private Sub menu10sec_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu10sec.Click
-        TimerOpenFile.Interval = 1000
-    End Sub
-
-    Private Sub menu3ec_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu3ec.Click
-        TimerOpenFile.Interval = 300
-    End Sub
-
-    Private Sub menu5sec_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu5sec.Click
-        TimerOpenFile.Interval = 500
-    End Sub
-
-    Private Sub menu30sec_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu30sec.Click
-        TimerOpenFile.Interval = 3000
-    End Sub
 
     Private Sub menuInvGD_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuInvGD.Click
         menuInvGD.Checked = Not menuInvGD.Checked
@@ -1506,36 +1483,12 @@ ErrorHandler:
         menuRot90.Checked = Not menuRot90.Checked
     End Sub
 
-    Private Sub menuNum1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuNum1.Click
-        menuNumero.Text = "Numéro 1"
-        c_pgn_live_pgn = "c:\pgn\live1.pgn"
-        InfoGame.IniSection = "GameInfo1"
-        LoadInfoPgn()
-    End Sub
-
-    Private Sub menuNum2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuNum2.Click
-        menuNumero.Text = "Numéro 2"
-        c_pgn_live_pgn = "c:\pgn\live2.pgn"
-        InfoGame.IniSection = "GameInfo2"
-        LoadInfoPgn()
-    End Sub
-
-    Private Sub menuNum3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuNum3.Click
-        menuNumero.Text = "Numéro 3"
-        c_pgn_live_pgn = "c:\pgn\live3.pgn"
-        InfoGame.IniSection = "GameInfo3"
-        LoadInfoPgn()
-    End Sub
+   
 
     Private Sub menuCalculComplet_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCalculComplet.Click
         menuCalculComplet.Checked = Not menuCalculComplet.Checked
     End Sub
 
-
-
-
-
-  
 
     Private Sub SplitContainer1_SplitterMoved(ByVal sender As Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
         With lvRec
@@ -1681,6 +1634,272 @@ err:
 
     Private Sub ActualiserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ActualiserToolStripMenuItem.Click
         Refresh_ListView()
+    End Sub
+
+    Private Sub ConfigToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ConfigToolStripMenuItem.Click
+        Form3.Show()
+    End Sub
+
+    '*************************** FONCTION LICHESS **************************************
+#Region "LICHESS BOARD"
+
+
+    '************************************************************************************************
+    'renvoie les deux cases qui viennent d'etre jouées en verifiant si elles sont vertes 
+    'case1 la case de départ c-a-d celle qui est vide
+    'case2 la case de fin
+    '************************************************************************************************
+    Private Sub FindNewCase(ByRef case1 As Byte, ByRef case2 As Byte)
+
+        Dim myBmp As New Bitmap(echiquier.Width, echiquier.Height)
+        Dim g As Graphics = Graphics.FromImage(myBmp)
+        g.CopyFromScreen(echiquier.Location, Point.Empty, myBmp.Size)
+        g.Dispose()
+
+        case1 = 0
+        case2 = 0
+
+        For ligne = 1 To 8
+            For colonne = 1 To 8
+                'si la case est verte claire
+                If myBmp.GetPixel((echiquier.Width \ 8) * (colonne - 1) + 5, (echiquier.Width \ 8) * (8 - ligne) + 5) = _
+                    ColorSquareWhite Then
+                    'si la case est verte  claire
+                    If case1 = 0 Then
+                        case1 = ligne * 10 + colonne
+                    Else
+                        case2 = ligne * 10 + colonne
+                    End If
+
+                End If
+                'si la case est verte foncé
+                If myBmp.GetPixel((echiquier.Width \ 8) * (colonne - 1) + 5, (echiquier.Width \ 8) * (8 - ligne) + 5) = _
+                    ColorSquareBlack Then
+                    If case1 = 0 Then
+                        case1 = ligne * 10 + colonne
+                    Else
+                        case2 = ligne * 10 + colonne
+                    End If
+                End If
+                If case2 <> 0 And case1 <> 0 Then Exit For
+            Next
+            If case2 <> 0 And case1 <> 0 Then Exit For
+        Next
+
+        myBmp.Dispose()
+
+    End Sub
+
+    'renvoie +1 ou -1
+    Private Function Sigma() As Integer
+        If Rnd() > 0.5 Then
+            Return 1
+        Else
+            Return -1
+        End If
+    End Function
+
+    'renvoie un nombre aléatoire en lb et ub
+    Private Function Alea(ByVal lb As Integer, ByVal ub As Integer) As Integer
+        Return Int((ub - lb + 1) * Rnd() + lb)
+    End Function
+
+    'Attends un peu entre 100 et 300 ms
+    Public Sub attendre()
+        System.Threading.Thread.Sleep(Alea(100, 300))
+    End Sub
+
+    'CLIC sur les cases pour jouer un coup
+    Private Sub ClickOnScreen(ByVal lescases As String)
+
+        Dim lastPos As Point
+        Dim ToClic As Point
+
+        Dim dep, arr As String
+        Dim sq1, sq2 As Byte
+        Dim l1, c1 As Byte
+        Dim l2, c2 As Byte
+        Dim Nb_Essai As Byte = 0
+
+        If CheckMoveToolStripMenuItem.Checked Then
+
+            Debug.Print("JOUE LICHESS")
+            SwitchOffLedBoard()
+
+
+            dep = lescases.Substring(0, 2)
+            arr = lescases.Substring(2, 2)
+
+            sq1 = PARTIE.SquareIndex(dep)
+            sq2 = PARTIE.SquareIndex(arr)
+
+            l1 = sq1 \ 10
+            c1 = sq1 Mod 10
+
+            l2 = sq2 \ 10
+            c2 = sq2 Mod 10
+
+            lastPos = Cursor.Position
+
+            ToClic.X = echiquier.X + (echiquier.Width \ 8) * (c1 - 1) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 18) * Rnd())
+            ToClic.Y = echiquier.Y + (echiquier.Width \ 8) * (8 - l1) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 18) * Rnd())
+
+            Cursor.Position = ToClic
+            mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+            attendre()
+            mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+
+            attendre()
+
+            ToClic.X = echiquier.X + (echiquier.Width \ 8) * (c2 - 1) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 18) * Rnd())
+            ToClic.Y = echiquier.Y + (echiquier.Width \ 8) * (8 - l2) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 18) * Rnd())
+
+            Cursor.Position = ToClic
+            mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+            attendre()
+            mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+
+            Cursor.Position = lastPos
+
+        End If
+    End Sub
+
+    'Demande d'éteindre toutes les LED
+    Private Sub SwitchOffLedBoard()
+        If SerialPort1.IsOpen Then
+            Debug.Print("EFFACE")
+            SerialPort1.WriteLine("c")
+        End If
+    End Sub
+
+    'Envoie la commande pour allumer les cases sq1 et sq2
+    Private Sub allumeLedId(ByVal sq1 As Byte, ByVal sq2 As Byte)
+        Dim cmdserial As String
+
+        Dim l1, c1 As Byte
+        Dim l2, c2 As Byte
+
+        If sq1 <> 0 And sq2 <> 0 Then
+
+            l1 = sq1 \ 10
+            c1 = sq1 Mod 10
+
+            l2 = sq2 \ 10
+            c2 = sq2 Mod 10
+
+            If SerialPort1.IsOpen Then
+ 
+                cmdserial = "o" & l1.ToString & "," & c1.ToString & "," & l2.ToString & "," & c2.ToString
+
+                SerialPort1.WriteLine(cmdserial)
+                Debug.Print(cmdserial)
+
+            End If
+        End If
+
+    End Sub
+
+    '************************************************************************************************
+    '************************************************************************************************
+    'vérifie si les cases case1 et case2 (en index 10) sont toujours vertes
+    'renvoie TRUE si elles ne le sont plus
+    'FALSE si pas de changement
+    '************************************************************************************************
+    Private Function ChangeCase(ByVal case1 As Byte, ByVal case2 As Byte) As Boolean
+
+        Dim ligne1 As Byte
+        Dim ligne2 As Byte
+        Dim colonne1 As Byte
+        Dim colonne2 As Byte
+
+        Dim couleur1 As Color
+        Dim couleur2 As Color
+        Dim couleur3 As Color
+
+
+        If case1 <> 0 And case2 <> 0 Then
+
+            Dim myBmp As New Bitmap(echiquier.Width, echiquier.Height)
+            Dim g As Graphics = Graphics.FromImage(myBmp)
+            g.CopyFromScreen(echiquier.Location, Point.Empty, myBmp.Size)
+
+            g.Dispose()
+
+            ligne1 = case1 \ 10
+            colonne1 = case1 Mod 10
+            ligne2 = case2 \ 10
+            colonne2 = case2 Mod 10
+
+            couleur1 = myBmp.GetPixel((echiquier.Width \ 8) * (colonne1 - 1) + 5, (echiquier.Width \ 8) * (8 - ligne1) + 5)
+            couleur2 = myBmp.GetPixel((echiquier.Width \ 8) * (colonne2 - 1) + 5, (echiquier.Width \ 8) * (8 - ligne2) + 5)
+            couleur3 = myBmp.GetPixel((echiquier.Width \ 8) * (colonne1 - 1) + echiquier.Width / 16, (echiquier.Width \ 8) * (8 - ligne1) + echiquier.Width / 16)
+
+            If (couleur1 = Color.FromArgb(255, 205, 210, 106) _
+                Or couleur1 = Color.FromArgb(255, 170, 162, 58)) _
+                And (couleur2 = Color.FromArgb(255, 205, 210, 106) _
+                Or couleur2 = Color.FromArgb(255, 170, 162, 58)) Then '_
+                'And (couleur3 = couleur1) Then
+                myBmp.Dispose()
+                Return False
+            Else
+                myBmp.Dispose()
+                Return True
+            End If
+        Else
+            Return True
+        End If
+
+    End Function
+
+#End Region
+
+    Private Sub TimerLichess_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerLichess.Tick
+        Static sq1, sq2, CompterSec As Byte
+
+        'permet d'initialiser les varialbles static en désactivant puis ré activant l'option
+        If TimerLichess.Interval <> 250 Then
+            TimerLichess.Interval = 250
+            sq1 = 0
+            sq2 = 0
+        End If
+
+        'si les cases vertes ne sont pas encore trouvées
+        If sq1 = 0 Or sq2 = 0 Then
+            FindNewCase(sq1, sq2)
+            If sq1 = 0 Or sq2 = 0 Then
+                'effaceBoard()  'si on a pas trouvé les deux cases on efface tout
+
+            Else
+                allumeLedId(sq1, sq2)   'sinon on allume les led
+
+                CompterSec = 0
+            End If
+
+        Else 'déja trouvées
+            If ChangeCase(sq1, sq2) Then
+                FindNewCase(sq1, sq2)
+                allumeLedId(sq1, sq2)
+
+                CompterSec = 0
+            Else 'elles n'ont pas changées
+                If CompterSec = 0 Then
+                    allumeLedId(sq1, sq2)
+
+                End If
+                CompterSec += 1
+                If CompterSec > 50 Then
+                    SwitchOffLedBoard()
+                    CompterSec = 1
+
+                End If
+            End If
+
+        End If
+    End Sub
+
+    Private Sub CheckMoveToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckMoveToolStripMenuItem.Click
+        CheckMoveToolStripMenuItem.Checked = Not CheckMoveToolStripMenuItem.Checked
+        TimerLichess.Enabled = CheckMoveToolStripMenuItem.Checked
     End Sub
 End Class
 

@@ -37,10 +37,6 @@ Partial Class Form1
         Me.menuInformationPartie = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
         Me.menuSauvePartie = New System.Windows.Forms.ToolStripMenuItem()
-        Me.menuNumero = New System.Windows.Forms.ToolStripMenuItem()
-        Me.menuNum1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.menuNum2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.menuNum3 = New System.Windows.Forms.ToolStripMenuItem()
         Me.lvRec = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -57,15 +53,9 @@ Partial Class Form1
         Me.FichierToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuOuvreDonnees = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuSauveDonnees = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ActualiserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.menuEnBoucle = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuEffaceDonnees = New System.Windows.Forms.ToolStripMenuItem()
-        Me.FréquenceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.menu1sec = New System.Windows.Forms.ToolStripMenuItem()
-        Me.menu3ec = New System.Windows.Forms.ToolStripMenuItem()
-        Me.menu5sec = New System.Windows.Forms.ToolStripMenuItem()
-        Me.menu10sec = New System.Windows.Forms.ToolStripMenuItem()
-        Me.menu30sec = New System.Windows.Forms.ToolStripMenuItem()
         Me.OrientationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuRot90 = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuInvGD = New System.Windows.Forms.ToolStripMenuItem()
@@ -116,12 +106,14 @@ Partial Class Form1
         Me.menuCalculComplet = New System.Windows.Forms.ToolStripMenuItem()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.pbReduire = New System.Windows.Forms.PictureBox()
-        Me.TimerOpenFile = New System.Windows.Forms.Timer(Me.components)
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.pnl_LV_move = New System.Windows.Forms.Panel()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.SerialPort1 = New System.IO.Ports.SerialPort(Me.components)
-        Me.ActualiserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EcranToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ConfigToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckMoveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TimerLichess = New System.Windows.Forms.Timer(Me.components)
         Me.sst_move.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.sst_etat.SuspendLayout()
@@ -187,7 +179,7 @@ Partial Class Form1
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuPartie, Me.menuNumero})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuPartie, Me.EcranToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(220, 24)
@@ -224,31 +216,6 @@ Partial Class Form1
         Me.menuSauvePartie.Name = "menuSauvePartie"
         Me.menuSauvePartie.Size = New System.Drawing.Size(152, 22)
         Me.menuSauvePartie.Text = "Sauvegarder"
-        '
-        'menuNumero
-        '
-        Me.menuNumero.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuNum1, Me.menuNum2, Me.menuNum3})
-        Me.menuNumero.Name = "menuNumero"
-        Me.menuNumero.Size = New System.Drawing.Size(63, 20)
-        Me.menuNumero.Text = "Numéro"
-        '
-        'menuNum1
-        '
-        Me.menuNum1.Name = "menuNum1"
-        Me.menuNum1.Size = New System.Drawing.Size(80, 22)
-        Me.menuNum1.Text = "1"
-        '
-        'menuNum2
-        '
-        Me.menuNum2.Name = "menuNum2"
-        Me.menuNum2.Size = New System.Drawing.Size(80, 22)
-        Me.menuNum2.Text = "2"
-        '
-        'menuNum3
-        '
-        Me.menuNum3.Name = "menuNum3"
-        Me.menuNum3.Size = New System.Drawing.Size(80, 22)
-        Me.menuNum3.Text = "3"
         '
         'lvRec
         '
@@ -336,7 +303,7 @@ Partial Class Form1
         '
         'FichierToolStripMenuItem
         '
-        Me.FichierToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuOuvreDonnees, Me.menuSauveDonnees, Me.ActualiserToolStripMenuItem, Me.ToolStripMenuItem3, Me.menuEnBoucle, Me.menuEffaceDonnees, Me.FréquenceToolStripMenuItem})
+        Me.FichierToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuOuvreDonnees, Me.menuSauveDonnees, Me.ActualiserToolStripMenuItem, Me.ToolStripMenuItem3, Me.menuEffaceDonnees})
         Me.FichierToolStripMenuItem.Name = "FichierToolStripMenuItem"
         Me.FichierToolStripMenuItem.Size = New System.Drawing.Size(65, 20)
         Me.FichierToolStripMenuItem.Text = "Données"
@@ -354,16 +321,16 @@ Partial Class Form1
         Me.menuSauveDonnees.Size = New System.Drawing.Size(160, 22)
         Me.menuSauveDonnees.Text = "Sauvegarder"
         '
+        'ActualiserToolStripMenuItem
+        '
+        Me.ActualiserToolStripMenuItem.Name = "ActualiserToolStripMenuItem"
+        Me.ActualiserToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.ActualiserToolStripMenuItem.Text = "Actualiser"
+        '
         'ToolStripMenuItem3
         '
         Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
         Me.ToolStripMenuItem3.Size = New System.Drawing.Size(157, 6)
-        '
-        'menuEnBoucle
-        '
-        Me.menuEnBoucle.Name = "menuEnBoucle"
-        Me.menuEnBoucle.Size = New System.Drawing.Size(160, 22)
-        Me.menuEnBoucle.Text = "Boucler"
         '
         'menuEffaceDonnees
         '
@@ -371,43 +338,6 @@ Partial Class Form1
         Me.menuEffaceDonnees.Name = "menuEffaceDonnees"
         Me.menuEffaceDonnees.Size = New System.Drawing.Size(160, 22)
         Me.menuEffaceDonnees.Text = "Effacer tout"
-        '
-        'FréquenceToolStripMenuItem
-        '
-        Me.FréquenceToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menu1sec, Me.menu3ec, Me.menu5sec, Me.menu10sec, Me.menu30sec})
-        Me.FréquenceToolStripMenuItem.Name = "FréquenceToolStripMenuItem"
-        Me.FréquenceToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
-        Me.FréquenceToolStripMenuItem.Text = "Fréquence"
-        '
-        'menu1sec
-        '
-        Me.menu1sec.Name = "menu1sec"
-        Me.menu1sec.Size = New System.Drawing.Size(106, 22)
-        Me.menu1sec.Text = "1 sec"
-        '
-        'menu3ec
-        '
-        Me.menu3ec.Name = "menu3ec"
-        Me.menu3ec.Size = New System.Drawing.Size(106, 22)
-        Me.menu3ec.Text = "3 sec"
-        '
-        'menu5sec
-        '
-        Me.menu5sec.Name = "menu5sec"
-        Me.menu5sec.Size = New System.Drawing.Size(106, 22)
-        Me.menu5sec.Text = "5 sec"
-        '
-        'menu10sec
-        '
-        Me.menu10sec.Name = "menu10sec"
-        Me.menu10sec.Size = New System.Drawing.Size(106, 22)
-        Me.menu10sec.Text = "10 sec"
-        '
-        'menu30sec
-        '
-        Me.menu30sec.Name = "menu30sec"
-        Me.menu30sec.Size = New System.Drawing.Size(106, 22)
-        Me.menu30sec.Text = "30 sec"
         '
         'OrientationToolStripMenuItem
         '
@@ -752,10 +682,6 @@ Partial Class Form1
         Me.pbReduire.TabIndex = 13
         Me.pbReduire.TabStop = False
         '
-        'TimerOpenFile
-        '
-        Me.TimerOpenFile.Interval = 1000
-        '
         'pnl_LV_move
         '
         Me.pnl_LV_move.Controls.Add(Me.lvMoves)
@@ -790,11 +716,27 @@ Partial Class Form1
         '
         Me.SerialPort1.PortName = "COM6"
         '
-        'ActualiserToolStripMenuItem
+        'EcranToolStripMenuItem
         '
-        Me.ActualiserToolStripMenuItem.Name = "ActualiserToolStripMenuItem"
-        Me.ActualiserToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
-        Me.ActualiserToolStripMenuItem.Text = "Actualiser"
+        Me.EcranToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConfigToolStripMenuItem, Me.CheckMoveToolStripMenuItem})
+        Me.EcranToolStripMenuItem.Name = "EcranToolStripMenuItem"
+        Me.EcranToolStripMenuItem.Size = New System.Drawing.Size(74, 20)
+        Me.EcranToolStripMenuItem.Text = "Adversaire"
+        '
+        'ConfigToolStripMenuItem
+        '
+        Me.ConfigToolStripMenuItem.Name = "ConfigToolStripMenuItem"
+        Me.ConfigToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ConfigToolStripMenuItem.Text = "Config"
+        '
+        'CheckMoveToolStripMenuItem
+        '
+        Me.CheckMoveToolStripMenuItem.Name = "CheckMoveToolStripMenuItem"
+        Me.CheckMoveToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CheckMoveToolStripMenuItem.Text = "Activer"
+        '
+        'TimerLichess
+        '
         '
         'Form1
         '
@@ -902,24 +844,12 @@ Partial Class Form1
     Friend WithEvents mnuVoirOrphelin As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mneCopierPGN As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem5 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents menuEnBoucle As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents TimerOpenFile As System.Windows.Forms.Timer
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     Friend WithEvents pbArbre As System.Windows.Forms.ToolStripProgressBar
-    Friend WithEvents FréquenceToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents menu1sec As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents menu3ec As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents menu5sec As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents menu10sec As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents menu30sec As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents OrientationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuInvGD As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuInvHB As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuRot90 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents menuNumero As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents menuNum1 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents menuNum2 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents menuNum3 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuCalculComplet As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents pnl_LV_move As System.Windows.Forms.Panel
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
@@ -933,5 +863,9 @@ Partial Class Form1
     Friend WithEvents menuCOM_5 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SerialPort1 As System.IO.Ports.SerialPort
     Friend WithEvents ActualiserToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EcranToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ConfigToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CheckMoveToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents TimerLichess As System.Windows.Forms.Timer
 
 End Class
