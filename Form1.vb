@@ -43,11 +43,21 @@ Public Class Form1
     Public Const PasEncoreRechercher As SByte = -1
     Public intTimeStart As Integer = 0
     Public c_pgn_live_pgn As String = "c:\pgn\live.pgn"
-   
-
 
     'tableau contenant les couleurs
     Dim LesCouleurs(5) As System.Drawing.Color
+    Dim ColorSquareWhite As Color
+    Dim ColorSquareBlack As Color
+
+    'GESTION DU PORT SERIE
+    '------------------------------------------------
+    Dim SerialPortName As String = "COM6"
+    Dim SerialPortSpeed As String = "115200"
+    Dim myPort As Array
+    ' Delegate Sub SetTextCallback(ByVal [text] As String) 'Added to prevent threading errors during receiveing of data
+
+
+    '------------------------------------------------
 
 
 
@@ -270,6 +280,29 @@ Public Class Form1
         LesCouleurs(2) = Color.Green
         LesCouleurs(3) = Color.Blue
 
+    End Sub
+
+
+    Public Sub initSizeEchiquier()
+        Dim tmpPt As Point
+        With echiquier
+            .Width = 512 '640
+            .Height = 512 '640 
+            .X = 660 '587 
+            .Y = 149 ' 164
+        End With
+
+        ColorSquareWhite = Color.FromArgb(255, 205, 210, 106)
+        ColorSquareBlack = Color.FromArgb(255, 170, 162, 58)
+
+        IniFile = Application.StartupPath & "\Chessboard.ini"
+        If Cls_Ini.INISectionExist(IniFile, "liscreen") Then
+            tmpPt.X = Cls_Ini.INIRead(IniFile, "liscreen", "left")
+            tmpPt.Y = Cls_Ini.INIRead(IniFile, "liscreen", "top")
+            echiquier.Location = tmpPt
+            echiquier.Width = Cls_Ini.INIRead(IniFile, "liscreen", "Width")
+            echiquier.Height = echiquier.Width
+        End If
     End Sub
 
     'Recupère les infos de la partie dans un fichier INI
@@ -890,6 +923,7 @@ ErrorHandler:
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Init_Option()
         LoadInfoPgn()
+        initSizeEchiquier()
         PictureBox1.Top = 10
         PictureBox1.Left = 10
         pbReduire.Top = 10
@@ -1527,6 +1561,127 @@ ErrorHandler:
     End Sub
 
    
+    Private Sub ChercherToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_Find.Click
+        On Error GoTo err
+
+        myPort = IO.Ports.SerialPort.GetPortNames()
+
+        menuCOM_Find.Text = "Choisir ..."
+
+        menuCOM_1.Text = myPort(0)
+        menuCOM_1.Enabled = True
+        menuCOM_1.Visible = True
+
+        menuCOM_2.Text = myPort(1)
+        menuCOM_2.Enabled = True
+        menuCOM_2.Visible = True
+
+        menuCOM_3.Text = myPort(2)
+        menuCOM_3.Enabled = True
+        menuCOM_3.Visible = True
+
+        menuCOM_4.Text = myPort(3)
+        menuCOM_4.Enabled = True
+        menuCOM_4.Visible = True
+
+        menuCOM_5.Text = myPort(4)
+        menuCOM_5.Enabled = True
+        menuCOM_5.Visible = True
+
+
+
+err:
+
+    End Sub
+
+    Private Sub menuCOM_1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_1.Click
+        SerialPortName = menuCOM_1.Text
+        chgMenuInit()
+    End Sub
+
+    Private Sub menuCOM_2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_2.Click
+        SerialPortName = menuCOM_2.Text
+        chgMenuInit()
+    End Sub
+
+    Private Sub menuCOM_3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_3.Click
+        SerialPortName = menuCOM_3.Text
+        chgMenuInit()
+    End Sub
+
+    Private Sub menuCOM_4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_4.Click
+        SerialPortName = menuCOM_4.Text
+        chgMenuInit()
+    End Sub
+
+    Private Sub menuCOM_5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_5.Click
+        SerialPortName = menuCOM_5.Text
+        chgMenuInit()
+    End Sub
+
+    Private Sub chgMenuInit()
+        menuSerialInit.Text = "Init " & SerialPortName & " " & SerialPortSpeed
+        menuSerialInit.Enabled = True
+
+    End Sub
+
+    Private Sub InitialiserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuSerialInit.Click
+        SerialPort1.PortName = SerialPortName
+        SerialPort1.BaudRate = SerialPortSpeed
+
+        Try
+
+            SerialPort1.Open()
+            menuSerialInit.Enabled = False
+            menuSerialClose.Enabled = True
+            'TimerCoup.Enabled = True
+            'CheckMoveToolStripMenuItem.Enabled = True
+        Catch ex As Exception
+            MsgBox("Erreur lors de l'ouverture du port")
+        End Try
+
+    End Sub
+
+    Private Sub FermerToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuSerialClose.Click
+        SerialPort1.Close()
+        menuSerialClose.Enabled = False
+        menuSerialInit.Enabled = True
+        'AttendreCoup = 0
+        'TimerCoup.Enabled = False
+        'CheckMoveToolStripMenuItem.Enabled = True
+    End Sub
+
+    'ajoute une signature à la collection 
+    Private Sub SetRec(ByVal aRec As String)
+        ETATS.Ajoute_Signature(aRec, 0)
+    End Sub
+
+    'rajoute un temps au dernier ETAT
+    Private Sub SetTime(ByVal aTime As String)
+
+    End Sub
+
+    'redirige en fonction du type de DATA recue
+    Private Sub ReceivedText(ByVal [text] As String) 'input from ReadExisting
+
+        Debug.Print([text])
+        If Not [text].Contains(".") Then 'si les DATA ne contiennent pas des . 
+            SetTime([text])
+        Else 'sinon il s'agit d'une signature
+            SetRec([text])
+        End If
+
+    End Sub
+
+    'recoit les DATA du port SERIE
+    Private Sub SerialPort1_DataReceived(ByVal sender As System.Object, ByVal e As System.IO.Ports.SerialDataReceivedEventArgs) Handles SerialPort1.DataReceived
+        ReceivedText(SerialPort1.ReadLine())
+        LastReceive = Environment.TickCount
+    End Sub
+
+    Private Sub ActualiserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ActualiserToolStripMenuItem.Click
+        Refresh_ListView()
+    End Sub
 End Class
 
 

@@ -228,6 +228,13 @@ Public Class BoardStates
 
         If temps = 0 Then modif = StateColor.NullTime Else modif = StateColor.Normal
 
+        signature = signature.Substring(0, signature.Length - 2)
+        If signature = "195.195.195.195.195.195.195.195" Then
+            'efface toutes les anciennes positions
+            col_States.Clear()
+            Debug.Print("CLEAR POSITION")
+        End If
+
         If col_States.Count = 0 Then 'si c'est le premier enregistrement
 
             Ajoute_Etat(signature, temps, "", "")

@@ -19,4 +19,10 @@
 
     Public InfoGame As New InfoPGN
 
+    Public echiquier As Rectangle
+    Public IniFile As String = ""
+
+    'permet de stocker le timecode de la dernière reception de data via le port série
+    Public LastReceive As Integer
+
 End Module

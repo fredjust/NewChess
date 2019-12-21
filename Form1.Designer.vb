@@ -50,6 +50,7 @@ Partial Class Form1
         Me.ColumnHeader7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader6 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader8 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader9 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.sst_etat = New System.Windows.Forms.StatusStrip()
         Me.sbEnregistrement = New System.Windows.Forms.ToolStripStatusLabel()
         Me.mnu_LV = New System.Windows.Forms.MenuStrip()
@@ -70,9 +71,14 @@ Partial Class Form1
         Me.menuInvGD = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuInvHB = New System.Windows.Forms.ToolStripMenuItem()
         Me.PortSérieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ChercherToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.InitialiserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.FermerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuCOM_Find = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuCOM_1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuCOM_2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuCOM_3 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuCOM_4 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuCOM_5 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuSerialInit = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuSerialClose = New System.Windows.Forms.ToolStripMenuItem()
         Me.tvPos = New System.Windows.Forms.TreeView()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.menuCopierFEN = New System.Windows.Forms.ToolStripMenuItem()
@@ -114,7 +120,8 @@ Partial Class Form1
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.pnl_LV_move = New System.Windows.Forms.Panel()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.ColumnHeader9 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.SerialPort1 = New System.IO.Ports.SerialPort(Me.components)
+        Me.ActualiserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.sst_move.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.sst_etat.SuspendLayout()
@@ -198,24 +205,24 @@ Partial Class Form1
         '
         Me.menuNouvellePartie.Enabled = False
         Me.menuNouvellePartie.Name = "menuNouvellePartie"
-        Me.menuNouvellePartie.Size = New System.Drawing.Size(142, 22)
+        Me.menuNouvellePartie.Size = New System.Drawing.Size(152, 22)
         Me.menuNouvellePartie.Text = "Nouvelle"
         '
         'menuInformationPartie
         '
         Me.menuInformationPartie.Name = "menuInformationPartie"
-        Me.menuInformationPartie.Size = New System.Drawing.Size(142, 22)
+        Me.menuInformationPartie.Size = New System.Drawing.Size(152, 22)
         Me.menuInformationPartie.Text = "Informations"
         '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(139, 6)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(149, 6)
         '
         'menuSauvePartie
         '
         Me.menuSauvePartie.Name = "menuSauvePartie"
-        Me.menuSauvePartie.Size = New System.Drawing.Size(142, 22)
+        Me.menuSauvePartie.Size = New System.Drawing.Size(152, 22)
         Me.menuSauvePartie.Text = "Sauvegarder"
         '
         'menuNumero
@@ -297,6 +304,10 @@ Partial Class Form1
         '
         Me.ColumnHeader8.Text = "Move"
         '
+        'ColumnHeader9
+        '
+        Me.ColumnHeader9.Text = "Diff"
+        '
         'sst_etat
         '
         Me.sst_etat.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sbEnregistrement})
@@ -325,7 +336,7 @@ Partial Class Form1
         '
         'FichierToolStripMenuItem
         '
-        Me.FichierToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuOuvreDonnees, Me.menuSauveDonnees, Me.ToolStripMenuItem3, Me.menuEnBoucle, Me.menuEffaceDonnees, Me.FréquenceToolStripMenuItem})
+        Me.FichierToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuOuvreDonnees, Me.menuSauveDonnees, Me.ActualiserToolStripMenuItem, Me.ToolStripMenuItem3, Me.menuEnBoucle, Me.menuEffaceDonnees, Me.FréquenceToolStripMenuItem})
         Me.FichierToolStripMenuItem.Name = "FichierToolStripMenuItem"
         Me.FichierToolStripMenuItem.Size = New System.Drawing.Size(65, 20)
         Me.FichierToolStripMenuItem.Text = "Données"
@@ -425,31 +436,66 @@ Partial Class Form1
         '
         'PortSérieToolStripMenuItem
         '
-        Me.PortSérieToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ChercherToolStripMenuItem, Me.InitialiserToolStripMenuItem, Me.FermerToolStripMenuItem})
+        Me.PortSérieToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuCOM_Find, Me.menuSerialInit, Me.menuSerialClose})
         Me.PortSérieToolStripMenuItem.Name = "PortSérieToolStripMenuItem"
         Me.PortSérieToolStripMenuItem.Size = New System.Drawing.Size(69, 20)
         Me.PortSérieToolStripMenuItem.Text = "Port Série"
         '
-        'ChercherToolStripMenuItem
+        'menuCOM_Find
         '
-        Me.ChercherToolStripMenuItem.Enabled = False
-        Me.ChercherToolStripMenuItem.Name = "ChercherToolStripMenuItem"
-        Me.ChercherToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
-        Me.ChercherToolStripMenuItem.Text = "Chercher"
+        Me.menuCOM_Find.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuCOM_1, Me.menuCOM_2, Me.menuCOM_3, Me.menuCOM_4, Me.menuCOM_5})
+        Me.menuCOM_Find.Name = "menuCOM_Find"
+        Me.menuCOM_Find.Size = New System.Drawing.Size(152, 22)
+        Me.menuCOM_Find.Text = "Chercher"
         '
-        'InitialiserToolStripMenuItem
+        'menuCOM_1
         '
-        Me.InitialiserToolStripMenuItem.Enabled = False
-        Me.InitialiserToolStripMenuItem.Name = "InitialiserToolStripMenuItem"
-        Me.InitialiserToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
-        Me.InitialiserToolStripMenuItem.Text = "Initialiser"
+        Me.menuCOM_1.Name = "menuCOM_1"
+        Me.menuCOM_1.Size = New System.Drawing.Size(102, 22)
+        Me.menuCOM_1.Text = "COM"
+        Me.menuCOM_1.Visible = False
         '
-        'FermerToolStripMenuItem
+        'menuCOM_2
         '
-        Me.FermerToolStripMenuItem.Enabled = False
-        Me.FermerToolStripMenuItem.Name = "FermerToolStripMenuItem"
-        Me.FermerToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
-        Me.FermerToolStripMenuItem.Text = "Fermer"
+        Me.menuCOM_2.Name = "menuCOM_2"
+        Me.menuCOM_2.Size = New System.Drawing.Size(102, 22)
+        Me.menuCOM_2.Text = "COM"
+        Me.menuCOM_2.Visible = False
+        '
+        'menuCOM_3
+        '
+        Me.menuCOM_3.Name = "menuCOM_3"
+        Me.menuCOM_3.Size = New System.Drawing.Size(102, 22)
+        Me.menuCOM_3.Text = "COM"
+        Me.menuCOM_3.Visible = False
+        '
+        'menuCOM_4
+        '
+        Me.menuCOM_4.Name = "menuCOM_4"
+        Me.menuCOM_4.Size = New System.Drawing.Size(102, 22)
+        Me.menuCOM_4.Text = "COM"
+        Me.menuCOM_4.Visible = False
+        '
+        'menuCOM_5
+        '
+        Me.menuCOM_5.Name = "menuCOM_5"
+        Me.menuCOM_5.Size = New System.Drawing.Size(102, 22)
+        Me.menuCOM_5.Text = "COM"
+        Me.menuCOM_5.Visible = False
+        '
+        'menuSerialInit
+        '
+        Me.menuSerialInit.Enabled = False
+        Me.menuSerialInit.Name = "menuSerialInit"
+        Me.menuSerialInit.Size = New System.Drawing.Size(152, 22)
+        Me.menuSerialInit.Text = "Initialiser"
+        '
+        'menuSerialClose
+        '
+        Me.menuSerialClose.Enabled = False
+        Me.menuSerialClose.Name = "menuSerialClose"
+        Me.menuSerialClose.Size = New System.Drawing.Size(152, 22)
+        Me.menuSerialClose.Text = "Fermer"
         '
         'tvPos
         '
@@ -565,41 +611,41 @@ Partial Class Form1
         'menuCoupSuivant
         '
         Me.menuCoupSuivant.Name = "menuCoupSuivant"
-        Me.menuCoupSuivant.Size = New System.Drawing.Size(152, 22)
+        Me.menuCoupSuivant.Size = New System.Drawing.Size(146, 22)
         Me.menuCoupSuivant.Text = "Suivant"
         '
         'menuTous
         '
         Me.menuTous.Name = "menuTous"
-        Me.menuTous.Size = New System.Drawing.Size(152, 22)
+        Me.menuTous.Size = New System.Drawing.Size(146, 22)
         Me.menuTous.Text = "Tous"
         '
         'menuTousLimit
         '
         Me.menuTousLimit.Name = "menuTousLimit"
-        Me.menuTousLimit.Size = New System.Drawing.Size(152, 22)
+        Me.menuTousLimit.Size = New System.Drawing.Size(146, 22)
         Me.menuTousLimit.Text = "Tous => ligne"
         '
         'ToolStripMenuItem4
         '
         Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
-        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(143, 6)
         '
         'mnuReTous
         '
         Me.mnuReTous.Name = "mnuReTous"
-        Me.mnuReTous.Size = New System.Drawing.Size(152, 22)
+        Me.mnuReTous.Size = New System.Drawing.Size(146, 22)
         Me.mnuReTous.Text = "RE Tous"
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(143, 6)
         '
         'menuClear
         '
         Me.menuClear.Name = "menuClear"
-        Me.menuClear.Size = New System.Drawing.Size(152, 22)
+        Me.menuClear.Size = New System.Drawing.Size(146, 22)
         Me.menuClear.Text = "CLEAR"
         '
         'mnuOptions
@@ -740,9 +786,15 @@ Partial Class Form1
         Me.SplitContainer1.SplitterDistance = 419
         Me.SplitContainer1.TabIndex = 17
         '
-        'ColumnHeader9
+        'SerialPort1
         '
-        Me.ColumnHeader9.Text = "Diff"
+        Me.SerialPort1.PortName = "COM6"
+        '
+        'ActualiserToolStripMenuItem
+        '
+        Me.ActualiserToolStripMenuItem.Name = "ActualiserToolStripMenuItem"
+        Me.ActualiserToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.ActualiserToolStripMenuItem.Text = "Actualiser"
         '
         'Form1
         '
@@ -799,9 +851,9 @@ Partial Class Form1
     Friend WithEvents ToolStripMenuItem3 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents menuEffaceDonnees As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PortSérieToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ChercherToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents InitialiserToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents FermerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuCOM_Find As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuSerialInit As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuSerialClose As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mnu_TV As System.Windows.Forms.MenuStrip
     Friend WithEvents PositionToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuEnPGN As System.Windows.Forms.ToolStripMenuItem
@@ -874,5 +926,12 @@ Partial Class Form1
     Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader8 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader9 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents menuCOM_1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuCOM_2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuCOM_3 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuCOM_4 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuCOM_5 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SerialPort1 As System.IO.Ports.SerialPort
+    Friend WithEvents ActualiserToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class
