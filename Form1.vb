@@ -9,28 +9,28 @@ Imports System.Net
 Public Class Form1
 
     'Type pour les données brutes
-    Dim ETATS As New BoardStates
+    Dim STATES As New BoardStates
 
     'type de donnée pour stocker une position
     Dim POSITIONS As New GamePositions
 
     'objet pour vérifier les coups
-    Public PARTIE As New ObjFenMoves
+    Public GAME As New ObjFenMoves
 
     'option pour modifier la recherche des coups
-    Public Structure Option_Recherche
+    Public Structure Search_Option
         Public Nb_signatures_comparees As Byte          'recherche parmis les x suivantes
         Public Distance_max_pour_coup_proche As Byte    'nombre de case maximum d'écart 
         Public Num_derniere_Ligne As UInteger           'pour limiter la recherche pour simuler le live
         Public Zap_Verif_case_depart As Boolean         'ne pas vérifier que la case de départ s'est eteinte
         Public Zap_Verif_case_arrivee As Boolean        'ne pas vérifier que la case d'arrivé s'est allumée
-        Public Couleur_Position As Byte                 'couleur pour afficher les noeuds suivants cf PositionColor ENUM
+        Public Color_Position As Byte                 'couleur pour afficher les noeuds suivants cf PositionColor ENUM
         Public Re_calculer As Boolean                   'recalcul les fils de chaque noeud
-        Public Voir_Orphelin As Boolean                 'affiche les orphelins dans la treeview
+        Public See_Orphans As Boolean                 'affiche les orphelins dans la treeview
     End Structure
 
     'stock les options
-    Dim LesOptions As Option_Recherche
+    Dim All_Options As Search_Option
 
     'pour choisir facilement une couleur pour Option_Recherche.Couleur_Position
     Public Enum PositionColor As Byte
@@ -120,21 +120,12 @@ Public Class Form1
 
         lvRec.Items.Clear()
 
-        For iEtat = 1 To ETATS.col_States.Count
-            Add_ItemToListView(ETATS.col_States.Item(iEtat))
+        For iEtat = 1 To STATES.col_States.Count
+            Add_ItemToListView(STATES.col_States.Item(iEtat))
         Next
 
     End Sub
 
-    Private Sub lvRec_ColumnClick(ByVal sender As Object, ByVal e As System.Windows.Forms.ColumnClickEventArgs) Handles lvRec.ColumnClick
-        ' sbEnregistrement.Text = lvRec.Columns(0).Width
-    End Sub
-
-    Private Sub lvRec_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles lvRec.DragDrop
-
-    End Sub
-
-   
 
     'affiche les cercles rouges et vert lorsqu'on défile les positions
     Private Sub lvRec_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles lvRec.KeyUp
@@ -159,7 +150,7 @@ Public Class Form1
 
 #Region "GESTION TREE VIEW POSITION"
 
-    'procedure recursive qui s'auto appelle
+    'procedure recursive 
     'trouve le noeud ayant pour clé "thekey" dans l'ensemble de tous les noeuds et le renvoie dans "FindNode"
     Public Sub Find_Node_By_Key(ByVal myNodes As TreeNodeCollection, ByVal thekey As String, _
                                 ByRef FindNode As TreeNode, ByRef isFind As Boolean)
@@ -231,14 +222,14 @@ Public Class Form1
         For iPos = 2 To POSITIONS.col_Position.Count - 1
             unePos = POSITIONS.col_Position.Item(iPos)
 
-            ETATS.col_States.Item(unePos.idState).FEN = unePos.FEN
-            ETATS.col_States.Item(unePos.idState).moveUCI = unePos.moveUCI
+            STATES.col_States.Item(unePos.idState).FEN = unePos.FEN
+            STATES.col_States.Item(unePos.idState).moveUCI = unePos.moveUCI
 
             If unePos.nbFils = 0 Then
-                ETATS.col_States.Item(unePos.idState).aColor = BoardStates.StateColor.CoupRejete
+                STATES.col_States.Item(unePos.idState).aColor = BoardStates.StateColor.CoupRejete
             End If
 
-            If unePos.nbFils > 0 Or LesOptions.Voir_Orphelin Then 'n'affiche pas les orphelins de niveau 1       
+            If unePos.nbFils > 0 Or All_Options.See_Orphans Then 'n'affiche pas les orphelins de niveau 1       
                 Add_Pos_Tv(unePos)
             End If
 
@@ -253,8 +244,9 @@ Public Class Form1
 
         tvPos.Nodes(0).ExpandAll()
         tvPos.Nodes(0).EnsureVisible()
+        tvPos.Nodes(tvPos.Nodes.Count - 1).EnsureVisible()
 
-
+        Draw_Position(POSITIONS.Last_Position)
     End Sub
 
 #End Region
@@ -265,18 +257,18 @@ Public Class Form1
     'initialise les variables options
     Public Sub Init_Option()
 
-        With LesOptions
+        With All_Options
             .Distance_max_pour_coup_proche = 1
             .Nb_signatures_comparees = 20
             .Num_derniere_Ligne = 0
             .Zap_Verif_case_arrivee = False
             .Zap_Verif_case_depart = False
-            .Couleur_Position = 0
+            .Color_Position = 0
             .Re_calculer = False
-            .Voir_Orphelin = False
+            .See_Orphans = False
         End With
 
-        mnuOpSuivant.Text = "Nb suivant (" & LesOptions.Nb_signatures_comparees.ToString & ")"
+        mnuOpSuivant.Text = "Nb suivant (" & All_Options.Nb_signatures_comparees.ToString & ")"
 
         LesCouleurs(0) = Color.Black
         LesCouleurs(1) = Color.Red
@@ -333,7 +325,7 @@ Public Class Form1
 
     'affecte une couleur pour l'affichage des noeuds suivants
     Public Sub Set_Color(ByVal LaCouleur As Byte)
-        LesOptions.Couleur_Position = LaCouleur
+        All_Options.Color_Position = LaCouleur
     End Sub
 
 
@@ -380,25 +372,25 @@ ErrorHandler:
     Public Sub Cherche_Premier()
         Dim iLigne As Byte = 1
 
-        iLigne = ETATS.idStateOne
-        POSITIONS.New_Game(iLigne)
+        iLigne = STATES.idStateOne
+        If iLigne <> 0 Then POSITIONS.New_Game(iLigne)
 
     End Sub
 
     'recherche les fils de toutes les positions qui n'ont pas encore été calculé
-    Public Sub Find_Child()
-
+    Public Function Find_Child() As Byte
+        Dim Result As Byte = 0
         'Dim OnTrouve As Boolean = True
 
         If POSITIONS.col_Position.Count = 0 Then Cherche_Premier()
 
         For iPos = 1 To POSITIONS.col_Position.Count
-            If POSITIONS.col_Position.Item(iPos).nbFils = PasEncoreRechercher Then
-                Find_Next_Pos(iPos)
+            If POSITIONS.col_Position.Item(iPos).nbFils < 1 Then 'PasEncoreRechercher 
+                Result = Find_Next_Pos(iPos)
             End If
         Next
-
-    End Sub
+        Return Result
+    End Function
 
     'Recherche et créer les fils en boucle
     Public Sub Find_All_Child()
@@ -454,8 +446,8 @@ ErrorHandler:
         Dim nbMAX As Byte
         Dim nbLigneMax As UInteger
 
-        nbMAX = LesOptions.Nb_signatures_comparees
-        nbLigneMax = LesOptions.Num_derniere_Ligne
+        nbMAX = All_Options.Nb_signatures_comparees
+        nbLigneMax = All_Options.Num_derniere_Ligne
 
         'position sur laquelle on se place
         aPos = POSITIONS.col_Position.Item(idPosition)
@@ -464,28 +456,28 @@ ErrorHandler:
 
         If idStateStart = 0 Then Return 0
 
-        PARTIE.SetFEN(aPos.FEN)
+        GAME.SetFEN(aPos.FEN)
 
         'récupère les signatures possibles de tous les coups 
         'renvoyer sous la forme d'un STRING contenenant les signatures et le coups
         'sous la forme forme : 195.195...195 a1h8 Th8|195.195...195 a1h8 Th8
-        CoupsEnString = PARTIE.Get_All_Signs()
+        CoupsEnString = GAME.Get_All_Signs()
 
         LesCoups = CoupsEnString.Split("|") 'sépare les signatures
 
-        If idStateStart > ETATS.col_States.Count Then Return 0
+        If idStateStart > STATES.col_States.Count Then Return 0
 
         For iSignature = 0 To LesCoups.Count - 1 'pour chaque signature possible
 
             'temps de reflexion total pour jouer le coup et déplacer la pièce
             'on commence par y mettre le temps de stabilité de la position 
-            TempsEntreCoup = ETATS.col_States.Item(idStateStart).temps
+            TempsEntreCoup = STATES.col_States.Item(idStateStart).temps
 
             'sépare la signature des coups UCI et SAN
             LeCoup = LesCoups(iSignature).Split(" ")
 
             'on regarde dans combien de ligne suivante 
-            NbLigneSuivante = Min(ETATS.col_States.Count - idStateStart, nbMAX)
+            NbLigneSuivante = Min(STATES.col_States.Count - idStateStart, nbMAX)
 
             'pour tester l'algo avec un nombre de ligne limité
             If nbLigneMax <> 0 Then
@@ -495,24 +487,24 @@ ErrorHandler:
             For iEtat = 1 To NbLigneSuivante
 
                 'égalité parfaite des signatures
-                If ETATS.col_States.Item(idStateStart + iEtat).signature = LeCoup(0) Then
+                If STATES.col_States.Item(idStateStart + iEtat).signature = LeCoup(0) Then
 
                     'vérifions que la case de départ s'est éteinte et que la case d'arrivée s'est allumé
                     'ou que ses vérifications sont ignorées
-                    If (LesOptions.Zap_Verif_case_depart Or ETATS.switched_OFF(LeCoup(1).Substring(0, 2), idStateStart, idStateStart + iEtat)) _
-                        And (LesOptions.Zap_Verif_case_arrivee Or ETATS.switched_ON(LeCoup(1).Substring(2, 2), idStateStart + 1, idStateStart + iEtat)) Then
+                    If (All_Options.Zap_Verif_case_depart Or STATES.switched_OFF(LeCoup(1).Substring(0, 2), idStateStart, idStateStart + iEtat)) _
+                        And (All_Options.Zap_Verif_case_arrivee Or STATES.switched_ON(LeCoup(1).Substring(2, 2), idStateStart + 1, idStateStart + iEtat)) Then
 
                         'Une signature vient de donner un coup
                         'TODO il faut l'ajouter à la signature
 
-                        ETATS.col_States.Item(idStateStart + iEtat).aColor = BoardStates.StateColor.CoupPossible
+                        STATES.col_States.Item(idStateStart + iEtat).aColor = BoardStates.StateColor.CoupPossible
 
-                        PARTIE.MakeMove(LeCoup(1))  'effectue le déplacement
-                        NewFen = PARTIE.GetFEN      'pour récupérer le FEN
-                        PARTIE.SetFEN(aPos.FEN)     'avant de remètre l'ancien FEN
+                        GAME.MakeMove(LeCoup(1))  'effectue le déplacement
+                        NewFen = GAME.GetFEN      'pour récupérer le FEN
+                        GAME.SetFEN(aPos.FEN)     'avant de remètre l'ancien FEN
 
                         'on tente d'ajouter cette nouvelle position si ce n'est pas un doublon
-                        If POSITIONS.Ajoute_Position(idPosition, idStateStart + iEtat, NewFen, TempsEntreCoup, LeCoup(1), LeCoup(2), LesOptions.Couleur_Position) Then
+                        If POSITIONS.Ajoute_Position(idPosition, idStateStart + iEtat, NewFen, TempsEntreCoup, LeCoup(1), LeCoup(2), All_Options.Color_Position) Then
                             Nb_Child_Find += 1
                         End If
 
@@ -522,7 +514,7 @@ ErrorHandler:
 
                 'ajoute le temps de stabilité pour l'état suivant 
                 'car le temps de stabilité de ce coup est compté dans le prochain coup
-                TempsEntreCoup += ETATS.col_States.Item(idStateStart + iEtat).temps
+                TempsEntreCoup += STATES.col_States.Item(idStateStart + iEtat).temps
 
             Next iEtat
         Next iSignature
@@ -610,9 +602,9 @@ ErrorHandler:
         aPos = POSITIONS.col_Position.Item(idPosition)
         idStateStart = aPos.idState
 
-        PARTIE.SetFEN(aPos.FEN)
+        GAME.SetFEN(aPos.FEN)
 
-        CoupsEnString = PARTIE.Get_All_Signs()  'récupère les signatures possibles de tous les coups sous la forme forme : 195.195...195 a1h8|195.195...195 a1h8
+        CoupsEnString = GAME.Get_All_Signs()  'récupère les signatures possibles de tous les coups sous la forme forme : 195.195...195 a1h8|195.195...195 a1h8
 
         'Try
         LesCoups = CoupsEnString.Split("|") 'sépare le rec
@@ -621,28 +613,28 @@ ErrorHandler:
 
             'temps de reflexion total pour jouer le coup et déplacer la pièce
             'on commence par y mettre le temps de stabilité de la position 
-            TempsEntreCoup = ETATS.col_States.Item(idStateStart).temps
+            TempsEntreCoup = STATES.col_States.Item(idStateStart).temps
 
             'sépare la signature des coups UCI et SAN
             LeCoup = LesCoups(iSignature).Split(" ")
 
-            For iEtat = 1 To Min(ETATS.col_States.Count - idStateStart, xNext) 'cherche dans les xNext signatures suivantes
+            For iEtat = 1 To Min(STATES.col_States.Count - idStateStart, xNext) 'cherche dans les xNext signatures suivantes
                 LesDiff = ""
-                laDistance = Distance(ETATS.col_States.Item(idStateStart + iEtat).signature, LeCoup(0), Lesdiff)
+                laDistance = Distance(STATES.col_States.Item(idStateStart + iEtat).signature, LeCoup(0), Lesdiff)
 
                 If laDistance <= DistanceMax Then 'si la distance est inférieur à la limite
 
                     'vérifions que la case de départ s'est éteinte 
                     'If ETATS.switched_OFF(LeCoup(1).Substring(0, 2), idStateStart, idStateStart + iEtat) Then
 
-                    PARTIE.MakeMove(LeCoup(1))  'effectue le déplacement
-                    NewFen = PARTIE.GetFEN      'pour récupérer le FEN
-                    PARTIE.SetFEN(aPos.FEN)     'avatn de remètre l'ancien
+                    GAME.MakeMove(LeCoup(1))  'effectue le déplacement
+                    NewFen = GAME.GetFEN      'pour récupérer le FEN
+                    GAME.SetFEN(aPos.FEN)     'avatn de remètre l'ancien
 
                     If POSITIONS.Ajoute_Position(idPosition, idStateStart + iEtat, NewFen, TempsEntreCoup, LeCoup(1), LeCoup(2), PositionColor.rouge) Then
                         Nb_Child_Find += 1
-                        ETATS.col_States.Item(idStateStart + iEtat).aColor = BoardStates.StateColor.CoupProche
-                        ETATS.col_States.Item(idStateStart + iEtat).Diff = LesDiff
+                        STATES.col_States.Item(idStateStart + iEtat).aColor = BoardStates.StateColor.CoupProche
+                        STATES.col_States.Item(idStateStart + iEtat).Diff = LesDiff
                     End If
 
                     'End If
@@ -651,7 +643,7 @@ ErrorHandler:
 
                 'ajoute le temps de stabilité pour l'état suivant 
                 'car le temps de stabilité de ce coup est compté dans le prochain coup
-                TempsEntreCoup += ETATS.col_States.Item(idStateStart).temps
+                TempsEntreCoup += STATES.col_States.Item(idStateStart).temps
 
             Next iEtat
         Next iSignature
@@ -792,7 +784,7 @@ ErrorHandler:
 
             Dim LaPiece As Char
             For i = 11 To 88
-                LaPiece = PARTIE.Board10x10(i)
+                LaPiece = GAME.Board10x10(i)
                 If LaPiece <> " " And LaPiece <> "*" Then
                     PutPiece(i, LaPiece)
                 End If
@@ -881,7 +873,7 @@ ErrorHandler:
 
     'affiche sur l'échiquier une position
     Public Sub Draw_Position(ByVal idPosition As Integer)
-        PARTIE.SetFEN(POSITIONS.col_Position(idPosition).FEN)
+        GAME.SetFEN(POSITIONS.col_Position(idPosition).FEN)
         DrawPiece()
     End Sub
 
@@ -910,15 +902,15 @@ ErrorHandler:
 
         sqOn = lvRec.SelectedItems(0).SubItems(3).Text
         sqOff = lvRec.SelectedItems(0).SubItems(4).Text
-        If sqOn <> "" Then sqOnI = ETATS.Index_Case(sqOn)
-        If sqOff <> "" Then sqOffI = ETATS.Index_Case(sqOff)
+        If sqOn <> "" Then sqOnI = STATES.Index_Case(sqOn)
+        If sqOff <> "" Then sqOffI = STATES.Index_Case(sqOff)
         PutSymbol(sqOnI, "1")
         PutSymbol(sqOffI, "2")
     End Sub
 
 #End Region
 
-    
+
 
 #Region "EVENEMENT FORM"
 
@@ -1130,11 +1122,11 @@ ErrorHandler:
     'lance une recherche en boucle en la limitant à la ligne de la liste sélectionnée
     Private Sub menuTousLimit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuTousLimit.Click
         POSITIONS.col_Position.Clear()
-        LesOptions.Num_derniere_Ligne = lvRec.SelectedItems(0).Index
+        All_Options.Num_derniere_Ligne = lvRec.SelectedItems(0).Index
         Find_All_Child()
         Refresh_TreeView()
         Refresh_ListView()
-        LesOptions.Num_derniere_Ligne = 0
+        All_Options.Num_derniere_Ligne = 0
     End Sub
 
     'affiche l'état dans la liste correspondant au noeud sélectionné
@@ -1188,11 +1180,11 @@ ErrorHandler:
         NomFichier = NameFile()
         If NomFichier <> "" Then
             intTimeStart = Environment.TickCount
-            ETATS.LoadFromFile(NomFichier, menuInvGD.Checked, menuInvHB.Checked, menuRot90.Checked)
+            STATES.LoadFromFile(NomFichier, menuInvGD.Checked, menuInvHB.Checked, menuRot90.Checked)
             Debug.Print("temps chargement : " & Environment.TickCount - intTimeStart)
             Refresh_ListView()
             sbEnregistrement.Text = NomFichier
-            
+
         End If
     End Sub
 
@@ -1208,40 +1200,40 @@ ErrorHandler:
     Private Sub mnuOpCoulNoir_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuOpCoulNoir.Click
         uncheck_all()
         sender.Checked = True
-        LesOptions.Couleur_Position = PositionColor.noir
+        All_Options.Color_Position = PositionColor.noir
     End Sub
 
     'choisi une couleur
     Private Sub mnuOpCoulRouge_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuOpCoulRouge.Click
         uncheck_all()
         sender.Checked = True
-        LesOptions.Couleur_Position = PositionColor.rouge
+        All_Options.Color_Position = PositionColor.rouge
     End Sub
 
     'choisi une couleur
     Private Sub mnuOpCoulVert_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuOpCoulVert.Click
         uncheck_all()
         sender.Checked = True
-        LesOptions.Couleur_Position = PositionColor.vert
+        All_Options.Color_Position = PositionColor.vert
     End Sub
 
     'choisi une couleur
     Private Sub mnuOpCoulBleu_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuOpCoulBleu.Click
         uncheck_all()
         sender.Checked = True
-        LesOptions.Couleur_Position = PositionColor.bleu
+        All_Options.Color_Position = PositionColor.bleu
     End Sub
 
     'bascule l'option
     Private Sub mnuVerifCaseDepart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuVerifCaseDepart.Click
         sender.Checked = Not sender.Checked
-        LesOptions.Zap_Verif_case_depart = Not sender.Checked
+        All_Options.Zap_Verif_case_depart = Not sender.Checked
     End Sub
 
     'bascule l'option
     Private Sub mnuVerifCaseArrivee_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuVerifCaseArrivee.Click
         sender.Checked = Not sender.Checked
-        LesOptions.Zap_Verif_case_arrivee = Not sender.Checked
+        All_Options.Zap_Verif_case_arrivee = Not sender.Checked
     End Sub
 
     'demande le nombre de signature à comparer
@@ -1249,14 +1241,14 @@ ErrorHandler:
         'si on ne rentre pas un nombre dans la boite cela plante 
         On Error Resume Next
         'mais on passe en conservant l'ancienne valeur
-        LesOptions.Nb_signatures_comparees = InputBox("Nombre de signature à comparer !,", , 20)
-        mnuOpSuivant.Text = "Nb suivant (" & LesOptions.Nb_signatures_comparees.ToString & ")"
+        All_Options.Nb_signatures_comparees = InputBox("Nombre de signature à comparer !,", , 20)
+        mnuOpSuivant.Text = "Nb suivant (" & All_Options.Nb_signatures_comparees.ToString & ")"
     End Sub
 
     'relance une recherche complete en forcant un recacule de toutes les positons
     Private Sub mnuReTous_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuReTous.Click
         Efface_Nb_Fils_Trouve()
-        LesOptions.Re_calculer = True
+        All_Options.Re_calculer = True
         Find_All_Child()
         Refresh_TreeView()
         'Refresh_ListView()
@@ -1265,7 +1257,7 @@ ErrorHandler:
     'bascule l'option permmetant d'afficher les noeuds sans fils
     Private Sub mnuVoirOrphelin_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuVoirOrphelin.Click
         sender.Checked = Not sender.Checked
-        LesOptions.Voir_Orphelin = sender.Checked
+        All_Options.See_Orphans = sender.Checked
         Refresh_TreeView()
     End Sub
 
@@ -1277,6 +1269,7 @@ ErrorHandler:
     'lance la recherche sur les positions pas encore calculée
     Private Sub menuCoupSuivant_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCoupSuivant.Click
         Find_Child()
+        Refresh_ListView()
         Refresh_TreeView()
     End Sub
 
@@ -1380,7 +1373,7 @@ ErrorHandler:
 
 
 
-   
+
 
     ''envoie le fichier sur le serveur FTP
     'Private Sub SendFTP()
@@ -1483,7 +1476,7 @@ ErrorHandler:
         menuRot90.Checked = Not menuRot90.Checked
     End Sub
 
-   
+
 
     Private Sub menuCalculComplet_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCalculComplet.Click
         menuCalculComplet.Checked = Not menuCalculComplet.Checked
@@ -1506,14 +1499,14 @@ ErrorHandler:
         End With
     End Sub
 
-  
+
     Private Sub lvRec_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lvRec.SelectedIndexChanged
         On Error Resume Next
-        PARTIE.SetFEN(lvRec.SelectedItems(0).SubItems(6).Text)
+        GAME.SetFEN(lvRec.SelectedItems(0).SubItems(6).Text)
         DrawPiece()
     End Sub
 
-   
+
     Private Sub ChercherToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_Find.Click
         On Error GoTo err
 
@@ -1606,7 +1599,7 @@ err:
 
     'ajoute une signature à la collection 
     Private Sub SetRec(ByVal aRec As String)
-        ETATS.Ajoute_Signature(aRec, 0)
+        STATES.Ajoute_Signature(aRec, 0)
     End Sub
 
     'rajoute un temps au dernier ETAT
@@ -1629,6 +1622,8 @@ err:
     'recoit les DATA du port SERIE
     Private Sub SerialPort1_DataReceived(ByVal sender As System.Object, ByVal e As System.IO.Ports.SerialDataReceivedEventArgs) Handles SerialPort1.DataReceived
         ReceivedText(SerialPort1.ReadLine())
+        Debug.Print("Date Received")
+        'ré initialise le temps pour la recherche auto des coups
         LastReceive = Environment.TickCount
     End Sub
 
@@ -1730,8 +1725,8 @@ err:
             dep = lescases.Substring(0, 2)
             arr = lescases.Substring(2, 2)
 
-            sq1 = PARTIE.SquareIndex(dep)
-            sq2 = PARTIE.SquareIndex(arr)
+            sq1 = GAME.SquareIndex(dep)
+            sq2 = GAME.SquareIndex(arr)
 
             l1 = sq1 \ 10
             c1 = sq1 Mod 10
@@ -1788,7 +1783,7 @@ err:
             c2 = sq2 Mod 10
 
             If SerialPort1.IsOpen Then
- 
+
                 cmdserial = "o" & l1.ToString & "," & c1.ToString & "," & l2.ToString & "," & c2.ToString
 
                 SerialPort1.WriteLine(cmdserial)
@@ -1900,6 +1895,29 @@ err:
     Private Sub CheckMoveToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckMoveToolStripMenuItem.Click
         CheckMoveToolStripMenuItem.Checked = Not CheckMoveToolStripMenuItem.Checked
         TimerLichess.Enabled = CheckMoveToolStripMenuItem.Checked
+    End Sub
+
+   
+    Private Sub TimerCheckMove_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerCheckMove.Tick
+        Static NbPosition As Integer
+
+        'si le nombre de position n'a pas changé on ne fait rien 
+        If NbPosition = STATES.col_States.Count Then Exit Sub
+
+        'si les dernières données recues datent de moins d'une seconde on ne fait rien
+        If Environment.TickCount - LastReceive < 1000 Then Exit Sub
+
+        'On stock le nombre de position
+        NbPosition = STATES.col_States.Count
+
+        Refresh_ListView()
+        If Find_Child() > 0 Then
+            Refresh_TreeView()
+            Debug.Print(POSITIONS.col_Position(POSITIONS.Last_Position).moveUCI())
+            ClickOnScreen(POSITIONS.col_Position(POSITIONS.Last_Position).moveUCI())
+        End If
+
+
     End Sub
 End Class
 

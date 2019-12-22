@@ -37,6 +37,9 @@ Partial Class Form1
         Me.menuInformationPartie = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
         Me.menuSauvePartie = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EcranToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ConfigToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckMoveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.lvRec = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -110,10 +113,8 @@ Partial Class Form1
         Me.pnl_LV_move = New System.Windows.Forms.Panel()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.SerialPort1 = New System.IO.Ports.SerialPort(Me.components)
-        Me.EcranToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ConfigToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CheckMoveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TimerLichess = New System.Windows.Forms.Timer(Me.components)
+        Me.TimerCheckMove = New System.Windows.Forms.Timer(Me.components)
         Me.sst_move.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.sst_etat.SuspendLayout()
@@ -197,25 +198,44 @@ Partial Class Form1
         '
         Me.menuNouvellePartie.Enabled = False
         Me.menuNouvellePartie.Name = "menuNouvellePartie"
-        Me.menuNouvellePartie.Size = New System.Drawing.Size(152, 22)
+        Me.menuNouvellePartie.Size = New System.Drawing.Size(142, 22)
         Me.menuNouvellePartie.Text = "Nouvelle"
         '
         'menuInformationPartie
         '
         Me.menuInformationPartie.Name = "menuInformationPartie"
-        Me.menuInformationPartie.Size = New System.Drawing.Size(152, 22)
+        Me.menuInformationPartie.Size = New System.Drawing.Size(142, 22)
         Me.menuInformationPartie.Text = "Informations"
         '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(139, 6)
         '
         'menuSauvePartie
         '
         Me.menuSauvePartie.Name = "menuSauvePartie"
-        Me.menuSauvePartie.Size = New System.Drawing.Size(152, 22)
+        Me.menuSauvePartie.Size = New System.Drawing.Size(142, 22)
         Me.menuSauvePartie.Text = "Sauvegarder"
+        '
+        'EcranToolStripMenuItem
+        '
+        Me.EcranToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConfigToolStripMenuItem, Me.CheckMoveToolStripMenuItem})
+        Me.EcranToolStripMenuItem.Name = "EcranToolStripMenuItem"
+        Me.EcranToolStripMenuItem.Size = New System.Drawing.Size(74, 20)
+        Me.EcranToolStripMenuItem.Text = "Adversaire"
+        '
+        'ConfigToolStripMenuItem
+        '
+        Me.ConfigToolStripMenuItem.Name = "ConfigToolStripMenuItem"
+        Me.ConfigToolStripMenuItem.Size = New System.Drawing.Size(111, 22)
+        Me.ConfigToolStripMenuItem.Text = "Config"
+        '
+        'CheckMoveToolStripMenuItem
+        '
+        Me.CheckMoveToolStripMenuItem.Name = "CheckMoveToolStripMenuItem"
+        Me.CheckMoveToolStripMenuItem.Size = New System.Drawing.Size(111, 22)
+        Me.CheckMoveToolStripMenuItem.Text = "Activer"
         '
         'lvRec
         '
@@ -375,7 +395,7 @@ Partial Class Form1
         '
         Me.menuCOM_Find.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuCOM_1, Me.menuCOM_2, Me.menuCOM_3, Me.menuCOM_4, Me.menuCOM_5})
         Me.menuCOM_Find.Name = "menuCOM_Find"
-        Me.menuCOM_Find.Size = New System.Drawing.Size(152, 22)
+        Me.menuCOM_Find.Size = New System.Drawing.Size(122, 22)
         Me.menuCOM_Find.Text = "Chercher"
         '
         'menuCOM_1
@@ -417,14 +437,14 @@ Partial Class Form1
         '
         Me.menuSerialInit.Enabled = False
         Me.menuSerialInit.Name = "menuSerialInit"
-        Me.menuSerialInit.Size = New System.Drawing.Size(152, 22)
+        Me.menuSerialInit.Size = New System.Drawing.Size(122, 22)
         Me.menuSerialInit.Text = "Initialiser"
         '
         'menuSerialClose
         '
         Me.menuSerialClose.Enabled = False
         Me.menuSerialClose.Name = "menuSerialClose"
-        Me.menuSerialClose.Size = New System.Drawing.Size(152, 22)
+        Me.menuSerialClose.Size = New System.Drawing.Size(122, 22)
         Me.menuSerialClose.Text = "Fermer"
         '
         'tvPos
@@ -716,27 +736,13 @@ Partial Class Form1
         '
         Me.SerialPort1.PortName = "COM6"
         '
-        'EcranToolStripMenuItem
-        '
-        Me.EcranToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConfigToolStripMenuItem, Me.CheckMoveToolStripMenuItem})
-        Me.EcranToolStripMenuItem.Name = "EcranToolStripMenuItem"
-        Me.EcranToolStripMenuItem.Size = New System.Drawing.Size(74, 20)
-        Me.EcranToolStripMenuItem.Text = "Adversaire"
-        '
-        'ConfigToolStripMenuItem
-        '
-        Me.ConfigToolStripMenuItem.Name = "ConfigToolStripMenuItem"
-        Me.ConfigToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.ConfigToolStripMenuItem.Text = "Config"
-        '
-        'CheckMoveToolStripMenuItem
-        '
-        Me.CheckMoveToolStripMenuItem.Name = "CheckMoveToolStripMenuItem"
-        Me.CheckMoveToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.CheckMoveToolStripMenuItem.Text = "Activer"
-        '
         'TimerLichess
         '
+        '
+        'TimerCheckMove
+        '
+        Me.TimerCheckMove.Enabled = True
+        Me.TimerCheckMove.Interval = 1000
         '
         'Form1
         '
@@ -867,5 +873,6 @@ Partial Class Form1
     Friend WithEvents ConfigToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CheckMoveToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TimerLichess As System.Windows.Forms.Timer
+    Friend WithEvents TimerCheckMove As System.Windows.Forms.Timer
 
 End Class

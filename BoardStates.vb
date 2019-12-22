@@ -232,6 +232,7 @@ Public Class BoardStates
         If signature = "195.195.195.195.195.195.195.195" Then
             'efface toutes les anciennes positions
             col_States.Clear()
+            
             Debug.Print("CLEAR POSITION")
         End If
 
@@ -421,13 +422,16 @@ Public Class BoardStates
         Dim iLigne As Byte = 1
         Dim Depart As Byte = 0
 
-        For iLigne = 1 To Min(30, col_States.Count - 1)
-            If col_States.Item(iLigne).signature = "195.195.195.195.195.195.195.195" Then
-                col_States.Item(iLigne).acolor = StateColor.Start
-                col_States.Item(iLigne).temps = 0
-                Depart = iLigne
-            End If
-        Next
+        If col_States.Count <> 0 Then
+
+            For iLigne = 1 To Min(30, col_States.Count - 1)
+                If col_States.Item(iLigne).signature = "195.195.195.195.195.195.195.195" Then
+                    col_States.Item(iLigne).acolor = StateColor.Start
+                    col_States.Item(iLigne).temps = 0
+                    Depart = iLigne
+                End If
+            Next
+        End If
         Return Depart
     End Function
 
