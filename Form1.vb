@@ -1919,6 +1919,13 @@ err:
 
 
     End Sub
+
+    Private Sub EffacerAprèsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EffacerAprèsToolStripMenuItem.Click
+
+        While lvRec.SelectedIndices(0) <> lvRec.Items.Count - 1
+            lvRec.Items.RemoveAt(lvRec.Items.Count - 1)
+        End While
+    End Sub
 End Class
 
 

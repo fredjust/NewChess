@@ -115,6 +115,7 @@ Partial Class Form1
         Me.SerialPort1 = New System.IO.Ports.SerialPort(Me.components)
         Me.TimerLichess = New System.Windows.Forms.Timer(Me.components)
         Me.TimerCheckMove = New System.Windows.Forms.Timer(Me.components)
+        Me.EffacerAprèsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.sst_move.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.sst_etat.SuspendLayout()
@@ -323,7 +324,7 @@ Partial Class Form1
         '
         'FichierToolStripMenuItem
         '
-        Me.FichierToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuOuvreDonnees, Me.menuSauveDonnees, Me.ActualiserToolStripMenuItem, Me.ToolStripMenuItem3, Me.menuEffaceDonnees})
+        Me.FichierToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuOuvreDonnees, Me.menuSauveDonnees, Me.ActualiserToolStripMenuItem, Me.ToolStripMenuItem3, Me.EffacerAprèsToolStripMenuItem, Me.menuEffaceDonnees})
         Me.FichierToolStripMenuItem.Name = "FichierToolStripMenuItem"
         Me.FichierToolStripMenuItem.Size = New System.Drawing.Size(65, 20)
         Me.FichierToolStripMenuItem.Text = "Données"
@@ -395,7 +396,7 @@ Partial Class Form1
         '
         Me.menuCOM_Find.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuCOM_1, Me.menuCOM_2, Me.menuCOM_3, Me.menuCOM_4, Me.menuCOM_5})
         Me.menuCOM_Find.Name = "menuCOM_Find"
-        Me.menuCOM_Find.Size = New System.Drawing.Size(122, 22)
+        Me.menuCOM_Find.Size = New System.Drawing.Size(152, 22)
         Me.menuCOM_Find.Text = "Chercher"
         '
         'menuCOM_1
@@ -437,14 +438,14 @@ Partial Class Form1
         '
         Me.menuSerialInit.Enabled = False
         Me.menuSerialInit.Name = "menuSerialInit"
-        Me.menuSerialInit.Size = New System.Drawing.Size(122, 22)
+        Me.menuSerialInit.Size = New System.Drawing.Size(152, 22)
         Me.menuSerialInit.Text = "Initialiser"
         '
         'menuSerialClose
         '
         Me.menuSerialClose.Enabled = False
         Me.menuSerialClose.Name = "menuSerialClose"
-        Me.menuSerialClose.Size = New System.Drawing.Size(122, 22)
+        Me.menuSerialClose.Size = New System.Drawing.Size(152, 22)
         Me.menuSerialClose.Text = "Fermer"
         '
         'tvPos
@@ -744,6 +745,12 @@ Partial Class Form1
         Me.TimerCheckMove.Enabled = True
         Me.TimerCheckMove.Interval = 1000
         '
+        'EffacerAprèsToolStripMenuItem
+        '
+        Me.EffacerAprèsToolStripMenuItem.Name = "EffacerAprèsToolStripMenuItem"
+        Me.EffacerAprèsToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.EffacerAprèsToolStripMenuItem.Text = "Effacer après"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -874,5 +881,6 @@ Partial Class Form1
     Friend WithEvents CheckMoveToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TimerLichess As System.Windows.Forms.Timer
     Friend WithEvents TimerCheckMove As System.Windows.Forms.Timer
+    Friend WithEvents EffacerAprèsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

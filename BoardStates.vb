@@ -218,7 +218,7 @@ Public Class BoardStates
     'regarde les différences avec l'état précédent pour calculer les cases qui s'allument et s'éteingnent
     'compte le nombre de pièce sur l'échiquier
     'en cas de double différence ajoute 3 états au lieu d'un <= TODO a regarder ??
-    Public Sub Ajoute_Signature(ByVal signature As String, ByVal temps As Long)
+    Public Function Ajoute_Signature(ByVal signature As String, ByVal temps As Long) As Boolean
 
         Dim NewState As New aState 'le nouvelle etat que l'on va ajouter
         Dim LastState As New aState 'l'état précédent pour chercher les différences
@@ -228,11 +228,16 @@ Public Class BoardStates
 
         If temps = 0 Then modif = StateColor.NullTime Else modif = StateColor.Normal
 
+        If signature.Split(".").Count <> 9 Then
+            Return False
+        End If
+
+        'TODO A NE PAS FAIRE ICI
         signature = signature.Substring(0, signature.Length - 2)
         If signature = "195.195.195.195.195.195.195.195" Then
             'efface toutes les anciennes positions
             col_States.Clear()
-            
+
             Debug.Print("CLEAR POSITION")
         End If
 
@@ -266,8 +271,8 @@ Public Class BoardStates
             End If
 
         End If
-
-    End Sub
+        Return True
+    End Function
 
     'Permet de changer l'orientation de base du plateau
     Private Function Modif_Orientation(ByVal UneSignature As String, _
@@ -390,7 +395,8 @@ Public Class BoardStates
             Return False
         End Try
 
-        RecordsInFile.Replace(Chr(10) + Chr(13) + Chr(10) + Chr(13), Chr(10) + Chr(13)) 'supprime les répétitions de retour chariot
+        'supprime les répétitions de retour chariot
+        RecordsInFile.Replace(Chr(10) + Chr(13) + Chr(10) + Chr(13), Chr(10) + Chr(13))
 
         RecTempo = RecordsInFile.Split(Chr(10) + Chr(13)) 'sépare les différentes lignes
 
