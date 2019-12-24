@@ -8,7 +8,7 @@
     Public Const InitFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 
-    Public Last_Position As Integer
+    Public Last_Position As aPosition
 
     'type de donnée pour stocker une position
     'TODO pas besoin d'une class ici un simple type utilisateur devrait suffire mais je n'y arrive pas ?! 
@@ -63,7 +63,8 @@
 
         col_Position.Add(FisrtPos, FisrtPos.Key)
 
-        Last_Position = 1
+        Last_Position = col_Position.Item(col_Position.Count)
+
 
     End Sub
 
@@ -102,7 +103,7 @@
         'meme parent
         If Not col_Position.Contains(newPos.Key) Then
             col_Position.Add(newPos, newPos.Key)
-            Last_Position = col_Position.Count
+            Last_Position = col_Position.Item(col_Position.Count)
             Return True
         Else
             Return False

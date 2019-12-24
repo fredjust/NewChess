@@ -44,7 +44,7 @@
 
     'tableau contenant le nom des cases 
     'permet d'accélérer les choses en les stockant au lieu de les calculer a chaque appel
-    Dim Square_Name(100) As String
+    Public SquareName(100) As String
 
     'contient l'initiale de la pièce correspondante en notation anglaise K Q R ...
     Public Board10x10(100) As Char
@@ -208,17 +208,17 @@
 
                 colonne = sqIndex Mod 10 'récupère la colonne
 
-                If colonne < 1 Or colonne > 8 Then square_Name(sqIndex) = ""
+                If colonne < 1 Or colonne > 8 Then SquareName(sqIndex) = ""
 
                 ligne = sqIndex \ 10 'récupère la ligne
 
-                If ligne < 1 Or ligne > 8 Then square_Name(sqIndex) = ""
+                If ligne < 1 Or ligne > 8 Then SquareName(sqIndex) = ""
 
                 lettre = Chr(colonne + 96) 'recupere le numero de colonne
 
-                square_Name(sqIndex) = lettre & ligne.ToString
+                SquareName(sqIndex) = lettre & ligne.ToString
             Else
-                square_Name(sqIndex) = ""
+                SquareName(sqIndex) = ""
             End If
         Next
 
@@ -301,7 +301,7 @@
 
         While Board10x10(NextSquare) = " "
 
-            TheMoves &= Square_Name(NextSquare) & " "
+            TheMoves &= SquareName(NextSquare) & " "
 
             If UCase(Board10x10(sqIndex)) = "K" Then 'si c'est un roi on s'arette 
                 Exit Sub
@@ -313,7 +313,7 @@
         'si la case suivante contient une piece adverse
         'TODO et si c'est un roi ?!
         If ColorOf(NextSquare) = ColorOpponent(sqIndex) Then
-            TheMoves &= "x" & Square_Name(NextSquare) & " "
+            TheMoves &= "x" & SquareName(NextSquare) & " "
         End If
 
     End Sub
@@ -322,12 +322,12 @@
     'TODO Aucune vérification sur le contenu des cases quand cela est il faut ?
     Private Sub AddTake(ByVal sqiTO As Byte, ByVal sqiFROM As Byte, ByRef TheMoves As String)
         If ColorOf(sqiTO) = ColorOpponent(sqiFROM) Then
-            TheMoves &= "x" & Square_Name(sqiTO) & " "
+            TheMoves &= "x" & SquareName(sqiTO) & " "
         End If
         'GESTION DE LA PRISE EN PASSANT
         If sqiTO = aFEN.sqiEnPassant And aFEN.sqiEnPassant <> 0 Then
             If aFEN.ToPlay = ColorOf(sqiFROM) Then 'si la piece de départ est de la couleur de celui qui doit jouer
-                TheMoves &= "x" & Square_Name(sqiTO) & " "
+                TheMoves &= "x" & SquareName(sqiTO) & " "
             End If
         End If
     End Sub
@@ -339,12 +339,12 @@
         If sqiTO > 10 And sqiTO < 89 Then 'si la cases est bien sur le plateau
 
             If Board10x10(sqiTO) = " " Then 'si la case est vide
-                TheMoves &= Square_Name(sqiTO) & " " 'ajoute le déplacement 
+                TheMoves &= SquareName(sqiTO) & " " 'ajoute le déplacement 
             End If
 
             If AndTake Then
                 If ColorOf(sqiTO) = ColorOpponent(sqiFROM) Then
-                    TheMoves &= "x" & Square_Name(sqiTO) & " "
+                    TheMoves &= "x" & SquareName(sqiTO) & " "
                 End If
             End If
 
@@ -386,7 +386,7 @@
         AddMoves(sqIndex, dpl.UP_RIGHT, TempoMoves)
 
         'ROQUE
-        If Square_Name(sqIndex) = "e1" Then
+        If SquareName(sqIndex) = "e1" Then
 
             If aFEN.WhiteCanDoLittle Then
                 If Board10x10(sqIndex + dpl.RIGHT) = " " _
@@ -407,7 +407,7 @@
 
         End If
 
-        If Square_Name(sqIndex) = "e8" Then
+        If SquareName(sqIndex) = "e8" Then
 
             If Board10x10(sqIndex + dpl.RIGHT) = " " _
                 And Board10x10(sqIndex + dpl.RIGHT * 2) = " " Then
@@ -490,7 +490,7 @@
             AddTake(sqIndex + dpl.UP_LEFT, sqIndex, TempoMoves)
             AddTake(sqIndex + dpl.UP_RIGHT, sqIndex, TempoMoves)
 
-           
+
         End If
 
         If ColorOf(sqIndex) = 2 Then
@@ -807,7 +807,7 @@
             strFEN &= IIf(.BlackCanDoBig Or .BlackCanDoLittle _
                           Or .WhiteCanDoBig Or .WhiteCanDoLittle, "", "-") 'aucun roque possible on ajoute -
             strFEN &= " "
-            strFEN &= IIf(aFEN.sqiEnPassant <> 0, Square_Name(aFEN.sqiEnPassant), "-") ' pas de prise en passant on ajoute -
+            strFEN &= IIf(aFEN.sqiEnPassant <> 0, SquareName(aFEN.sqiEnPassant), "-") ' pas de prise en passant on ajoute -
             strFEN &= " "
             strFEN &= aFEN.nbSinceLastPawn
             strFEN &= " "
@@ -919,7 +919,7 @@
 
         For iSquare = 11 To 88
             If ColorOf(iSquare) = aFEN.ToPlay Then
-                Recs = Get_Signs_for_Square(Square_Name(iSquare))
+                Recs = Get_Signs_for_Square(SquareName(iSquare))
                 If Recs <> "" Then tempo = tempo & "|" & Recs
             End If
         Next
@@ -1090,10 +1090,10 @@
         '------------------ DROIT DU ROQUE -----------------------------
         'une tour blanche bouge
         If Board10x10(sqiFROM) = "R" Then
-            If Square_Name(sqiFROM) = "h1" Then
+            If SquareName(sqiFROM) = "h1" Then
                 aFEN.WhiteCanDoLittle = False
             End If
-            If Square_Name(sqiFROM) = "a1" Then
+            If SquareName(sqiFROM) = "a1" Then
                 aFEN.WhiteCanDoBig = False
             End If
         End If
@@ -1104,10 +1104,10 @@
         End If
         'une tour noire bouge
         If Board10x10(sqiFROM) = "r" Then
-            If Square_Name(sqiFROM) = "h8" Then
+            If SquareName(sqiFROM) = "h8" Then
                 aFEN.BlackCanDoLittle = False
             End If
-            If Square_Name(sqiFROM) = "a8" Then
+            If SquareName(sqiFROM) = "a8" Then
                 aFEN.BlackCanDoBig = False
             End If
         End If
@@ -1254,8 +1254,8 @@
 
         For i = 11 To 88
             If ColorOf(i) = FindColor Then ' pour chaque piece adverse 
-                If GetTakes(Square_Name(i)).Contains(strSquare) Then
-                    tmp &= Square_Name(i) & " "
+                If GetTakes(SquareName(i)).Contains(strSquare) Then
+                    tmp &= SquareName(i) & " "
                 End If
             End If
         Next
@@ -1274,7 +1274,7 @@
         Dim tmp As String = ""
         For sqi = 11 To 88
             If Board10x10(sqi) = aPiece Then
-                tmp &= Square_Name(sqi) & " "
+                tmp &= SquareName(sqi) & " "
             End If
         Next
         Return Trim(tmp)
@@ -1409,7 +1409,7 @@
         Select Case UCase(LaPiece)          'en fonction du type de pièce
 
             Case "R", "N" 'si c'est un cavalier ou une tour   ***************************************************
-                OtherIn = Square_Name(FindOther(sqiFROM))                'cherche la position de l'autre
+                OtherIn = SquareName(FindOther(sqiFROM))                'cherche la position de l'autre
                 If OtherIn <> "" Then                                 'si elle est bien présente
                     AutrePeutAller = GetMoves(OtherIn)              'récupère les mouvements possible de l'autre piece
                     If AutrePeutAller.Contains(NameCase2) Then  'si la case d'arrivé fait partie des cases atteingnables
@@ -1642,7 +1642,7 @@
         aFEN.ToPlay = Not aFEN.ToPlay
     End Sub
 
-    
+
 
 
 

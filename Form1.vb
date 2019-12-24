@@ -59,6 +59,8 @@ Public Class Form1
 
     '------------------------------------------------
 
+    Dim LastOff As String = ""
+
     Declare Sub mouse_event Lib "user32" Alias "mouse_event" (ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal cButtons As Integer, ByVal dwExtraInfo As Integer)
 
     Public Const MOUSEEVENTF_LEFTDOWN = &H2 ' left button down
@@ -96,17 +98,17 @@ Public Class Form1
                 lvRec.Items(NbLigne).ForeColor = Color.Blue
 
             Case BoardStates.StateColor.NullTime
-                lvRec.Items(NbLigne).ForeColor = Color.BlueViolet
+                lvRec.Items(NbLigne).ForeColor = Color.WhiteSmoke
 
 
             Case BoardStates.StateColor.CoupPossible
-                lvRec.Items(NbLigne).ForeColor = Color.Green
+                lvRec.Items(NbLigne).ForeColor = Color.Lime
 
             Case BoardStates.StateColor.CoupRejete
                 lvRec.Items(NbLigne).ForeColor = Color.Red
 
             Case BoardStates.StateColor.CoupProche
-                lvRec.Items(NbLigne).ForeColor = Color.Lime
+                lvRec.Items(NbLigne).ForeColor = Color.Green
 
         End Select
 
@@ -117,6 +119,8 @@ Public Class Form1
     'efface la liste juste avant
     Public Sub Refresh_ListView()
         Dim iEtat As UInteger
+
+        If lvRec.Items.Count = STATES.col_States.Count Then Exit Sub
 
         lvRec.Items.Clear()
 
@@ -246,7 +250,7 @@ Public Class Form1
         tvPos.Nodes(0).EnsureVisible()
         tvPos.Nodes(tvPos.Nodes.Count - 1).EnsureVisible()
 
-        Draw_Position(POSITIONS.Last_Position)
+        Draw_Position(POSITIONS.Last_Position.id)
     End Sub
 
 #End Region
@@ -1877,18 +1881,31 @@ err:
 
                 CompterSec = 0
             Else 'elles n'ont pas changées
-                If CompterSec = 0 Then
-                    allumeLedId(sq1, sq2)
+                'If CompterSec = 0 Then
+                '    allumeLedId(sq1, sq2)
+                'End If
+                'CompterSec += 1
+                'If CompterSec > 50 Then
+                '    SwitchOffLedBoard()
+                '    CompterSec = 1
 
-                End If
-                CompterSec += 1
-                If CompterSec > 50 Then
-                    SwitchOffLedBoard()
-                    CompterSec = 1
-
-                End If
+                'End If
             End If
 
+        End If
+
+        If POSITIONS.col_Position.Count > 0 Then
+            If LastOff <> POSITIONS.Last_Position.moveUCI Then
+
+
+
+                If POSITIONS.Last_Position.moveUCI = GAME.SquareName(sq1) & GAME.SquareName(sq2) _
+                    Or POSITIONS.Last_Position.moveUCI = GAME.SquareName(sq2) & GAME.SquareName(sq1) Then
+                    SwitchOffLedBoard()
+                    Debug.Print("EFFACE " & POSITIONS.Last_Position.moveUCI)
+                    LastOff = POSITIONS.Last_Position.moveUCI
+                End If
+            End If
         End If
     End Sub
 
@@ -1901,20 +1918,24 @@ err:
     Private Sub TimerCheckMove_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerCheckMove.Tick
         Static NbPosition As Integer
 
+        'si les dernières données recues datent de moins d'une seconde on ne fait rien
+        If Environment.TickCount - LastReceive < 1000 Then Exit Sub
+
+        Refresh_ListView()
+
         'si le nombre de position n'a pas changé on ne fait rien 
         If NbPosition = STATES.col_States.Count Then Exit Sub
 
-        'si les dernières données recues datent de moins d'une seconde on ne fait rien
-        If Environment.TickCount - LastReceive < 1000 Then Exit Sub
+       
 
         'On stock le nombre de position
         NbPosition = STATES.col_States.Count
 
-        Refresh_ListView()
+
         If Find_Child() > 0 Then
             Refresh_TreeView()
-            Debug.Print(POSITIONS.col_Position(POSITIONS.Last_Position).moveUCI())
-            ClickOnScreen(POSITIONS.col_Position(POSITIONS.Last_Position).moveUCI())
+            Debug.Print(POSITIONS.Last_Position.moveUCI)
+            ClickOnScreen(POSITIONS.Last_Position.moveUCI)
         End If
 
 
