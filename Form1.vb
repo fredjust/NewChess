@@ -1704,8 +1704,13 @@ err:
     End Function
 
     'Attends un peu entre 100 et 300 ms
-    Public Sub attendre()
-        System.Threading.Thread.Sleep(Alea(100, 300))
+    Public Sub attendre(Optional ByVal temps_ms As Integer = 0)
+        If temps_ms = 0 Then
+            System.Threading.Thread.Sleep(Alea(100, 300))
+        Else
+            System.Threading.Thread.Sleep(temps_ms)
+        End If
+
     End Sub
 
     'CLIC sur les cases pour jouer un coup
@@ -1720,7 +1725,16 @@ err:
         Dim l2, c2 As Byte
         Dim Nb_Essai As Byte = 0
 
+
+
         If CheckMoveToolStripMenuItem.Checked Then
+
+            'ne pas le faire si les deux cases sont déja allumées
+            If Not ChangeCase(GAME.SquareIndex(lescases.Substring(0, 2)), GAME.SquareIndex(lescases.Substring(2, 2))) Then
+                Debug.Print("DEJA ALLUMEES ")
+                'TODO vérifié qu'il n'existe pas un cas ou deux coups de suite allume exactement les memes cases ?!
+                Exit Sub
+            End If
 
             Debug.Print("JOUE LICHESS")
             SwitchOffLedBoard()
@@ -1740,25 +1754,40 @@ err:
 
             lastPos = Cursor.Position
 
-            ToClic.X = echiquier.X + (echiquier.Width \ 8) * (c1 - 1) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 18) * Rnd())
-            ToClic.Y = echiquier.Y + (echiquier.Width \ 8) * (8 - l1) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 18) * Rnd())
+            ToClic.X = echiquier.X + (echiquier.Width \ 8) * (c1 - 1) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 20) * Rnd())
+            ToClic.Y = echiquier.Y + (echiquier.Width \ 8) * (8 - l1) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 20) * Rnd())
 
+            'APPUIS SUR LE BOUTON
             Cursor.Position = ToClic
             mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+            'ATTENDRE
             attendre()
+            'RELEVER LE BOUTON
             mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
 
+            'ATTENDRE
             attendre()
 
-            ToClic.X = echiquier.X + (echiquier.Width \ 8) * (c2 - 1) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 18) * Rnd())
-            ToClic.Y = echiquier.Y + (echiquier.Width \ 8) * (8 - l2) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 18) * Rnd())
+            ToClic.X = echiquier.X + (echiquier.Width \ 8) * (c2 - 1) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 20) * Rnd())
+            ToClic.Y = echiquier.Y + (echiquier.Width \ 8) * (8 - l2) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 20) * Rnd())
 
+            'APPUIS SUR LE BOUTON
             Cursor.Position = ToClic
             mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+            'ATTENDRE
             attendre()
+            'RELEVER LE BOUTON
             mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
 
             Cursor.Position = lastPos
+
+            'ATTENDRE
+
+            'vérifions que cela c'est bien passé
+            If ChangeCase(GAME.SquareIndex(lescases.Substring(0, 2)), GAME.SquareIndex(lescases.Substring(2, 2))) Then
+                Debug.Print("CLIC A COTE")
+                Beep()
+            End If
 
         End If
     End Sub
@@ -1901,7 +1930,9 @@ err:
 
                 If POSITIONS.Last_Position.moveUCI = GAME.SquareName(sq1) & GAME.SquareName(sq2) _
                     Or POSITIONS.Last_Position.moveUCI = GAME.SquareName(sq2) & GAME.SquareName(sq1) Then
+                    attendre(200)
                     SwitchOffLedBoard()
+
                     Debug.Print("EFFACE " & POSITIONS.Last_Position.moveUCI)
                     LastOff = POSITIONS.Last_Position.moveUCI
                 End If
