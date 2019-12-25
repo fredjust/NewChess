@@ -39,7 +39,15 @@ Partial Class Form1
         Me.menuSauvePartie = New System.Windows.Forms.ToolStripMenuItem()
         Me.EcranToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ConfigToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.JeJoueLesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuJoueBlancs = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuJoueNoirs = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckMoveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ThèmesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuTheme1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuTheme2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem6 = New System.Windows.Forms.ToolStripSeparator()
+        Me.menuTheme3 = New System.Windows.Forms.ToolStripMenuItem()
         Me.lvRec = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -58,6 +66,7 @@ Partial Class Form1
         Me.menuSauveDonnees = New System.Windows.Forms.ToolStripMenuItem()
         Me.ActualiserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.EffacerAprèsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuEffaceDonnees = New System.Windows.Forms.ToolStripMenuItem()
         Me.OrientationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuRot90 = New System.Windows.Forms.ToolStripMenuItem()
@@ -107,15 +116,15 @@ Partial Class Form1
         Me.mnuVerifCaseArrivee = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuVoirOrphelin = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuCalculComplet = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.pbReduire = New System.Windows.Forms.PictureBox()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.pnl_LV_move = New System.Windows.Forms.Panel()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.SerialPort1 = New System.IO.Ports.SerialPort(Me.components)
         Me.TimerLichess = New System.Windows.Forms.Timer(Me.components)
         Me.TimerCheckMove = New System.Windows.Forms.Timer(Me.components)
-        Me.EffacerAprèsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.pbReduire = New System.Windows.Forms.PictureBox()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.menuInvBN = New System.Windows.Forms.ToolStripMenuItem()
         Me.sst_move.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.sst_etat.SuspendLayout()
@@ -123,13 +132,13 @@ Partial Class Form1
         Me.ContextMenuStrip1.SuspendLayout()
         Me.sst_TV.SuspendLayout()
         Me.mnu_TV.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.pbReduire, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnl_LV_move.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
+        CType(Me.pbReduire, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lvMoves
@@ -221,7 +230,7 @@ Partial Class Form1
         '
         'EcranToolStripMenuItem
         '
-        Me.EcranToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConfigToolStripMenuItem, Me.CheckMoveToolStripMenuItem})
+        Me.EcranToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConfigToolStripMenuItem, Me.JeJoueLesToolStripMenuItem, Me.CheckMoveToolStripMenuItem, Me.ThèmesToolStripMenuItem})
         Me.EcranToolStripMenuItem.Name = "EcranToolStripMenuItem"
         Me.EcranToolStripMenuItem.Size = New System.Drawing.Size(74, 20)
         Me.EcranToolStripMenuItem.Text = "Adversaire"
@@ -229,14 +238,65 @@ Partial Class Form1
         'ConfigToolStripMenuItem
         '
         Me.ConfigToolStripMenuItem.Name = "ConfigToolStripMenuItem"
-        Me.ConfigToolStripMenuItem.Size = New System.Drawing.Size(111, 22)
-        Me.ConfigToolStripMenuItem.Text = "Config"
+        Me.ConfigToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ConfigToolStripMenuItem.Text = "Configurer"
+        '
+        'JeJoueLesToolStripMenuItem
+        '
+        Me.JeJoueLesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuJoueBlancs, Me.menuJoueNoirs})
+        Me.JeJoueLesToolStripMenuItem.Name = "JeJoueLesToolStripMenuItem"
+        Me.JeJoueLesToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.JeJoueLesToolStripMenuItem.Text = "Je joue les ..."
+        '
+        'menuJoueBlancs
+        '
+        Me.menuJoueBlancs.Checked = True
+        Me.menuJoueBlancs.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.menuJoueBlancs.Name = "menuJoueBlancs"
+        Me.menuJoueBlancs.Size = New System.Drawing.Size(152, 22)
+        Me.menuJoueBlancs.Text = "Blancs"
+        '
+        'menuJoueNoirs
+        '
+        Me.menuJoueNoirs.Name = "menuJoueNoirs"
+        Me.menuJoueNoirs.Size = New System.Drawing.Size(152, 22)
+        Me.menuJoueNoirs.Text = "Noirs"
         '
         'CheckMoveToolStripMenuItem
         '
         Me.CheckMoveToolStripMenuItem.Name = "CheckMoveToolStripMenuItem"
-        Me.CheckMoveToolStripMenuItem.Size = New System.Drawing.Size(111, 22)
+        Me.CheckMoveToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.CheckMoveToolStripMenuItem.Text = "Activer"
+        '
+        'ThèmesToolStripMenuItem
+        '
+        Me.ThèmesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuTheme1, Me.menuTheme2, Me.ToolStripMenuItem6, Me.menuTheme3})
+        Me.ThèmesToolStripMenuItem.Name = "ThèmesToolStripMenuItem"
+        Me.ThèmesToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ThèmesToolStripMenuItem.Text = "Thèmes"
+        '
+        'menuTheme1
+        '
+        Me.menuTheme1.Name = "menuTheme1"
+        Me.menuTheme1.Size = New System.Drawing.Size(169, 22)
+        Me.menuTheme1.Text = "Lichess défaut"
+        '
+        'menuTheme2
+        '
+        Me.menuTheme2.Name = "menuTheme2"
+        Me.menuTheme2.Size = New System.Drawing.Size(169, 22)
+        Me.menuTheme2.Text = "Lichess bleu"
+        '
+        'ToolStripMenuItem6
+        '
+        Me.ToolStripMenuItem6.Name = "ToolStripMenuItem6"
+        Me.ToolStripMenuItem6.Size = New System.Drawing.Size(166, 6)
+        '
+        'menuTheme3
+        '
+        Me.menuTheme3.Name = "menuTheme3"
+        Me.menuTheme3.Size = New System.Drawing.Size(169, 22)
+        Me.menuTheme3.Text = "Chess.com défaut"
         '
         'lvRec
         '
@@ -353,6 +413,12 @@ Partial Class Form1
         Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
         Me.ToolStripMenuItem3.Size = New System.Drawing.Size(157, 6)
         '
+        'EffacerAprèsToolStripMenuItem
+        '
+        Me.EffacerAprèsToolStripMenuItem.Name = "EffacerAprèsToolStripMenuItem"
+        Me.EffacerAprèsToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.EffacerAprèsToolStripMenuItem.Text = "Effacer après"
+        '
         'menuEffaceDonnees
         '
         Me.menuEffaceDonnees.Enabled = False
@@ -362,7 +428,7 @@ Partial Class Form1
         '
         'OrientationToolStripMenuItem
         '
-        Me.OrientationToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuRot90, Me.menuInvGD, Me.menuInvHB})
+        Me.OrientationToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuRot90, Me.menuInvGD, Me.menuInvHB, Me.menuInvBN})
         Me.OrientationToolStripMenuItem.Name = "OrientationToolStripMenuItem"
         Me.OrientationToolStripMenuItem.Size = New System.Drawing.Size(72, 20)
         Me.OrientationToolStripMenuItem.Text = "Inversions"
@@ -396,7 +462,7 @@ Partial Class Form1
         '
         Me.menuCOM_Find.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuCOM_1, Me.menuCOM_2, Me.menuCOM_3, Me.menuCOM_4, Me.menuCOM_5})
         Me.menuCOM_Find.Name = "menuCOM_Find"
-        Me.menuCOM_Find.Size = New System.Drawing.Size(152, 22)
+        Me.menuCOM_Find.Size = New System.Drawing.Size(122, 22)
         Me.menuCOM_Find.Text = "Chercher"
         '
         'menuCOM_1
@@ -438,14 +504,14 @@ Partial Class Form1
         '
         Me.menuSerialInit.Enabled = False
         Me.menuSerialInit.Name = "menuSerialInit"
-        Me.menuSerialInit.Size = New System.Drawing.Size(152, 22)
+        Me.menuSerialInit.Size = New System.Drawing.Size(122, 22)
         Me.menuSerialInit.Text = "Initialiser"
         '
         'menuSerialClose
         '
         Me.menuSerialClose.Enabled = False
         Me.menuSerialClose.Name = "menuSerialClose"
-        Me.menuSerialClose.Size = New System.Drawing.Size(152, 22)
+        Me.menuSerialClose.Size = New System.Drawing.Size(122, 22)
         Me.menuSerialClose.Text = "Fermer"
         '
         'tvPos
@@ -682,27 +748,6 @@ Partial Class Form1
         Me.menuCalculComplet.Size = New System.Drawing.Size(160, 22)
         Me.menuCalculComplet.Text = "Calcul Complet"
         '
-        'PictureBox1
-        '
-        Me.PictureBox1.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(12, 13)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(444, 447)
-        Me.PictureBox1.TabIndex = 6
-        Me.PictureBox1.TabStop = False
-        '
-        'pbReduire
-        '
-        Me.pbReduire.BackColor = System.Drawing.SystemColors.Control
-        Me.pbReduire.BackgroundImage = CType(resources.GetObject("pbReduire.BackgroundImage"), System.Drawing.Image)
-        Me.pbReduire.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.pbReduire.Location = New System.Drawing.Point(1614, 13)
-        Me.pbReduire.Name = "pbReduire"
-        Me.pbReduire.Size = New System.Drawing.Size(26, 17)
-        Me.pbReduire.TabIndex = 13
-        Me.pbReduire.TabStop = False
-        '
         'pnl_LV_move
         '
         Me.pnl_LV_move.Controls.Add(Me.lvMoves)
@@ -745,11 +790,32 @@ Partial Class Form1
         Me.TimerCheckMove.Enabled = True
         Me.TimerCheckMove.Interval = 1000
         '
-        'EffacerAprèsToolStripMenuItem
+        'pbReduire
         '
-        Me.EffacerAprèsToolStripMenuItem.Name = "EffacerAprèsToolStripMenuItem"
-        Me.EffacerAprèsToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
-        Me.EffacerAprèsToolStripMenuItem.Text = "Effacer après"
+        Me.pbReduire.BackColor = System.Drawing.SystemColors.Control
+        Me.pbReduire.BackgroundImage = CType(resources.GetObject("pbReduire.BackgroundImage"), System.Drawing.Image)
+        Me.pbReduire.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+        Me.pbReduire.Location = New System.Drawing.Point(1614, 13)
+        Me.pbReduire.Name = "pbReduire"
+        Me.pbReduire.Size = New System.Drawing.Size(26, 17)
+        Me.pbReduire.TabIndex = 13
+        Me.pbReduire.TabStop = False
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(12, 13)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(444, 447)
+        Me.PictureBox1.TabIndex = 6
+        Me.PictureBox1.TabStop = False
+        '
+        'menuInvBN
+        '
+        Me.menuInvBN.Name = "menuInvBN"
+        Me.menuInvBN.Size = New System.Drawing.Size(153, 22)
+        Me.menuInvBN.Text = "Blancs/Noirs"
         '
         'Form1
         '
@@ -777,8 +843,6 @@ Partial Class Form1
         Me.sst_TV.PerformLayout()
         Me.mnu_TV.ResumeLayout(False)
         Me.mnu_TV.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbReduire, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pnl_LV_move.ResumeLayout(False)
         Me.pnl_LV_move.PerformLayout()
         Me.SplitContainer1.Panel1.ResumeLayout(False)
@@ -787,6 +851,8 @@ Partial Class Form1
         Me.SplitContainer1.Panel2.PerformLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
+        CType(Me.pbReduire, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -882,5 +948,14 @@ Partial Class Form1
     Friend WithEvents TimerLichess As System.Windows.Forms.Timer
     Friend WithEvents TimerCheckMove As System.Windows.Forms.Timer
     Friend WithEvents EffacerAprèsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents JeJoueLesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuJoueBlancs As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuJoueNoirs As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ThèmesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuTheme1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuTheme2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem6 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents menuTheme3 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuInvBN As System.Windows.Forms.ToolStripMenuItem
 
 End Class

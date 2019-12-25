@@ -105,6 +105,8 @@
 
     End Sub
 
+    
+
     Private Sub lblClose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblClose.Click
         With echiquier
             .Width = Me.Width
@@ -115,8 +117,14 @@
         Cls_Ini.INIWrite(IniFile, "liscreen", "left", echiquier.Location.X)
         Cls_Ini.INIWrite(IniFile, "liscreen", "top", echiquier.Location.Y)
 
+
+
+
+
+
         Me.Close()
-        Me.Close()
+
+        Form1.CheckBoardColor()
 
     End Sub
 

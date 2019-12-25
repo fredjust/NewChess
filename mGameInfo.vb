@@ -17,6 +17,17 @@
         Dim IniSection As String
     End Structure
 
+    Public Structure Theme_Color
+        Dim Dark_Square As Color
+        Dim Light_Square As Color
+        Dim Dark_highlight As Color
+        Dim Ligh_highlight As Color
+    End Structure
+
+    Public Const NumberOfTheme As Byte = 2
+    Public ThemesColor(NumberOfTheme) As Theme_Color
+    Public NumColorTheme As Byte
+
     Public InfoGame As New InfoPGN
 
     Public echiquier As Rectangle

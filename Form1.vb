@@ -46,8 +46,7 @@ Public Class Form1
 
     'tableau contenant les couleurs
     Dim LesCouleurs(5) As System.Drawing.Color
-    Dim ColorSquareWhite As Color
-    Dim ColorSquareBlack As Color
+    
 
     'GESTION DU PORT SERIE
     '------------------------------------------------
@@ -281,6 +280,36 @@ Public Class Form1
 
     End Sub
 
+    Public Sub InitThemeColor()
+
+        'Lichess Default brown Theme 
+        With ThemesColor(0)
+            .Dark_highlight = Color.FromArgb(255, 170, 162, 58) 'Dark Green
+            .Ligh_highlight = Color.FromArgb(255, 205, 210, 106) 'Light Green
+            .Dark_Square = Color.FromArgb(255, 181, 136, 99) 'Dark Green
+            .Light_Square = Color.FromArgb(255, 240, 217, 181) 'Light Green
+        End With
+
+        'Lichess blue Theme 
+        With ThemesColor(1)
+            .Dark_highlight = Color.FromArgb(255, 146, 177, 102) 'Dark Green
+            .Ligh_highlight = Color.FromArgb(255, 195, 216, 135) 'Light Green
+            .Dark_Square = Color.FromArgb(255, 140, 162, 173) 'Dark Green
+            .Light_Square = Color.FromArgb(255, 222, 227, 230) 'Light Green
+        End With
+
+        'chess.com Default green Theme 
+        With ThemesColor(2)
+            .Dark_highlight = Color.FromArgb(255, 186, 202, 68) 'Dark Green
+            .Ligh_highlight = Color.FromArgb(255, 246, 246, 130) 'Light Green
+            .Dark_Square = Color.FromArgb(255, 118, 150, 86) 'Dark Green
+            .Light_Square = Color.FromArgb(255, 238, 238, 210) 'Light Green
+        End With
+
+        NumColorTheme = 0
+
+    End Sub
+
 
     Public Sub initSizeEchiquier()
         Dim tmpPt As Point
@@ -291,8 +320,8 @@ Public Class Form1
             .Y = 149 ' 164
         End With
 
-        ColorSquareWhite = Color.FromArgb(255, 205, 210, 106)
-        ColorSquareBlack = Color.FromArgb(255, 170, 162, 58)
+        'ColorSquareWhite = Color.FromArgb(255, 205, 210, 106)
+        'ColorSquareBlack = Color.FromArgb(255, 170, 162, 58)
 
         IniFile = Application.StartupPath & "\Chessboard.ini"
         If Cls_Ini.INISectionExist(IniFile, "liscreen") Then
@@ -709,6 +738,8 @@ ErrorHandler:
 
     Dim PieceSize As Integer
 
+   
+
     'dessine l'échiquier puis  les pièces
     Private Sub DrawPiece(Optional ByVal aFEN As String = "")
         Dim rect As Rectangle
@@ -794,7 +825,11 @@ ErrorHandler:
                 End If
             Next
 
+
+
         End If
+
+
     End Sub
 
     'retourne le bitmap correspondant à la piece d'une notation FEN
@@ -906,8 +941,8 @@ ErrorHandler:
 
         sqOn = lvRec.SelectedItems(0).SubItems(3).Text
         sqOff = lvRec.SelectedItems(0).SubItems(4).Text
-        If sqOn <> "" Then sqOnI = STATES.Index_Case(sqOn)
-        If sqOff <> "" Then sqOffI = STATES.Index_Case(sqOff)
+        If sqOn <> "" Then sqOnI = GAME.SquareIndex(sqOn)
+        If sqOff <> "" Then sqOffI = GAME.SquareIndex(sqOff)
         PutSymbol(sqOnI, "1")
         PutSymbol(sqOffI, "2")
     End Sub
@@ -923,6 +958,7 @@ ErrorHandler:
         Init_Option()
         LoadInfoPgn()
         initSizeEchiquier()
+        InitThemeColor()
         PictureBox1.Top = 10
         PictureBox1.Left = 10
         pbReduire.Top = 10
@@ -1480,6 +1516,11 @@ ErrorHandler:
         menuRot90.Checked = Not menuRot90.Checked
     End Sub
 
+    Private Sub menuInvBN_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuInvBN.Click
+        menuInvBN.Checked = Not menuInvBN.Checked
+        STATES.Inverted_ChessBoard = menuInvBN.Checked
+    End Sub
+
 
 
     Private Sub menuCalculComplet_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCalculComplet.Click
@@ -1639,6 +1680,42 @@ err:
         Form3.Show()
     End Sub
 
+    Public Sub CheckBoardColor()
+
+        Dim ligne1 As Byte
+        Dim ligne2 As Byte
+        Dim colonne1 As Byte
+        Dim colonne2 As Byte
+
+        Dim couleur1 As Color
+        Dim couleur2 As Color
+
+        Dim myBmp As New Bitmap(echiquier.Width, echiquier.Height)
+        Dim g As Graphics = Graphics.FromImage(myBmp)
+        g.CopyFromScreen(echiquier.Location, Point.Empty, myBmp.Size)
+
+        g.Dispose()
+
+        ligne1 = 4
+        colonne1 = 4
+        ligne2 = 4
+        colonne2 = 5
+
+        couleur1 = myBmp.GetPixel((echiquier.Width \ 8) * (colonne1 - 1) + 5, (echiquier.Width \ 8) * (8 - ligne1) + 5)
+        couleur2 = myBmp.GetPixel((echiquier.Width \ 8) * (colonne2 - 1) + 5, (echiquier.Width \ 8) * (8 - ligne2) + 5)
+
+        For i = 0 To NumberOfTheme
+            If couleur1 = ThemesColor(i).Dark_Square _
+                And couleur2 = ThemesColor(i).Light_Square Then
+                Debug.Print("THEME : " & i)
+                Exit Sub
+            End If
+        Next
+        MsgBox("Les couleurs ne correspondent à aucun thème !", vbCritical, "ATTENTION")
+
+    End Sub
+
+
     '*************************** FONCTION LICHESS **************************************
 #Region "LICHESS BOARD"
 
@@ -1662,7 +1739,7 @@ err:
             For colonne = 1 To 8
                 'si la case est verte claire
                 If myBmp.GetPixel((echiquier.Width \ 8) * (colonne - 1) + 5, (echiquier.Width \ 8) * (8 - ligne) + 5) = _
-                    ColorSquareWhite Then
+                    ThemesColor(NumColorTheme).Ligh_highlight Then
                     'si la case est verte  claire
                     If case1 = 0 Then
                         case1 = ligne * 10 + colonne
@@ -1673,7 +1750,7 @@ err:
                 End If
                 'si la case est verte foncé
                 If myBmp.GetPixel((echiquier.Width \ 8) * (colonne - 1) + 5, (echiquier.Width \ 8) * (8 - ligne) + 5) = _
-                    ColorSquareBlack Then
+                    ThemesColor(NumColorTheme).Dark_highlight Then
                     If case1 = 0 Then
                         case1 = ligne * 10 + colonne
                     Else
@@ -1752,6 +1829,14 @@ err:
             l2 = sq2 \ 10
             c2 = sq2 Mod 10
 
+            If STATES.Inverted_ChessBoard Then
+                l1 = 9 - sq1 \ 10
+                c1 = 9 - sq1 Mod 10
+
+                l2 = 9 - sq2 \ 10
+                c2 = 9 - sq2 Mod 10
+            End If
+
             lastPos = Cursor.Position
 
             ToClic.X = echiquier.X + (echiquier.Width \ 8) * (c1 - 1) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 20) * Rnd())
@@ -1784,10 +1869,10 @@ err:
             'ATTENDRE
 
             'vérifions que cela c'est bien passé
-            If ChangeCase(GAME.SquareIndex(lescases.Substring(0, 2)), GAME.SquareIndex(lescases.Substring(2, 2))) Then
-                Debug.Print("CLIC A COTE")
-                Beep()
-            End If
+            'If ChangeCase(GAME.SquareIndex(lescases.Substring(0, 2)), GAME.SquareIndex(lescases.Substring(2, 2))) Then
+            '    Debug.Print("CLIC A COTE")
+            '    Beep()
+            'End If
 
         End If
     End Sub
@@ -1842,7 +1927,6 @@ err:
 
         Dim couleur1 As Color
         Dim couleur2 As Color
-        Dim couleur3 As Color
 
 
         If case1 <> 0 And case2 <> 0 Then
@@ -1853,20 +1937,25 @@ err:
 
             g.Dispose()
 
-            ligne1 = case1 \ 10
-            colonne1 = case1 Mod 10
-            ligne2 = case2 \ 10
-            colonne2 = case2 Mod 10
+            If STATES.Inverted_ChessBoard Then
+                ligne1 = case1 \ 10
+                colonne1 = case1 Mod 10
+                ligne2 = case2 \ 10
+                colonne2 = case2 Mod 10
+            Else
+                ligne1 = case1 \ 10
+                colonne1 = case1 Mod 10
+                ligne2 = case2 \ 10
+                colonne2 = case2 Mod 10
+            End If
+
+
 
             couleur1 = myBmp.GetPixel((echiquier.Width \ 8) * (colonne1 - 1) + 5, (echiquier.Width \ 8) * (8 - ligne1) + 5)
             couleur2 = myBmp.GetPixel((echiquier.Width \ 8) * (colonne2 - 1) + 5, (echiquier.Width \ 8) * (8 - ligne2) + 5)
-            couleur3 = myBmp.GetPixel((echiquier.Width \ 8) * (colonne1 - 1) + echiquier.Width / 16, (echiquier.Width \ 8) * (8 - ligne1) + echiquier.Width / 16)
 
-            If (couleur1 = Color.FromArgb(255, 205, 210, 106) _
-                Or couleur1 = Color.FromArgb(255, 170, 162, 58)) _
-                And (couleur2 = Color.FromArgb(255, 205, 210, 106) _
-                Or couleur2 = Color.FromArgb(255, 170, 162, 58)) Then '_
-                'And (couleur3 = couleur1) Then
+            If (couleur1 = ThemesColor(NumColorTheme).Dark_highlight Or couleur1 = ThemesColor(NumColorTheme).Ligh_highlight) _
+                And (couleur2 = ThemesColor(NumColorTheme).Dark_highlight Or couleur2 = ThemesColor(NumColorTheme).Ligh_highlight) Then
                 myBmp.Dispose()
                 Return False
             Else
@@ -1923,13 +2012,15 @@ err:
 
         End If
 
+        'Etteint les diodes si le derniers coups reconnu est celui qui est affiché sur l'échiquier
         If POSITIONS.col_Position.Count > 0 Then
             If LastOff <> POSITIONS.Last_Position.moveUCI Then
-
-
-
-                If POSITIONS.Last_Position.moveUCI = GAME.SquareName(sq1) & GAME.SquareName(sq2) _
-                    Or POSITIONS.Last_Position.moveUCI = GAME.SquareName(sq2) & GAME.SquareName(sq1) Then
+                Dim tempo1 As String
+                Dim tempo2 As String
+                tempo1 = Inverted_Name(GAME.SquareName(sq1)) & Inverted_Name(GAME.SquareName(sq2))
+                tempo2 = Inverted_Name(GAME.SquareName(sq2)) & Inverted_Name(GAME.SquareName(sq1))
+                If POSITIONS.Last_Position.moveUCI = tempo1 _
+                    Or POSITIONS.Last_Position.moveUCI = tempo2 Then
                     attendre(200)
                     SwitchOffLedBoard()
 
@@ -1940,12 +2031,34 @@ err:
         End If
     End Sub
 
+    'Inverse le nom d'une case lorsque le plateau est utilsé en inversant les blancs et les noirs
+    Public Function Inverted_Name(ByVal NameSquare As String) As String
+        Dim case1 As Byte
+        Dim ligne1 As Byte
+        Dim colonne1 As Byte
+        Dim tempo1 As String
+
+        If Not STATES.Inverted_ChessBoard Then Return (NameSquare)
+
+        case1 = GAME.SquareIndex(NameSquare)
+
+        ligne1 = 9 - case1 \ 10
+        colonne1 = 9 - case1 Mod 10
+
+        case1 = 10 * ligne1 + colonne1
+
+        tempo1 = GAME.SquareName(case1)
+        Return tempo1
+
+
+    End Function
+
     Private Sub CheckMoveToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckMoveToolStripMenuItem.Click
         CheckMoveToolStripMenuItem.Checked = Not CheckMoveToolStripMenuItem.Checked
         TimerLichess.Enabled = CheckMoveToolStripMenuItem.Checked
     End Sub
 
-   
+
     Private Sub TimerCheckMove_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerCheckMove.Tick
         Static NbPosition As Integer
 
@@ -1957,7 +2070,7 @@ err:
         'si le nombre de position n'a pas changé on ne fait rien 
         If NbPosition = STATES.col_States.Count Then Exit Sub
 
-       
+
 
         'On stock le nombre de position
         NbPosition = STATES.col_States.Count
@@ -1974,10 +2087,31 @@ err:
 
     Private Sub EffacerAprèsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EffacerAprèsToolStripMenuItem.Click
 
-        While lvRec.SelectedIndices(0) <> lvRec.Items.Count - 1
-            lvRec.Items.RemoveAt(lvRec.Items.Count - 1)
-        End While
+        STATES.Delete_States(lvRec.SelectedIndices(0))
+        Refresh_ListView()
+
+        'While lvRec.SelectedIndices(0) <> lvRec.Items.Count - 1
+        '    lvRec.Items.RemoveAt(lvRec.Items.Count - 1)
+        'End While
     End Sub
+
+
+    Private Sub menuTheme1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuTheme1.Click
+        NumColorTheme = 0
+        Form2.Show()
+    End Sub
+
+    Private Sub menuTheme2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuTheme2.Click
+        NumColorTheme = 1
+        Form2.Show()
+    End Sub
+
+    Private Sub menuTheme3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuTheme3.Click
+        NumColorTheme = 2
+        Form2.Show()
+    End Sub
+
+    
 End Class
 
 

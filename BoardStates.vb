@@ -18,8 +18,9 @@ Public Class BoardStates
         CoupRejete = 6
         CoupProche = 7
         Start = 195
-
     End Enum
+
+    Public Inverted_ChessBoard As Boolean
 
     'Type pour les données brutes
     Public Class aState
@@ -160,6 +161,7 @@ Public Class BoardStates
     End Function
 
     'ajoute un ETAT
+    'c'est à dire une signature plus les informations calculées 
     Private Sub Ajoute_Etat(ByVal Signature As String, _
         ByVal Temps As Long, _
         ByVal sqOff As String, _
@@ -194,7 +196,7 @@ Public Class BoardStates
     '   SquareIndex(a1)=11
     '   SquareIndex(h8)=88
     'ou 0 en cas d'erreur
-    Public Function Index_Case(ByVal Nom_case As String) As Byte
+    Private Function Index_Case(ByVal Nom_case As String) As Byte
         Dim lettre As Char
         Dim colonne As Byte
         Dim ligne As Byte
@@ -214,7 +216,9 @@ Public Class BoardStates
 
     End Function
 
-    'ajoute un etat dans la collection a partir d'une signature
+    
+
+    'ajoute une signature puis un etats dans la collection a partir d'une signature
     'regarde les différences avec l'état précédent pour calculer les cases qui s'allument et s'éteingnent
     'compte le nombre de pièce sur l'échiquier
     'en cas de double différence ajoute 3 états au lieu d'un <= TODO a regarder ??
@@ -228,12 +232,13 @@ Public Class BoardStates
 
         If temps = 0 Then modif = StateColor.NullTime Else modif = StateColor.Normal
 
-        If signature.Split(".").Count <> 9 Then
-            Return False
+        If Inverted_ChessBoard Then
+            signature = Modif_Orientation(signature, True, True, False)
+        Else
+            signature = Modif_Orientation(signature, False, False, False)
         End If
 
         'TODO A NE PAS FAIRE ICI
-        signature = signature.Substring(0, signature.Length - 2)
         If signature = "195.195.195.195.195.195.195.195" Then
             'efface toutes les anciennes positions
             col_States.Clear()
@@ -475,6 +480,21 @@ Public Class BoardStates
 
     End Function
 
+    'Efface tous les états apres un ID
+    Public Sub Delete_States(ByVal AfterID As Integer)
+        If AfterID = 0 Then
+            col_States.Clear()
+            Exit Sub
+        End If
+        While col_States.Count - 1 <> AfterID
+            col_States.Remove(col_States.Count)
+        End While
+
+    End Sub
+
 #End Region
 
+    Public Sub New()
+        Inverted_ChessBoard = False
+    End Sub
 End Class
