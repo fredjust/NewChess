@@ -248,7 +248,7 @@ Public Class BoardStates
 
         If col_States.Count = 0 Then 'si c'est le premier enregistrement
 
-            Ajoute_Etat(signature, temps, "", "")
+            Ajoute_Etat(signature, temps, "", "", 195)
 
         Else        'cherche les différenes avec l'état précédent
 

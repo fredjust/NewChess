@@ -1654,8 +1654,10 @@ err:
 
     'redirige en fonction du type de DATA recue
     Private Sub ReceivedText(ByVal [text] As String) 'input from ReadExisting
-
         Debug.Print([text])
+
+        If menuPause.Checked Then Exit Sub
+
         If Not [text].Contains(".") Then 'si les DATA ne contiennent pas des . 
             SetTime([text])
         Else 'sinon il s'agit d'une signature
@@ -2111,7 +2113,10 @@ err:
         Form2.Show()
     End Sub
 
-    
+
+    Private Sub menuPause_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuPause.Click
+        menuPause.Checked = Not menuPause.Checked
+    End Sub
 End Class
 
 
