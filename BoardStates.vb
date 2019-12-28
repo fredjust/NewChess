@@ -258,6 +258,10 @@ Public Class BoardStates
             'cherche les différences
             FindOnOff(signature, LastState.Signature, SquareOn, SquareOff)
 
+            If SquareOff = "" And SquareOn = "" Then 'si aucune case ne changent sur cet enregistrement on ne fait rien
+                Return False
+            End If
+
 
             If SquareOff <> "" And SquareOn <> "" Then 'si plusieurs cases changent sur un seul enregistrement 
 
@@ -418,8 +422,10 @@ Public Class BoardStates
                 LeTemps = 0
             End Try
 
-            Ajoute_Signature(LaSignature, LeTemps)
-            iLigne = iLigne + 2
+            If Ajoute_Signature(LaSignature, LeTemps) Then
+                iLigne = iLigne + 2
+            End If
+
         End While
 
         Return True
