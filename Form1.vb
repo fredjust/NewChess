@@ -1179,6 +1179,8 @@ ErrorHandler:
         Dim aPos As UInteger
         Dim lvItem As Integer
 
+        On Error Resume Next
+
         aTag = tvPos.SelectedNode.Tag
         aTag = aTag.Replace("k", "")
         aPos = aTag

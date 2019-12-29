@@ -259,6 +259,7 @@ Public Class BoardStates
             FindOnOff(signature, LastState.Signature, SquareOn, SquareOff)
 
             If SquareOff = "" And SquareOn = "" Then 'si aucune case ne changent sur cet enregistrement on ne fait rien
+                Debug.Print("DOUBLON " & DateTime.Now)
                 Return False
             End If
 
