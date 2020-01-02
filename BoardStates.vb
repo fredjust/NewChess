@@ -38,7 +38,8 @@ Public Class BoardStates
     'collection des etats du plateau
     Public col_States As New Collection
 
-
+    Public last_State As String
+    Public screen_State As String
 
 #Region "PRIVATE SUB"
 
@@ -181,6 +182,8 @@ Public Class BoardStates
 
         'ajoute le nouvel etat à la collection
         col_States.Add(NewState)
+
+        last_State = Signature
 
     End Sub
 

@@ -60,6 +60,8 @@ Public Class Form1
 
     Dim LastOff As String = ""
 
+    Dim Old_Msg As String = ""
+
     Declare Sub mouse_event Lib "user32" Alias "mouse_event" (ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal cButtons As Integer, ByVal dwExtraInfo As Integer)
 
     Public Const MOUSEEVENTF_LEFTDOWN = &H2 ' left button down
@@ -1654,7 +1656,7 @@ err:
 
     'redirige en fonction du type de DATA recue
     Private Sub ReceivedText(ByVal [text] As String) 'input from ReadExisting
-        Debug.Print([text])
+        Debug.Print("Data read : " & [text])
 
         If menuPause.Checked Then Exit Sub
 
@@ -1669,7 +1671,7 @@ err:
     'recoit les DATA du port SERIE
     Private Sub SerialPort1_DataReceived(ByVal sender As System.Object, ByVal e As System.IO.Ports.SerialDataReceivedEventArgs) Handles SerialPort1.DataReceived
         ReceivedText(SerialPort1.ReadLine())
-        Debug.Print("Date Received")
+        'Debug.Print("Date Received")
         'ré initialise le temps pour la recherche auto des coups
         LastReceive = Environment.TickCount
     End Sub
@@ -1765,6 +1767,69 @@ err:
         Next
 
         myBmp.Dispose()
+
+    End Sub
+
+    'teste si une piece est sur la case
+    Public Function pieceOnsquare(ByVal aColor As Color) As Boolean
+        Dim R As Integer = aColor.R
+        Dim G As Integer = aColor.G
+        Dim B As Integer = aColor.B
+
+        'si le pixel est suffisement blanc
+        If R < 56 And G < 56 And B < 56 Then Return True
+
+        'si le pixel est suffisement noir
+        If R > 200 And G > 200 And B > 200 Then Return True
+
+        'si le pixel est suffisement gris
+        If Math.Abs(R - G) < 10 And Math.Abs(R - B) < 10 And Math.Abs(G - B) < 10 Then Return True
+
+        Return False
+
+    End Function
+
+    '************************************************************************************************
+    'renvoie la signature du plateau ecran lichess ou chess.com
+    '************************************************************************************************
+    Private Sub getScreenState()
+
+        Dim myBmp As New Bitmap(echiquier.Width, echiquier.Height)
+        Dim g As Graphics = Graphics.FromImage(myBmp)
+        g.CopyFromScreen(echiquier.Location, Point.Empty, myBmp.Size)
+        g.Dispose()
+        Dim sqColor As Color
+        Dim sSquare As Byte = echiquier.Width \ 8
+
+        Dim strState As String = ""
+        Static oldstrState As String
+
+        Dim bRow As Byte
+
+        For colonne = 0 To 7
+            bRow = 0
+            For ligne = 7 To 0 Step -1
+
+                sqColor = myBmp.GetPixel(sSquare * colonne + sSquare \ 2, sSquare * ligne + sSquare \ 2)
+
+                If pieceOnsquare(sqColor) Then 'une piece se trouve sur la case
+                    bRow += 2 ^ (7 - ligne)
+                End If
+            Next
+            strState &= bRow
+            strState &= "."
+        Next
+
+        strState = strState.Substring(0, strState.Length - 1)
+
+        myBmp.Dispose()
+        If strState <> oldstrState Then
+            Debug.Print(strState)
+            oldstrState = strState
+
+        End If
+
+        STATES.screen_State = strState
 
     End Sub
 
@@ -1882,7 +1947,7 @@ err:
     'Demande d'éteindre toutes les LED
     Private Sub SwitchOffLedBoard()
         If SerialPort1.IsOpen Then
-            Debug.Print("EFFACE")
+            Debug.Print("Data write : c")
             SerialPort1.WriteLine("c")
         End If
     End Sub
@@ -1904,13 +1969,32 @@ err:
 
             If SerialPort1.IsOpen Then
 
-                cmdserial = "o" & l1.ToString & "," & c1.ToString & "," & l2.ToString & "," & c2.ToString
+                cmdserial = l1.ToString & c1.ToString & l2.ToString & c2.ToString
 
                 SerialPort1.WriteLine(cmdserial)
                 Debug.Print(cmdserial)
 
             End If
         End If
+
+    End Sub
+
+    'Envoie la commande pour allumer les cases sq1 et sq2
+    Private Sub Led_ON(ByVal strToSend As String)
+        Dim cmdserial As String
+
+
+        If old_msg = strToSend Then Exit Sub
+        old_msg = strToSend
+        If SerialPort1.IsOpen Then
+
+            cmdserial = strToSend
+
+            SerialPort1.WriteLine(cmdserial)
+            Debug.Print("Data write : " & cmdserial)
+
+        End If
+
 
     End Sub
 
@@ -1972,6 +2056,44 @@ err:
 
 #End Region
 
+    'allume les cases du plateau qui ne sont pas identiques à l'écran
+    Public Sub SwitchOnDiff()
+        Dim board_pos(8) As String
+        Dim screen_pos(8) As String
+        Dim board_byte As Byte
+        Dim screen_byte As Byte
+        Dim iLigne As Integer 'compte de boucle sur la ligne
+        Dim icolonne As Byte 'compteur de boucle sur la colonne
+
+        Dim buffer_LED As String = ""
+
+        If STATES.last_State <> "" Then
+            board_pos = Split(STATES.last_State, ".")
+        Else
+            board_pos = Split("0.0.0.0.0.0.0.0", ".")
+        End If
+
+        If STATES.screen_State <> "" Then
+            screen_pos = Split(STATES.screen_State, ".")
+        Else
+            screen_pos = Split("0.0.0.0.0.0.0.0", ".")
+        End If
+
+        For icolonne = 0 To 7
+            board_byte = board_pos(icolonne) 'bytes des colonnes
+            screen_byte = screen_pos(icolonne)
+            If (board_byte <> screen_byte) Then 'si les deux colonnes sont différentes
+                For iLigne = 7 To 0 Step -1
+                    If (board_byte And (2 ^ iLigne)) <> (screen_byte And (2 ^ iLigne)) Then   'si la case est diffétente
+                        buffer_LED &= (iLigne + 1).ToString & (icolonne + 1).ToString
+
+                    End If
+                Next
+            End If
+        Next
+        Led_ON(buffer_LED)
+    End Sub
+
     Private Sub TimerLichess_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerLichess.Tick
         Static sq1, sq2, CompterSec As Byte
 
@@ -1981,6 +2103,9 @@ err:
             sq1 = 0
             sq2 = 0
         End If
+
+        'test
+
 
         'si les cases vertes ne sont pas encore trouvées
         If sq1 = 0 Or sq2 = 0 Then
@@ -2031,6 +2156,7 @@ err:
                 End If
             End If
         End If
+       
     End Sub
 
     'Inverse le nom d'une case lorsque le plateau est utilsé en inversant les blancs et les noirs
@@ -2068,6 +2194,7 @@ err:
         If Environment.TickCount - LastReceive < 1000 Then Exit Sub
 
         Refresh_ListView()
+        TimerDiff.Interval = 250
 
         'si le nombre de position n'a pas changé on ne fait rien 
         If NbPosition = STATES.col_States.Count Then Exit Sub
@@ -2116,6 +2243,31 @@ err:
 
     Private Sub menuPause_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuPause.Click
         menuPause.Checked = Not menuPause.Checked
+    End Sub
+
+    Public Sub Check_Diff()
+        Static Must_Erase As Boolean = True
+
+        getScreenState()
+        If STATES.screen_State <> STATES.last_State Then
+            SwitchOnDiff()
+            Must_Erase = True
+        Else
+            Old_Msg = ""
+            If Must_Erase Then
+                Must_Erase = False
+                SwitchOffLedBoard()
+            End If
+        End If
+    End Sub
+
+    Private Sub TimerDiff_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerDiff.Tick
+        Check_Diff()
+    End Sub
+
+    Private Sub MenuSur_Ecran_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSur_Ecran.Click
+        MenuSur_Ecran.Checked = Not MenuSur_Ecran.Checked
+        TimerDiff.Enabled = MenuSur_Ecran.Checked
     End Sub
 End Class
 

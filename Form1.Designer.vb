@@ -125,6 +125,9 @@ Partial Class Form1
         Me.TimerCheckMove = New System.Windows.Forms.Timer(Me.components)
         Me.pbReduire = New System.Windows.Forms.PictureBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.TimerDiff = New System.Windows.Forms.Timer(Me.components)
+        Me.MenuSur_Ecran = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem7 = New System.Windows.Forms.ToolStripSeparator()
         Me.sst_move.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.sst_etat.SuspendLayout()
@@ -230,7 +233,7 @@ Partial Class Form1
         '
         'EcranToolStripMenuItem
         '
-        Me.EcranToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConfigToolStripMenuItem, Me.JeJoueLesToolStripMenuItem, Me.CheckMoveToolStripMenuItem, Me.ThèmesToolStripMenuItem})
+        Me.EcranToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConfigToolStripMenuItem, Me.JeJoueLesToolStripMenuItem, Me.MenuSur_Ecran, Me.CheckMoveToolStripMenuItem, Me.ToolStripMenuItem7, Me.ThèmesToolStripMenuItem})
         Me.EcranToolStripMenuItem.Name = "EcranToolStripMenuItem"
         Me.EcranToolStripMenuItem.Size = New System.Drawing.Size(74, 20)
         Me.EcranToolStripMenuItem.Text = "Adversaire"
@@ -238,14 +241,14 @@ Partial Class Form1
         'ConfigToolStripMenuItem
         '
         Me.ConfigToolStripMenuItem.Name = "ConfigToolStripMenuItem"
-        Me.ConfigToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
+        Me.ConfigToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.ConfigToolStripMenuItem.Text = "Configurer"
         '
         'JeJoueLesToolStripMenuItem
         '
         Me.JeJoueLesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuJoueBlancs, Me.menuJoueNoirs})
         Me.JeJoueLesToolStripMenuItem.Name = "JeJoueLesToolStripMenuItem"
-        Me.JeJoueLesToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
+        Me.JeJoueLesToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.JeJoueLesToolStripMenuItem.Text = "Je joue les ..."
         '
         'menuJoueBlancs
@@ -265,14 +268,14 @@ Partial Class Form1
         'CheckMoveToolStripMenuItem
         '
         Me.CheckMoveToolStripMenuItem.Name = "CheckMoveToolStripMenuItem"
-        Me.CheckMoveToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
-        Me.CheckMoveToolStripMenuItem.Text = "Activer"
+        Me.CheckMoveToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CheckMoveToolStripMenuItem.Text = "Activer Coup"
         '
         'ThèmesToolStripMenuItem
         '
         Me.ThèmesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuTheme1, Me.menuTheme2, Me.ToolStripMenuItem6, Me.menuTheme3})
         Me.ThèmesToolStripMenuItem.Name = "ThèmesToolStripMenuItem"
-        Me.ThèmesToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
+        Me.ThèmesToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.ThèmesToolStripMenuItem.Text = "Thèmes"
         '
         'menuTheme1
@@ -816,6 +819,21 @@ Partial Class Form1
         Me.PictureBox1.TabIndex = 6
         Me.PictureBox1.TabStop = False
         '
+        'TimerDiff
+        '
+        Me.TimerDiff.Interval = 1000
+        '
+        'MenuSur_Ecran
+        '
+        Me.MenuSur_Ecran.Name = "MenuSur_Ecran"
+        Me.MenuSur_Ecran.Size = New System.Drawing.Size(152, 22)
+        Me.MenuSur_Ecran.Text = "Sur Ecran"
+        '
+        'ToolStripMenuItem7
+        '
+        Me.ToolStripMenuItem7.Name = "ToolStripMenuItem7"
+        Me.ToolStripMenuItem7.Size = New System.Drawing.Size(149, 6)
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -956,5 +974,8 @@ Partial Class Form1
     Friend WithEvents menuTheme3 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuInvBN As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuPause As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents TimerDiff As System.Windows.Forms.Timer
+    Friend WithEvents MenuSur_Ecran As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem7 As System.Windows.Forms.ToolStripSeparator
 
 End Class
