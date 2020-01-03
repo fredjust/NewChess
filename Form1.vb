@@ -139,7 +139,7 @@ Public Class Form1
 
 #End Region
 
-#Region "GESTION LIST VIEW MOVE"
+#Region "GESTION LIST VIEW MOVE" ' TODO VIDE A COMPLETER
 
     'ajoute une position dans la lvMove
     'on doit ajouter les positions dans l'ordre
@@ -315,7 +315,7 @@ Public Class Form1
 
     Public Sub initSizeEchiquier()
         Dim tmpPt As Point
-        With echiquier
+        With rect_ChessBoardOnScreen
             .Width = 512 '640
             .Height = 512 '640 
             .X = 660 '587 
@@ -325,13 +325,13 @@ Public Class Form1
         'ColorSquareWhite = Color.FromArgb(255, 205, 210, 106)
         'ColorSquareBlack = Color.FromArgb(255, 170, 162, 58)
 
-        IniFile = Application.StartupPath & "\Chessboard.ini"
-        If Cls_Ini.INISectionExist(IniFile, "liscreen") Then
-            tmpPt.X = Cls_Ini.INIRead(IniFile, "liscreen", "left")
-            tmpPt.Y = Cls_Ini.INIRead(IniFile, "liscreen", "top")
-            echiquier.Location = tmpPt
-            echiquier.Width = Cls_Ini.INIRead(IniFile, "liscreen", "Width")
-            echiquier.Height = echiquier.Width
+        str_IniFile = Application.StartupPath & "\Chessboard.ini"
+        If Cls_Ini.INISectionExist(str_IniFile, "liscreen") Then
+            tmpPt.X = Cls_Ini.INIRead(str_IniFile, "liscreen", "left")
+            tmpPt.Y = Cls_Ini.INIRead(str_IniFile, "liscreen", "top")
+            rect_ChessBoardOnScreen.Location = tmpPt
+            rect_ChessBoardOnScreen.Width = Cls_Ini.INIRead(str_IniFile, "liscreen", "Width")
+            rect_ChessBoardOnScreen.Height = rect_ChessBoardOnScreen.Width
         End If
     End Sub
 
@@ -740,7 +740,7 @@ ErrorHandler:
 
     Dim PieceSize As Integer
 
-   
+
 
     'dessine l'échiquier puis  les pièces
     Private Sub DrawPiece(Optional ByVal aFEN As String = "")
@@ -1118,6 +1118,31 @@ ErrorHandler:
 
 #Region "EVENEMENT SUR LES MENUS"
 
+    Private Sub menuCOM_1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_1.Click
+        SerialPortName = menuCOM_1.Text
+        chgMenuInit()
+    End Sub
+
+    Private Sub menuCOM_2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_2.Click
+        SerialPortName = menuCOM_2.Text
+        chgMenuInit()
+    End Sub
+
+    Private Sub menuCOM_3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_3.Click
+        SerialPortName = menuCOM_3.Text
+        chgMenuInit()
+    End Sub
+
+    Private Sub menuCOM_4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_4.Click
+        SerialPortName = menuCOM_4.Text
+        chgMenuInit()
+    End Sub
+
+    Private Sub menuCOM_5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_5.Click
+        SerialPortName = menuCOM_5.Text
+        chgMenuInit()
+    End Sub
+
     'affecte -1 au noeud selectionné pour forcer son recalcul
     Private Sub menuRecalculer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuRecalculer.Click
         Dim aTag As String
@@ -1176,23 +1201,7 @@ ErrorHandler:
         VoirEtat()
     End Sub
 
-    Private Sub VoirEtat()
-        Dim aTag As String
-        Dim aPos As UInteger
-        Dim lvItem As Integer
-
-        On Error Resume Next
-
-        aTag = tvPos.SelectedNode.Tag
-        aTag = aTag.Replace("k", "")
-        aPos = aTag
-        lvItem = POSITIONS.col_Position(aPos).idState
-        'lvRec.Items(lvItem - 1).Selected = True
-        lvRec.Items(lvRec.Items.Count - 1).EnsureVisible()
-        lvRec.Items(lvItem - 1).EnsureVisible()
-        'lvRec.Items(lvItem - 1).Focused = True
-
-    End Sub
+   
     'copie dans le presse papier la position FEN du noeud sélectionné
     Private Sub menuCopierFEN_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCopierFEN.Click
         Dim aTag As String
@@ -1232,13 +1241,7 @@ ErrorHandler:
         End If
     End Sub
 
-    'décoche tous les menus couleurs
-    Private Sub uncheck_all()
-        mnuOpCoulBleu.Checked = False
-        mnuOpCoulNoir.Checked = False
-        mnuOpCoulRouge.Checked = False
-        mnuOpCoulVert.Checked = False
-    End Sub
+
 
     'choisi une couleur
     Private Sub mnuOpCoulNoir_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuOpCoulNoir.Click
@@ -1345,7 +1348,89 @@ ErrorHandler:
 
     End Sub
 
+    Private Sub menuInvGD_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuInvGD.Click
+        menuInvGD.Checked = Not menuInvGD.Checked
+    End Sub
+
+    Private Sub menuInvHB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuInvHB.Click
+        menuInvHB.Checked = Not menuInvHB.Checked
+    End Sub
+
+    Private Sub menuRot90_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuRot90.Click
+        menuRot90.Checked = Not menuRot90.Checked
+    End Sub
+
+    Private Sub menuInvBN_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuInvBN.Click
+        menuInvBN.Checked = Not menuInvBN.Checked
+        STATES.Inverted_ChessBoard = menuInvBN.Checked
+    End Sub
+
+    Private Sub menuCalculComplet_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCalculComplet.Click
+        menuCalculComplet.Checked = Not menuCalculComplet.Checked
+    End Sub
+
+
+    Private Sub menuTheme1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuTheme1.Click
+        NumColorTheme = 0
+        Form2.Show()
+    End Sub
+
+    Private Sub menuTheme2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuTheme2.Click
+        NumColorTheme = 1
+        Form2.Show()
+    End Sub
+
+    Private Sub menuTheme3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuTheme3.Click
+        NumColorTheme = 2
+        Form2.Show()
+    End Sub
+
+    Private Sub menuPause_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuPause.Click
+        menuPause.Checked = Not menuPause.Checked
+    End Sub
+
+    Private Sub MenuSur_Ecran_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSur_Ecran.Click
+        MenuSur_Ecran.Checked = Not MenuSur_Ecran.Checked
+        TimerDiff.Enabled = MenuSur_Ecran.Checked
+    End Sub
+
+    Private Sub menuJoueBlancs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuJoueBlancs.Click
+        menuJoueBlancs.Checked = Not menuJoueBlancs.Checked
+        menuJoueNoirs.Checked = Not menuJoueNoirs.Checked
+    End Sub
+
+    Private Sub menuJoueNoirs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuJoueNoirs.Click
+        menuJoueBlancs.Checked = Not menuJoueBlancs.Checked
+        menuJoueNoirs.Checked = Not menuJoueNoirs.Checked
+    End Sub
+
 #End Region
+
+    'décoche tous les menus couleurs
+    Private Sub uncheck_all()
+        mnuOpCoulBleu.Checked = False
+        mnuOpCoulNoir.Checked = False
+        mnuOpCoulRouge.Checked = False
+        mnuOpCoulVert.Checked = False
+    End Sub
+
+    Private Sub VoirEtat()
+        Dim aTag As String
+        Dim aPos As UInteger
+        Dim lvItem As Integer
+
+        On Error Resume Next
+
+        aTag = tvPos.SelectedNode.Tag
+        aTag = aTag.Replace("k", "")
+        aPos = aTag
+        lvItem = POSITIONS.col_Position(aPos).idState
+        'lvRec.Items(lvItem - 1).Selected = True
+        lvRec.Items(lvRec.Items.Count - 1).EnsureVisible()
+        lvRec.Items(lvItem - 1).EnsureVisible()
+        'lvRec.Items(lvItem - 1).Focused = True
+
+    End Sub
 
 #Region "FONCTION INUTILE"
 
@@ -1412,12 +1497,6 @@ ErrorHandler:
     'End Function
 
     'calcule le nombre de cases différentes entre deux positions
-
-#End Region
-
-
-
-
 
     ''envoie le fichier sur le serveur FTP
     'Private Sub SendFTP()
@@ -1508,28 +1587,8 @@ ErrorHandler:
 
 
 
-    Private Sub menuInvGD_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuInvGD.Click
-        menuInvGD.Checked = Not menuInvGD.Checked
-    End Sub
+#End Region
 
-    Private Sub menuInvHB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuInvHB.Click
-        menuInvHB.Checked = Not menuInvHB.Checked
-    End Sub
-
-    Private Sub menuRot90_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuRot90.Click
-        menuRot90.Checked = Not menuRot90.Checked
-    End Sub
-
-    Private Sub menuInvBN_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuInvBN.Click
-        menuInvBN.Checked = Not menuInvBN.Checked
-        STATES.Inverted_ChessBoard = menuInvBN.Checked
-    End Sub
-
-
-
-    Private Sub menuCalculComplet_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCalculComplet.Click
-        menuCalculComplet.Checked = Not menuCalculComplet.Checked
-    End Sub
 
 
     Private Sub SplitContainer1_SplitterMoved(ByVal sender As Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
@@ -1589,30 +1648,7 @@ err:
 
     End Sub
 
-    Private Sub menuCOM_1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_1.Click
-        SerialPortName = menuCOM_1.Text
-        chgMenuInit()
-    End Sub
 
-    Private Sub menuCOM_2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_2.Click
-        SerialPortName = menuCOM_2.Text
-        chgMenuInit()
-    End Sub
-
-    Private Sub menuCOM_3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_3.Click
-        SerialPortName = menuCOM_3.Text
-        chgMenuInit()
-    End Sub
-
-    Private Sub menuCOM_4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_4.Click
-        SerialPortName = menuCOM_4.Text
-        chgMenuInit()
-    End Sub
-
-    Private Sub menuCOM_5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCOM_5.Click
-        SerialPortName = menuCOM_5.Text
-        chgMenuInit()
-    End Sub
 
     Private Sub chgMenuInit()
         menuSerialInit.Text = "Init " & SerialPortName & " " & SerialPortSpeed
@@ -1696,9 +1732,9 @@ err:
         Dim couleur1 As Color
         Dim couleur2 As Color
 
-        Dim myBmp As New Bitmap(echiquier.Width, echiquier.Height)
+        Dim myBmp As New Bitmap(rect_ChessBoardOnScreen.Width, rect_ChessBoardOnScreen.Height)
         Dim g As Graphics = Graphics.FromImage(myBmp)
-        g.CopyFromScreen(echiquier.Location, Point.Empty, myBmp.Size)
+        g.CopyFromScreen(rect_ChessBoardOnScreen.Location, Point.Empty, myBmp.Size)
 
         g.Dispose()
 
@@ -1707,8 +1743,8 @@ err:
         ligne2 = 4
         colonne2 = 5
 
-        couleur1 = myBmp.GetPixel((echiquier.Width \ 8) * (colonne1 - 1) + 5, (echiquier.Width \ 8) * (8 - ligne1) + 5)
-        couleur2 = myBmp.GetPixel((echiquier.Width \ 8) * (colonne2 - 1) + 5, (echiquier.Width \ 8) * (8 - ligne2) + 5)
+        couleur1 = myBmp.GetPixel((rect_ChessBoardOnScreen.Width \ 8) * (colonne1 - 1) + 5, (rect_ChessBoardOnScreen.Width \ 8) * (8 - ligne1) + 5)
+        couleur2 = myBmp.GetPixel((rect_ChessBoardOnScreen.Width \ 8) * (colonne2 - 1) + 5, (rect_ChessBoardOnScreen.Width \ 8) * (8 - ligne2) + 5)
 
         For i = 0 To NumberOfTheme
             If couleur1 = ThemesColor(i).Dark_Square _
@@ -1733,9 +1769,9 @@ err:
     '************************************************************************************************
     Private Sub FindNewCase(ByRef case1 As Byte, ByRef case2 As Byte)
 
-        Dim myBmp As New Bitmap(echiquier.Width, echiquier.Height)
+        Dim myBmp As New Bitmap(rect_ChessBoardOnScreen.Width, rect_ChessBoardOnScreen.Height)
         Dim g As Graphics = Graphics.FromImage(myBmp)
-        g.CopyFromScreen(echiquier.Location, Point.Empty, myBmp.Size)
+        g.CopyFromScreen(rect_ChessBoardOnScreen.Location, Point.Empty, myBmp.Size)
         g.Dispose()
 
         case1 = 0
@@ -1744,7 +1780,7 @@ err:
         For ligne = 1 To 8
             For colonne = 1 To 8
                 'si la case est verte claire
-                If myBmp.GetPixel((echiquier.Width \ 8) * (colonne - 1) + 5, (echiquier.Width \ 8) * (8 - ligne) + 5) = _
+                If myBmp.GetPixel((rect_ChessBoardOnScreen.Width \ 8) * (colonne - 1) + 5, (rect_ChessBoardOnScreen.Width \ 8) * (8 - ligne) + 5) = _
                     ThemesColor(NumColorTheme).Ligh_highlight Then
                     'si la case est verte  claire
                     If case1 = 0 Then
@@ -1755,7 +1791,7 @@ err:
 
                 End If
                 'si la case est verte foncé
-                If myBmp.GetPixel((echiquier.Width \ 8) * (colonne - 1) + 5, (echiquier.Width \ 8) * (8 - ligne) + 5) = _
+                If myBmp.GetPixel((rect_ChessBoardOnScreen.Width \ 8) * (colonne - 1) + 5, (rect_ChessBoardOnScreen.Width \ 8) * (8 - ligne) + 5) = _
                     ThemesColor(NumColorTheme).Dark_highlight Then
                     If case1 = 0 Then
                         case1 = ligne * 10 + colonne
@@ -1772,92 +1808,15 @@ err:
 
     End Sub
 
-    'teste si une piece est sur la case
-    Public Function pieceOnsquare(ByVal aColor As Color) As Boolean
-        Dim R As Integer = aColor.R
-        Dim G As Integer = aColor.G
-        Dim B As Integer = aColor.B
+   
 
-        'si le pixel est suffisement blanc
-        If R < 56 And G < 56 And B < 56 Then Return True
+   
 
-        'si le pixel est suffisement noir
-        If R > 200 And G > 200 And B > 200 Then Return True
+    
 
-        'si le pixel est suffisement gris
-        If Math.Abs(R - G) < 10 And Math.Abs(R - B) < 10 And Math.Abs(G - B) < 10 Then Return True
+   
 
-        Return False
-
-    End Function
-
-    '************************************************************************************************
-    'renvoie la signature du plateau ecran lichess ou chess.com
-    '************************************************************************************************
-    Private Sub getScreenState()
-
-        Dim myBmp As New Bitmap(echiquier.Width, echiquier.Height)
-        Dim g As Graphics = Graphics.FromImage(myBmp)
-        g.CopyFromScreen(echiquier.Location, Point.Empty, myBmp.Size)
-        g.Dispose()
-        Dim sqColor As Color
-        Dim sSquare As Byte = echiquier.Width \ 8
-
-        Dim strState As String = ""
-        Static oldstrState As String
-
-        Dim bRow As Byte
-
-        For colonne = 0 To 7
-            bRow = 0
-            For ligne = 7 To 0 Step -1
-
-                sqColor = myBmp.GetPixel(sSquare * colonne + sSquare \ 2, sSquare * ligne + sSquare \ 2)
-
-                If pieceOnsquare(sqColor) Then 'une piece se trouve sur la case
-                    bRow += 2 ^ (7 - ligne)
-                End If
-            Next
-            strState &= bRow
-            strState &= "."
-        Next
-
-        strState = strState.Substring(0, strState.Length - 1)
-
-        myBmp.Dispose()
-        If strState <> oldstrState Then
-            Debug.Print(strState)
-            oldstrState = strState
-
-        End If
-
-        STATES.screen_State = strState
-
-    End Sub
-
-    'renvoie +1 ou -1
-    Private Function Sigma() As Integer
-        If Rnd() > 0.5 Then
-            Return 1
-        Else
-            Return -1
-        End If
-    End Function
-
-    'renvoie un nombre aléatoire en lb et ub
-    Private Function Alea(ByVal lb As Integer, ByVal ub As Integer) As Integer
-        Return Int((ub - lb + 1) * Rnd() + lb)
-    End Function
-
-    'Attends un peu entre 100 et 300 ms
-    Public Sub attendre(Optional ByVal temps_ms As Integer = 0)
-        If temps_ms = 0 Then
-            System.Threading.Thread.Sleep(Alea(100, 300))
-        Else
-            System.Threading.Thread.Sleep(temps_ms)
-        End If
-
-    End Sub
+   
 
     'CLIC sur les cases pour jouer un coup
     Private Sub ClickOnScreen(ByVal lescases As String)
@@ -1908,28 +1867,28 @@ err:
 
             lastPos = Cursor.Position
 
-            ToClic.X = echiquier.X + (echiquier.Width \ 8) * (c1 - 1) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 20) * Rnd())
-            ToClic.Y = echiquier.Y + (echiquier.Width \ 8) * (8 - l1) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 20) * Rnd())
+            ToClic.X = rect_ChessBoardOnScreen.X + (rect_ChessBoardOnScreen.Width \ 8) * (c1 - 1) + (rect_ChessBoardOnScreen.Width \ 16) + Sigma() * Int((rect_ChessBoardOnScreen.Width \ 20) * Rnd())
+            ToClic.Y = rect_ChessBoardOnScreen.Y + (rect_ChessBoardOnScreen.Width \ 8) * (8 - l1) + (rect_ChessBoardOnScreen.Width \ 16) + Sigma() * Int((rect_ChessBoardOnScreen.Width \ 20) * Rnd())
 
             'APPUIS SUR LE BOUTON
             Cursor.Position = ToClic
             mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
             'ATTENDRE
-            attendre()
+            waitPlease()
             'RELEVER LE BOUTON
             mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
 
             'ATTENDRE
-            attendre()
+            waitPlease()
 
-            ToClic.X = echiquier.X + (echiquier.Width \ 8) * (c2 - 1) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 20) * Rnd())
-            ToClic.Y = echiquier.Y + (echiquier.Width \ 8) * (8 - l2) + (echiquier.Width \ 16) + Sigma() * Int((echiquier.Width \ 20) * Rnd())
+            ToClic.X = rect_ChessBoardOnScreen.X + (rect_ChessBoardOnScreen.Width \ 8) * (c2 - 1) + (rect_ChessBoardOnScreen.Width \ 16) + Sigma() * Int((rect_ChessBoardOnScreen.Width \ 20) * Rnd())
+            ToClic.Y = rect_ChessBoardOnScreen.Y + (rect_ChessBoardOnScreen.Width \ 8) * (8 - l2) + (rect_ChessBoardOnScreen.Width \ 16) + Sigma() * Int((rect_ChessBoardOnScreen.Width \ 20) * Rnd())
 
             'APPUIS SUR LE BOUTON
             Cursor.Position = ToClic
             mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
             'ATTENDRE
-            attendre()
+            waitPlease()
             'RELEVER LE BOUTON
             mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
 
@@ -2019,9 +1978,9 @@ err:
 
         If case1 <> 0 And case2 <> 0 Then
 
-            Dim myBmp As New Bitmap(echiquier.Width, echiquier.Height)
+            Dim myBmp As New Bitmap(rect_ChessBoardOnScreen.Width, rect_ChessBoardOnScreen.Height)
             Dim g As Graphics = Graphics.FromImage(myBmp)
-            g.CopyFromScreen(echiquier.Location, Point.Empty, myBmp.Size)
+            g.CopyFromScreen(rect_ChessBoardOnScreen.Location, Point.Empty, myBmp.Size)
 
             g.Dispose()
 
@@ -2039,8 +1998,8 @@ err:
 
 
 
-            couleur1 = myBmp.GetPixel((echiquier.Width \ 8) * (colonne1 - 1) + 5, (echiquier.Width \ 8) * (8 - ligne1) + 5)
-            couleur2 = myBmp.GetPixel((echiquier.Width \ 8) * (colonne2 - 1) + 5, (echiquier.Width \ 8) * (8 - ligne2) + 5)
+            couleur1 = myBmp.GetPixel((rect_ChessBoardOnScreen.Width \ 8) * (colonne1 - 1) + 5, (rect_ChessBoardOnScreen.Width \ 8) * (8 - ligne1) + 5)
+            couleur2 = myBmp.GetPixel((rect_ChessBoardOnScreen.Width \ 8) * (colonne2 - 1) + 5, (rect_ChessBoardOnScreen.Width \ 8) * (8 - ligne2) + 5)
 
             If (couleur1 = ThemesColor(NumColorTheme).Dark_highlight Or couleur1 = ThemesColor(NumColorTheme).Ligh_highlight) _
                 And (couleur2 = ThemesColor(NumColorTheme).Dark_highlight Or couleur2 = ThemesColor(NumColorTheme).Ligh_highlight) Then
@@ -2150,7 +2109,7 @@ err:
                 tempo2 = Inverted_Name(GAME.SquareName(sq2)) & Inverted_Name(GAME.SquareName(sq1))
                 If POSITIONS.Last_Position.moveUCI = tempo1 _
                     Or POSITIONS.Last_Position.moveUCI = tempo2 Then
-                    attendre(200)
+                    waitPlease(200)
                     SwitchOffLedBoard()
 
                     Debug.Print("EFFACE " & POSITIONS.Last_Position.moveUCI)
@@ -2158,7 +2117,7 @@ err:
                 End If
             End If
         End If
-       
+
     End Sub
 
     'Inverse le nom d'une case lorsque le plateau est utilsé en inversant les blancs et les noirs
@@ -2227,31 +2186,10 @@ err:
     End Sub
 
 
-    Private Sub menuTheme1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuTheme1.Click
-        NumColorTheme = 0
-        Form2.Show()
-    End Sub
-
-    Private Sub menuTheme2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuTheme2.Click
-        NumColorTheme = 1
-        Form2.Show()
-    End Sub
-
-    Private Sub menuTheme3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuTheme3.Click
-        NumColorTheme = 2
-        Form2.Show()
-    End Sub
-
-
-    Private Sub menuPause_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuPause.Click
-        menuPause.Checked = Not menuPause.Checked
-    End Sub
-
     Public Sub Check_Diff()
         Static Must_Erase As Boolean = True
 
-        getScreenState()
-        If STATES.screen_State <> STATES.last_State Then
+        If getScreenState(rect_ChessBoardOnScreen, STATES.screen_State, menuJoueNoirs.Checked) Then
             SwitchOnDiff()
             Must_Erase = True
         Else
@@ -2267,10 +2205,7 @@ err:
         Check_Diff()
     End Sub
 
-    Private Sub MenuSur_Ecran_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSur_Ecran.Click
-        MenuSur_Ecran.Checked = Not MenuSur_Ecran.Checked
-        TimerDiff.Enabled = MenuSur_Ecran.Checked
-    End Sub
+  
 End Class
 
 

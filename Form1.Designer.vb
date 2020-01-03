@@ -42,7 +42,9 @@ Partial Class Form1
         Me.JeJoueLesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuJoueBlancs = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuJoueNoirs = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuSur_Ecran = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckMoveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem7 = New System.Windows.Forms.ToolStripSeparator()
         Me.ThèmesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuTheme1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuTheme2 = New System.Windows.Forms.ToolStripMenuItem()
@@ -126,8 +128,6 @@ Partial Class Form1
         Me.pbReduire = New System.Windows.Forms.PictureBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.TimerDiff = New System.Windows.Forms.Timer(Me.components)
-        Me.MenuSur_Ecran = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem7 = New System.Windows.Forms.ToolStripSeparator()
         Me.sst_move.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.sst_etat.SuspendLayout()
@@ -256,20 +256,31 @@ Partial Class Form1
         Me.menuJoueBlancs.Checked = True
         Me.menuJoueBlancs.CheckState = System.Windows.Forms.CheckState.Checked
         Me.menuJoueBlancs.Name = "menuJoueBlancs"
-        Me.menuJoueBlancs.Size = New System.Drawing.Size(108, 22)
+        Me.menuJoueBlancs.Size = New System.Drawing.Size(152, 22)
         Me.menuJoueBlancs.Text = "Blancs"
         '
         'menuJoueNoirs
         '
         Me.menuJoueNoirs.Name = "menuJoueNoirs"
-        Me.menuJoueNoirs.Size = New System.Drawing.Size(108, 22)
+        Me.menuJoueNoirs.Size = New System.Drawing.Size(152, 22)
         Me.menuJoueNoirs.Text = "Noirs"
+        '
+        'MenuSur_Ecran
+        '
+        Me.MenuSur_Ecran.Name = "MenuSur_Ecran"
+        Me.MenuSur_Ecran.Size = New System.Drawing.Size(152, 22)
+        Me.MenuSur_Ecran.Text = "Sur Ecran"
         '
         'CheckMoveToolStripMenuItem
         '
         Me.CheckMoveToolStripMenuItem.Name = "CheckMoveToolStripMenuItem"
         Me.CheckMoveToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.CheckMoveToolStripMenuItem.Text = "Activer Coup"
+        '
+        'ToolStripMenuItem7
+        '
+        Me.ToolStripMenuItem7.Name = "ToolStripMenuItem7"
+        Me.ToolStripMenuItem7.Size = New System.Drawing.Size(149, 6)
         '
         'ThèmesToolStripMenuItem
         '
@@ -464,7 +475,7 @@ Partial Class Form1
         '
         Me.menuCOM_Find.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuCOM_1, Me.menuCOM_2, Me.menuCOM_3, Me.menuCOM_4, Me.menuCOM_5})
         Me.menuCOM_Find.Name = "menuCOM_Find"
-        Me.menuCOM_Find.Size = New System.Drawing.Size(152, 22)
+        Me.menuCOM_Find.Size = New System.Drawing.Size(122, 22)
         Me.menuCOM_Find.Text = "Chercher"
         '
         'menuCOM_1
@@ -506,20 +517,20 @@ Partial Class Form1
         '
         Me.menuSerialInit.Enabled = False
         Me.menuSerialInit.Name = "menuSerialInit"
-        Me.menuSerialInit.Size = New System.Drawing.Size(152, 22)
+        Me.menuSerialInit.Size = New System.Drawing.Size(122, 22)
         Me.menuSerialInit.Text = "Initialiser"
         '
         'menuPause
         '
         Me.menuPause.Name = "menuPause"
-        Me.menuPause.Size = New System.Drawing.Size(152, 22)
+        Me.menuPause.Size = New System.Drawing.Size(122, 22)
         Me.menuPause.Text = "Pause"
         '
         'menuSerialClose
         '
         Me.menuSerialClose.Enabled = False
         Me.menuSerialClose.Name = "menuSerialClose"
-        Me.menuSerialClose.Size = New System.Drawing.Size(152, 22)
+        Me.menuSerialClose.Size = New System.Drawing.Size(122, 22)
         Me.menuSerialClose.Text = "Fermer"
         '
         'tvPos
@@ -822,17 +833,6 @@ Partial Class Form1
         'TimerDiff
         '
         Me.TimerDiff.Interval = 1000
-        '
-        'MenuSur_Ecran
-        '
-        Me.MenuSur_Ecran.Name = "MenuSur_Ecran"
-        Me.MenuSur_Ecran.Size = New System.Drawing.Size(152, 22)
-        Me.MenuSur_Ecran.Text = "Sur Ecran"
-        '
-        'ToolStripMenuItem7
-        '
-        Me.ToolStripMenuItem7.Name = "ToolStripMenuItem7"
-        Me.ToolStripMenuItem7.Size = New System.Drawing.Size(149, 6)
         '
         'Form1
         '

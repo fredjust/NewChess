@@ -97,7 +97,7 @@
 
         lblClose.Top = 1
 
-        With echiquier
+        With rect_ChessBoardOnScreen
             Me.Location = .Location
             Me.Width = .Width
             Me.Height = .Height
@@ -105,17 +105,17 @@
 
     End Sub
 
-    
+
 
     Private Sub lblClose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblClose.Click
-        With echiquier
+        With rect_ChessBoardOnScreen
             .Width = Me.Width
             .Height = Me.Width
             .Location = Me.Location
         End With
-        Cls_Ini.INIWrite(IniFile, "liscreen", "Width", Me.Width)
-        Cls_Ini.INIWrite(IniFile, "liscreen", "left", echiquier.Location.X)
-        Cls_Ini.INIWrite(IniFile, "liscreen", "top", echiquier.Location.Y)
+        Cls_Ini.INIWrite(str_IniFile, "liscreen", "Width", Me.Width)
+        Cls_Ini.INIWrite(str_IniFile, "liscreen", "left", rect_ChessBoardOnScreen.Location.X)
+        Cls_Ini.INIWrite(str_IniFile, "liscreen", "top", rect_ChessBoardOnScreen.Location.Y)
 
 
 
