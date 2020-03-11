@@ -6,6 +6,9 @@ Imports System.ComponentModel
 Imports System.IO
 Imports System.Net
 
+Imports System.Text
+
+
 Public Class Form1
 
     'Type pour les données brutes
@@ -96,7 +99,7 @@ Public Class Form1
                 lvRec.Items(NbLigne).ForeColor = Color.Yellow
 
             Case BoardStates.StateColor.Start
-                lvRec.Items(NbLigne).ForeColor = Color.Blue
+                lvRec.Items(NbLigne).ForeColor = Color.LightBlue
 
             Case BoardStates.StateColor.NullTime
                 lvRec.Items(NbLigne).ForeColor = Color.WhiteSmoke
@@ -503,6 +506,8 @@ ErrorHandler:
         If idStateStart > STATES.col_States.Count Then Return 0
 
         For iSignature = 0 To LesCoups.Count - 1 'pour chaque signature possible
+
+           
 
             'temps de reflexion total pour jouer le coup et déplacer la pièce
             'on commence par y mettre le temps de stabilité de la position 
@@ -964,6 +969,8 @@ ErrorHandler:
         PictureBox1.Top = 10
         PictureBox1.Left = 10
         pbReduire.Top = 10
+
+        ServicePointManager.SecurityProtocol = 3072
     End Sub
 
     Private Sub Form1_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
@@ -2169,7 +2176,20 @@ err:
         If Find_Child() > 0 Then
             Refresh_TreeView()
             Debug.Print(POSITIONS.Last_Position.moveUCI)
-            ClickOnScreen(POSITIONS.Last_Position.moveUCI)
+            'ClickOnScreen(POSITIONS.Last_Position.moveUCI)
+
+            If menuJoueNoirs.Checked Then
+                If GAME.WhiteToPlay() Then
+                    MakeBoardMove(lichessGameId, POSITIONS.Last_Position.moveUCI, lichessTOKEN)
+                End If
+            Else
+                If Not GAME.WhiteToPlay() Then
+                    MakeBoardMove(lichessGameId, POSITIONS.Last_Position.moveUCI, lichessTOKEN)
+                End If
+            End If
+
+            
+
         End If
 
 
@@ -2187,9 +2207,27 @@ err:
 
 
     Public Sub Check_Diff()
+        'Static Must_Erase As Boolean = True
+        'Dim str_state As String = ""
+
+        'getScreenState(rect_ChessBoardOnScreen, str_state, menuJoueNoirs.Checked)
+
+        'If STATES.screen_State <> str_state Then
+        '    SwitchOnDiff()
+        '    STATES.screen_State = str_state
+        '    Must_Erase = True
+        'Else
+        '    Old_Msg = ""
+        '    If Must_Erase Then
+        '        Must_Erase = False
+        '        SwitchOffLedBoard()
+        '    End If
+        'End If
+
         Static Must_Erase As Boolean = True
 
-        If getScreenState(rect_ChessBoardOnScreen, STATES.screen_State, menuJoueNoirs.Checked) Then
+        getScreenState(rect_ChessBoardOnScreen, STATES.screen_State, menuInverser.Checked)
+        If STATES.screen_State <> STATES.last_State Then
             SwitchOnDiff()
             Must_Erase = True
         Else
@@ -2199,13 +2237,87 @@ err:
                 SwitchOffLedBoard()
             End If
         End If
+
     End Sub
 
     Private Sub TimerDiff_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerDiff.Tick
         Check_Diff()
     End Sub
 
-  
+
+    Private Sub SurLichessToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SurLichessToolStripMenuItem.Click
+        lichessTOKEN = Cls_Ini.INIRead(str_IniFile, "lichess", "Token")
+        If lichessTOKEN = "" Then
+            lichessTOKEN = InputBox("Token")
+            Cls_Ini.INIWrite(str_IniFile, "lichess", "Token", lichessTOKEN)
+        End If
+
+
+        lichessGameId = GetJSONdata(GetOngoingGame(lichessTOKEN), "gameId")
+        MsgBox(lichessGameId, , "ID de la game")
+    End Sub
+
+    Private Function GetOngoingGame(ByVal token As String) As String
+        Dim origResponse As HttpWebResponse
+
+        Dim origRequest As HttpWebRequest = DirectCast(HttpWebRequest.Create("https://lichess.org/api/account/playing"), HttpWebRequest)
+        origRequest.Headers.Add("Authorization", "Bearer " & token)
+        origRequest.AllowAutoRedirect = False
+        origRequest.Method = "GET"
+        Try
+            origResponse = DirectCast(origRequest.GetResponse(), HttpWebResponse)
+            Dim Stream As Stream = origResponse.GetResponseStream()
+            Dim sr As New StreamReader(Stream, Encoding.GetEncoding("utf-8"))
+            Dim str As String = sr.ReadToEnd()
+            Return str
+            'MessageBox.Show(str)
+            'Clipboard.SetText(str)
+        Catch ex As WebException
+            MsgBox(ex.ToString)
+            Return ""
+        End Try
+    End Function
+
+    Private Function MakeBoardMove(ByVal idGame As String, ByVal uciMove As String, ByVal token As String) As Boolean
+
+
+        If token = "" Then Return False
+
+        Dim origResponse As HttpWebResponse
+
+        Dim origRequest As HttpWebRequest = DirectCast(HttpWebRequest.Create("https://lichess.org/api/board/game/" & idGame & "/move/" & uciMove), HttpWebRequest)
+        origRequest.Headers.Add("Authorization", "Bearer " & token)
+        origRequest.AllowAutoRedirect = False
+        origRequest.Method = "POST"
+        Try
+            origResponse = DirectCast(origRequest.GetResponse(), HttpWebResponse)
+            Dim Stream As Stream = origResponse.GetResponseStream()
+            Dim sr As New StreamReader(Stream, Encoding.GetEncoding("utf-8"))
+            Dim str As String = sr.ReadToEnd()
+            Debug.Print(str)
+            Return True
+            'MessageBox.Show(str)
+            'Clipboard.SetText(str)
+            'MsgBox(Ex.ToString)
+        Catch ex As WebException
+
+            'MsgBox(ex.ToString)
+            Return False
+        End Try
+    End Function
+
+    Private Sub ToolStripMenuItem8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem8.Click
+
+    End Sub
+
+    Private Sub menuInverser_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuInverser.Click
+        menuInverser.Checked = Not menuInverser.Checked
+
+    End Sub
+
+    Private Sub EcranToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EcranToolStripMenuItem.Click
+
+    End Sub
 End Class
 
 

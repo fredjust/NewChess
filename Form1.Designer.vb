@@ -35,6 +35,7 @@ Partial Class Form1
         Me.menuPartie = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuNouvellePartie = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuInformationPartie = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SurLichessToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
         Me.menuSauvePartie = New System.Windows.Forms.ToolStripMenuItem()
         Me.EcranToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -43,6 +44,8 @@ Partial Class Form1
         Me.menuJoueBlancs = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuJoueNoirs = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuSur_Ecran = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuInverser = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem8 = New System.Windows.Forms.ToolStripSeparator()
         Me.CheckMoveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem7 = New System.Windows.Forms.ToolStripSeparator()
         Me.ThèmesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -202,7 +205,7 @@ Partial Class Form1
         '
         'menuPartie
         '
-        Me.menuPartie.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuNouvellePartie, Me.menuInformationPartie, Me.ToolStripMenuItem1, Me.menuSauvePartie})
+        Me.menuPartie.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuNouvellePartie, Me.menuInformationPartie, Me.SurLichessToolStripMenuItem, Me.ToolStripMenuItem1, Me.menuSauvePartie})
         Me.menuPartie.Name = "menuPartie"
         Me.menuPartie.Size = New System.Drawing.Size(49, 20)
         Me.menuPartie.Text = "Partie"
@@ -220,6 +223,12 @@ Partial Class Form1
         Me.menuInformationPartie.Size = New System.Drawing.Size(142, 22)
         Me.menuInformationPartie.Text = "Informations"
         '
+        'SurLichessToolStripMenuItem
+        '
+        Me.SurLichessToolStripMenuItem.Name = "SurLichessToolStripMenuItem"
+        Me.SurLichessToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
+        Me.SurLichessToolStripMenuItem.Text = "Sur Lichess"
+        '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
@@ -233,7 +242,7 @@ Partial Class Form1
         '
         'EcranToolStripMenuItem
         '
-        Me.EcranToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConfigToolStripMenuItem, Me.JeJoueLesToolStripMenuItem, Me.MenuSur_Ecran, Me.CheckMoveToolStripMenuItem, Me.ToolStripMenuItem7, Me.ThèmesToolStripMenuItem})
+        Me.EcranToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConfigToolStripMenuItem, Me.JeJoueLesToolStripMenuItem, Me.MenuSur_Ecran, Me.menuInverser, Me.ToolStripMenuItem8, Me.CheckMoveToolStripMenuItem, Me.ToolStripMenuItem7, Me.ThèmesToolStripMenuItem})
         Me.EcranToolStripMenuItem.Name = "EcranToolStripMenuItem"
         Me.EcranToolStripMenuItem.Size = New System.Drawing.Size(74, 20)
         Me.EcranToolStripMenuItem.Text = "Adversaire"
@@ -256,13 +265,13 @@ Partial Class Form1
         Me.menuJoueBlancs.Checked = True
         Me.menuJoueBlancs.CheckState = System.Windows.Forms.CheckState.Checked
         Me.menuJoueBlancs.Name = "menuJoueBlancs"
-        Me.menuJoueBlancs.Size = New System.Drawing.Size(152, 22)
+        Me.menuJoueBlancs.Size = New System.Drawing.Size(108, 22)
         Me.menuJoueBlancs.Text = "Blancs"
         '
         'menuJoueNoirs
         '
         Me.menuJoueNoirs.Name = "menuJoueNoirs"
-        Me.menuJoueNoirs.Size = New System.Drawing.Size(152, 22)
+        Me.menuJoueNoirs.Size = New System.Drawing.Size(108, 22)
         Me.menuJoueNoirs.Text = "Noirs"
         '
         'MenuSur_Ecran
@@ -270,6 +279,17 @@ Partial Class Form1
         Me.MenuSur_Ecran.Name = "MenuSur_Ecran"
         Me.MenuSur_Ecran.Size = New System.Drawing.Size(152, 22)
         Me.MenuSur_Ecran.Text = "Sur Ecran"
+        '
+        'menuInverser
+        '
+        Me.menuInverser.Name = "menuInverser"
+        Me.menuInverser.Size = New System.Drawing.Size(152, 22)
+        Me.menuInverser.Text = "Inverser"
+        '
+        'ToolStripMenuItem8
+        '
+        Me.ToolStripMenuItem8.Name = "ToolStripMenuItem8"
+        Me.ToolStripMenuItem8.Size = New System.Drawing.Size(149, 6)
         '
         'CheckMoveToolStripMenuItem
         '
@@ -977,5 +997,8 @@ Partial Class Form1
     Friend WithEvents TimerDiff As System.Windows.Forms.Timer
     Friend WithEvents MenuSur_Ecran As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem7 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents SurLichessToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem8 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents menuInverser As System.Windows.Forms.ToolStripMenuItem
 
 End Class

@@ -718,7 +718,7 @@
         MovePiece(sqiFrom, sqiTo)
 
         aFEN.nbSinceLastPawn = 0
-        aFEN.sqiEnPassant = 0
+        aFEN.sqiEnPassant = 0 'erreur car cela peut etre une prise en passant
         'SwitchToPlay()
 
     End Sub
@@ -1435,7 +1435,7 @@
                     'gérer la prise en passant
                     If Board10x10(sqiTO) = " " Then
                         If IsEnPassant(sqiFROM, sqiTO) Then
-                            SpecificMove = NameCase1.Substring(0, 1) & "x" & NameCase2 & " ep"
+                            SpecificMove = NameCase1.Substring(0, 1) & "x" & NameCase2 & "-ep"
                         Else
                             'SUPPRIMER LA CASE DE DEPART EN CAS DE POUSSE DE PION 
                             SpecificMove = NameCase2

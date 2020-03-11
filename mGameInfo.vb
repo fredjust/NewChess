@@ -36,6 +36,9 @@
     'permet de stocker le timecode de la dernière reception de data via le port série
     Public LastReceive As Integer
 
+    Public lichessGameId As String
+    Public lichessTOKEN As String
+
     '************************************************************************************************
     '
     '                                       FONCTIONS AUTONOMES
@@ -83,7 +86,7 @@
     ' rect_board est l'emplacement de l'échquier 
     ' State_Result contient la signature dans tous les cas
     '************************************************************************************************
-    Public Function getScreenState(ByVal rect_board As Rectangle, ByRef State_Result As String, Optional ByVal reverse_chessboard As Boolean = False) As Boolean
+    Public Sub getScreenState(ByVal rect_board As Rectangle, ByRef State_Result As String, Optional ByVal reverse_chessboard As Boolean = False)
 
         Dim myBmp As New Bitmap(rect_board.Width, rect_board.Height)
         Dim g As Graphics = Graphics.FromImage(myBmp)
@@ -126,15 +129,17 @@
 
         myBmp.Dispose()
 
-        If strState <> State_Result Then
-            Debug.Print(strState)
-            State_Result = strState
-            Return True
-        Else
-            Return False
-        End If
+        State_Result = strState
 
-    End Function
+        'If strState <> State_Result Then
+        '    Debug.Print(strState)
+
+        '    Return True
+        'Else
+        '    Return False
+        'End If
+
+    End Sub
 
     '************************************************************************************************
     ' RENVOIE ALEATOIREMENT +1 ou -1
@@ -166,6 +171,40 @@
         End If
 
     End Sub
+
+    '************************************************************************************************
+    'renvoie la valeur d'une variable a partir de son nom dans une chaine JSON
+    '************************************************************************************************
+    Public Function GetJSONdata(ByVal strJSON As String, ByVal data_name As String, Optional ByVal RemoveCote As Boolean = True) As String
+        Dim idStart As Integer
+        Dim idEnd As Integer
+        Dim Str_tempo As String
+
+        If data_name = "" Then Return ""
+
+        idStart = strJSON.IndexOf("""" & data_name & """:")
+
+        If idStart = -1 Then Return ""
+
+        idStart = idStart + data_name.Length + 3
+
+        idEnd = strJSON.IndexOf(",", idStart)
+
+        'si c'est la dernière variable de la chaine il n'y a pas de , après mais une }
+        If idEnd = -1 Then
+            idEnd = strJSON.IndexOf("}", idStart)
+        End If
+
+        Str_tempo = strJSON.Substring(idStart, idEnd - idStart)
+
+        'on supprime les doubles cotes
+        If RemoveCote And Str_tempo.IndexOf("""") = 0 Then
+            Str_tempo = Str_tempo.Substring(1, Str_tempo.Length - 2)
+        End If
+
+        Return Str_tempo
+
+    End Function
 
 
 
